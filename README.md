@@ -1,5 +1,5 @@
-# Todo List Project
+# Default Project Name
 
-This is an assignemtn from the [Odin Project](https://www.theodinproject.com/).
+This is an assignment from the [Odin Project](https://www.theodinproject.com/).
 
-[Here](https://www.theodinproject.com/lessons/node-path-javascript-todo-list) is the project brief.
+[Here](###) is the project brief.
