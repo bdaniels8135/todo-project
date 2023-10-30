@@ -1,1 +1,2 @@
-import './index.css';
+import './style.css';
+import './page-build.js';

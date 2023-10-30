@@ -1,7 +1,7 @@
 {
-  "name": "default-project-name",
+  "name": "todo-project",
   "version": "1.0.0",
-  "description": "Default project description.",
+  "description": "Todo list website project.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
