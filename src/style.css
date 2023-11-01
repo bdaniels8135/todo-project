@@ -26,6 +26,7 @@ header {
 
 header h1 {
     font-size: 3rem;
+    font-weight: 600;
 }
 
 aside {
@@ -36,11 +37,22 @@ aside {
     border-right: 2px solid black;
 }
 
+aside div {
+    border-bottom: 3px solid black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 aside h1 {
     font-size: 1.6rem;
     font-weight: 600;
-    border-bottom: 3px solid black;
     padding-bottom: .2rem;
+}
+
+aside div img {
+    height: 1.5rem;
+    cursor: pointer;
 }
 
 aside ul {
@@ -56,10 +68,11 @@ aside li {
     display: flex;
     gap: .5rem;
     cursor: pointer;
+    align-items: center;
 }
 
 aside li img {
-    height: 1.2rem;
+    height: 1.5rem;
 }
 
 aside li p {

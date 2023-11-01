@@ -14,7 +14,6 @@ const headerText = document.createElement('h1');
 headerText.innerText = 'Task-ticle';
 header.appendChild(headerText);
 
-
 // Add a sidebar
 const sidebar = document.createElement('aside');
 body.appendChild(sidebar);
@@ -24,9 +23,17 @@ const taskNav = document.createElement('ul');
 taskNav.id = 'task-nav';
 sidebar.appendChild(taskNav);
 
-const taskNavHeader = document.createElement('h1');
-taskNavHeader.innerText = 'Tasks';
-taskNav.appendChild(taskNavHeader);
+const taskNavHeaderContainer = document.createElement('div');
+taskNav.appendChild(taskNavHeaderContainer);
+
+const taskNavHeaderText = document.createElement('h1');
+taskNavHeaderText.innerText = 'Tasks';
+taskNavHeaderContainer.appendChild(taskNavHeaderText);
+
+const newTaskIcon = document.createElement('img');
+newTaskIcon.src = plusIcon;
+newTaskIcon.id = 'new-task-btn';
+taskNavHeaderContainer.appendChild(newTaskIcon);
 
 const taskLabelIconPairs = [
     {
@@ -67,23 +74,17 @@ const projectsNav = document.createElement('ul');
 projectsNav.id = 'projects-nav';
 sidebar.appendChild(projectsNav);
 
-const projectsHeader = document.createElement('h1');
-projectsHeader.innerText = 'Projects';
-projectsNav.appendChild(projectsHeader);
+const projectsNavHeaderContainer = document.createElement('div');
+projectsNav.appendChild(projectsNavHeaderContainer);
 
-// Add new project button
-const newProjectBtn = document.createElement('li');
-newProjectBtn.id = 'new-project-btn';
-projectsNav.appendChild(newProjectBtn);
+const projectsNavHeaderText = document.createElement('h1');
+projectsNavHeaderText.innerText = 'Projects';
+projectsNavHeaderContainer.appendChild(projectsNavHeaderText);
 
-const newProjectBtnIcon = document.createElement('img');
-newProjectBtnIcon.src = plusIcon;
-newProjectBtn.appendChild(newProjectBtnIcon);
-
-const newProjectBtnText = document.createElement('p');
-newProjectBtnText.innerText = 'New Project';
-newProjectBtn.appendChild(newProjectBtnText);
-
+const newProjectIcon = document.createElement('img');
+newProjectIcon.src = plusIcon;
+newProjectIcon.id = 'new-project-btn';
+projectsNavHeaderContainer.appendChild(newProjectIcon);
 
 // Include Main element
 const main = document.createElement('main');
