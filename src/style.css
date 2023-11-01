@@ -36,6 +36,13 @@ aside {
     border-right: 2px solid black;
 }
 
+aside h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    border-bottom: 3px solid black;
+    padding-bottom: .2rem;
+}
+
 aside ul {
     list-style: none;
     display: flex;
@@ -45,13 +52,16 @@ aside ul {
 }
 
 aside li {
-    font-size: 1.2rem;
     padding-left: 1rem;
+    display: flex;
+    gap: .5rem;
+    cursor: pointer;
 }
 
-aside h1 {
-    font-size: 1.6rem;
-    font-weight: 600;
-    border-bottom: 3px solid black;
-    padding-bottom: .2rem;
+aside li img {
+    height: 1.2rem;
+}
+
+aside li p {
+    font-size: 1.2rem;
 }
