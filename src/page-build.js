@@ -1,10 +1,10 @@
-import allIcon from './img/inbox.svg'
-import todayIcon from './img/calendar-today.svg'
-import upcomingIcon from './img/calendar-search.svg'
-import importantIcon from './img/star.svg'
-import plusIcon from './img/plus-thick.svg'
+import allIcon from './img/inbox.svg';
+import todayIcon from './img/calendar-today.svg';
+import upcomingIcon from './img/calendar-search.svg';
+import importantIcon from './img/star.svg';
+import plusIcon from './img/plus-thick.svg';
 
-const body = document.querySelector('body')
+const body = document.querySelector('body');
 
 // Add Header
 const header = document.createElement('header');
@@ -66,8 +66,7 @@ for (let pair of taskLabelIconPairs) {
     const newItemText = document.createElement('p');
     newItemText.innerText = pair.label;
     newItem.appendChild(newItemText);
-    
-}
+};
 
 // Include projects nav
 const projectsNav = document.createElement('ul');
@@ -88,5 +87,5 @@ projectsNavHeaderContainer.appendChild(newProjectIcon);
 
 // Include Main element
 const main = document.createElement('main');
-main.innerText = 'Main Content'
+main.innerText = '';
 body.appendChild(main);
