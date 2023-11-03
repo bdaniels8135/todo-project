@@ -52,7 +52,7 @@ const taskLabelIconPairs = [
         label: 'Important',
         icon: importantIcon,
     },
-];
+]
 
 for (let pair of taskLabelIconPairs) {
     const newItem = document.createElement('li');
@@ -66,7 +66,7 @@ for (let pair of taskLabelIconPairs) {
     const newItemText = document.createElement('p');
     newItemText.innerText = pair.label;
     newItem.appendChild(newItemText);
-};
+}
 
 // Include projects nav
 const projectsNav = document.createElement('ul');
