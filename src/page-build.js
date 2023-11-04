@@ -14,11 +14,11 @@ const headerText = document.createElement('h1');
 headerText.innerText = 'Task-ticle';
 header.appendChild(headerText);
 
-// Add a sidebar
+// Add sidebar
 const sidebar = document.createElement('aside');
 body.appendChild(sidebar);
 
-// Include tasks nav
+// Add tasks nav
 const taskNav = document.createElement('ul');
 taskNav.id = 'task-nav';
 sidebar.appendChild(taskNav);
@@ -68,7 +68,7 @@ for (let pair of taskLabelIconPairs) {
     newItem.appendChild(newItemText);
 }
 
-// Include tags nav
+// Add tags nav
 const tagsNav = document.createElement('ul');
 tagsNav.id = 'tags-nav';
 sidebar.appendChild(tagsNav);
@@ -85,7 +85,7 @@ newTagIcon.src = plusIcon;
 newTagIcon.id = 'new-tag-btn';
 tagsNavHeaderContainer.appendChild(newTagIcon);
 
-// Include Main element
+// Add Main element
 const main = document.createElement('main');
 main.innerText = '';
 body.appendChild(main);
