@@ -1,14 +1,16 @@
 import { ChecklistItem } from './checklist-item.js'
 
 export class Task {
-    #checklist = [];
-    #tags = [];
+    #checklist;
+    #tags;
 
     constructor(title, dueDate, shortDescription) {
         this.title = title;
         this.dueDate = dueDate;
         this.shortDescription = shortDescription;
         this.notes = '';
+        this.#checklist = [];
+        this.#tags = [];
     }
 
     get checklist() { return this.#checklist }

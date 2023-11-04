@@ -18,21 +18,21 @@ import { Tag } from './tag.js';
     }
 
     const resolveAllBtnClick = () => {
-        console.log('All Button Pressed!')
+        console.log('All Button Pressed!');
     }
 
     const resolveTodayBtnClick = () => {
-        console.log('Today Button Pressed!')
+        console.log('Today Button Pressed!');
     }
 
     const resolveUpcomingBtnClick = () => {
-        console.log('Upcoming Button Pressed!')
+        console.log('Upcoming Button Pressed!');
     }
 
     const resolveNewTaskBtnClick = () => {
-        console.log('New Task Button Pressed!')
+        console.log('New Task Button Pressed!');
     }
     const resolveNewTagBtnClick = () => {
-        console.log('New Tag Button Pressed!')
+        console.log('New Tag Button Pressed!');
     }
 })();
