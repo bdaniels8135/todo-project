@@ -1,26 +1,20 @@
 export class Project {
-    #name;
-    #tasks;
+    #tasks = [];
 
-    constructor(name) {
-        this.#name = name;
-        this.#tasks = [];
+    constructor(title) {
+        this.title = title;
     }
 
-    set name(newName) {
-        if (!newName) throw Error('A project must have a name.');
-        this.#name = newName;
-    }
-
-    get name() {
-        return this.#name;
+    get tasks() {
+        return this.#tasks;
     }
 
     addTask(newTask) {
         this.#tasks.push(newTask);
     }
 
-    get tasks() {
-        return this.#tasks.map((task) => task.name);
+    deleteTask(taskToDelete) {
+        const deleteIndex = this.#tasks.findIndex(task => task === taskToDelete);
+        if (deleteIndex > -1) this.#tasks.splice(deleteIndex, 1);
     }
 }
