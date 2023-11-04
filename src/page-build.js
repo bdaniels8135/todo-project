@@ -1,7 +1,6 @@
 import allIcon from './img/inbox.svg';
 import todayIcon from './img/calendar-today.svg';
 import upcomingIcon from './img/calendar-search.svg';
-import importantIcon from './img/star.svg';
 import plusIcon from './img/plus-thick.svg';
 
 const body = document.querySelector('body');
@@ -48,10 +47,6 @@ const taskLabelIconPairs = [
         label: 'Upcoming',
         icon: upcomingIcon,
     },
-    {
-        label: 'Important',
-        icon: importantIcon,
-    },
 ]
 
 for (let pair of taskLabelIconPairs) {
@@ -68,22 +63,22 @@ for (let pair of taskLabelIconPairs) {
     newItem.appendChild(newItemText);
 }
 
-// Include projects nav
-const projectsNav = document.createElement('ul');
-projectsNav.id = 'projects-nav';
-sidebar.appendChild(projectsNav);
+// Include tags nav
+const tagsNav = document.createElement('ul');
+tagsNav.id = 'tags-nav';
+sidebar.appendChild(tagsNav);
 
-const projectsNavHeaderContainer = document.createElement('div');
-projectsNav.appendChild(projectsNavHeaderContainer);
+const tagsNavHeaderContainer = document.createElement('div');
+tagsNav.appendChild(tagsNavHeaderContainer);
 
-const projectsNavHeaderText = document.createElement('h1');
-projectsNavHeaderText.innerText = 'Projects';
-projectsNavHeaderContainer.appendChild(projectsNavHeaderText);
+const tagsNavHeaderText = document.createElement('h1');
+tagsNavHeaderText.innerText = 'Tags';
+tagsNavHeaderContainer.appendChild(tagsNavHeaderText);
 
-const newProjectIcon = document.createElement('img');
-newProjectIcon.src = plusIcon;
-newProjectIcon.id = 'new-project-btn';
-projectsNavHeaderContainer.appendChild(newProjectIcon);
+const newTagIcon = document.createElement('img');
+newTagIcon.src = plusIcon;
+newTagIcon.id = 'new-tag-btn';
+tagsNavHeaderContainer.appendChild(newTagIcon);
 
 // Include Main element
 const main = document.createElement('main');
