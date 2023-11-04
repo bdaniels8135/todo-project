@@ -1,11 +1,10 @@
 export class Task {
     #checklist = [];
 
-    constructor(title, dueDate, shortDescription, isImportant) {
+    constructor(title, dueDate, shortDescription) {
         this.title = title;
         this.dueDate = dueDate;
         this.shortDescription = shortDescription;
-        this.isImportant = isImportant; 
         this.notes = '';
     }
 
