@@ -1,6 +1,7 @@
 import allIcon from './img/inbox.svg';
 import todayIcon from './img/calendar-today.svg';
 import upcomingIcon from './img/calendar-search.svg';
+import pastDueIcon from './img/exclamation-thick.svg'
 import plusIcon from './img/plus-thick.svg';
 
 const body = document.querySelector('body');
@@ -46,6 +47,10 @@ const taskLabelIconPairs = [
     {
         label: 'Upcoming',
         icon: upcomingIcon,
+    },
+    {
+        label: 'Past Due',
+        icon: pastDueIcon,
     },
 ]
 

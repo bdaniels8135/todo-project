@@ -8,6 +8,7 @@ import { Tag } from './tag.js';
         allBtn: document.getElementById('all-btn'),
         todayBtn: document.getElementById('today-btn'),
         upcomingBtn: document.getElementById('upcoming-btn'),
+        pastDueBtn: document.getElementById('past-due-btn'),
         newTaskBtn: document.getElementById('new-task-btn'),
         newTagBtn: document.getElementById('new-tag-btn'),
     }
@@ -29,9 +30,14 @@ import { Tag } from './tag.js';
         console.log('Upcoming Button Pressed!');
     }
 
+    const resolvePastDueBtnClick = () => {
+        console.log('Past Due Button Pressed!')
+    }
+
     const resolveNewTaskBtnClick = () => {
         console.log('New Task Button Pressed!');
     }
+
     const resolveNewTagBtnClick = () => {
         console.log('New Tag Button Pressed!');
     }
