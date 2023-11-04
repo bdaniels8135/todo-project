@@ -1,6 +1,7 @@
 import './style.css';
 import './page-build.js';
 import { Task } from './task.js';
+import { Tag } from './tag.js';
 
 (() => {
     const BUTTONS = {
