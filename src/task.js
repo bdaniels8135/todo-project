@@ -15,7 +15,7 @@ export class Task {
 
     get checklist() { return this.#checklist }
 
-    addChecklistItem(newItemText) { this.#checklist.push(new ChecklistItem(newItemText)) }
+    createChecklistItem(newItemText) { this.#checklist.push(new ChecklistItem(newItemText)) }
 
     deleteChecklistItem(itemToDelete) {
         const deleteIndex = this.#checklist.findIndex(item => item === itemToDelete);
@@ -24,7 +24,7 @@ export class Task {
 
     get tags() { return this.#tags }
 
-    addTag(newTag) { this.#tags.push(newTag) }
+    addTag(tagToAdd) { this.#tags.push(tagToAdd) }
 
     removeTag(tagToRemove) {
         const removeIndex = this.#tags.findIndex(tag => tag === tagToRemove);
