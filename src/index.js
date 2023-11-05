@@ -2,7 +2,7 @@ import './style.css';
 import './page-build.js';
 import { Task } from './task.js';
 import { Tag } from './tag.js';
-import { displayTasks, displayDateInput, updateMainHeader, clearContent } from './display-controller.js';
+import { displayTasks, displayDateInput, displayMainHeader, clearMain, clearTaskTable } from './display-controller.js';
 import { isSameDay, isPast, endOfDay, isWithinInterval } from 'date-fns';
 
 const tasks = [];
@@ -42,36 +42,36 @@ testTask1.addTag(testTag2);
     }
 
     const resolveAllBtnClick = () => { 
-        updateMainHeader('All Tasks');
-        clearContent();
+        clearMain();
+        displayMainHeader('All Tasks');
         displayTasks(tasks);
     }
 
     const resolveTodayBtnClick = () => {
+        clearMain();
         const todayTasks = tasks.filter(task => isSameDay(new Date(), task.dueDate));
-        updateMainHeader('Today\'s Tasks');
-        clearContent();
+        displayMainHeader('Today\'s Tasks');
         displayTasks(todayTasks);
     }
 
     const resolveUpcomingBtnClick = () => {
-        updateMainHeader('Upcoming Tasks');
+        clearMain();
+        displayMainHeader('Upcoming Tasks');
         displayDateInput();
-        clearContent();
         const dateInput = document.querySelector('input[type=date]');
         dateInput.addEventListener('change', () => {
             const upcomingDate = new Date(dateInput.value);
             const upcomingInterval = {start: new Date(), end: upcomingDate};
             const upcomingTasks = tasks.filter(task => isWithinInterval(task.dueDate, upcomingInterval));
-            clearContent();
+            clearTaskTable();
             displayTasks(upcomingTasks);
         })
     }
 
     const resolvePastDueBtnClick = () => {
+        clearMain();
         const pastDueTasks = tasks.filter(task => isPast(task.dueDate));
-        updateMainHeader('Past Due Tasks');
-        clearContent();
+        displayMainHeader('Past Due Tasks');
         displayTasks(pastDueTasks);
     }
 
@@ -79,5 +79,5 @@ testTask1.addTag(testTag2);
 
     const resolveNewTagBtnClick = () => { console.log('New Tag Button Pressed!') }
 
-    displayTasks(tasks);
+    resolveAllBtnClick();
 })()
