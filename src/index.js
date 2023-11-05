@@ -2,7 +2,7 @@ import './style.css';
 import './page-build.js';
 import { Task } from './task.js';
 import { Tag } from './tag.js';
-import { displayTasks, displayDateInput, updateMainHeader, clearContent } from './display-controller.js'
+import { displayTasks, displayDateInput, updateMainHeader, clearContent } from './display-controller.js';
 import { isSameDay, isPast, endOfDay, isWithinInterval } from 'date-fns';
 
 const tasks = [];
@@ -58,10 +58,10 @@ testTask1.addTag(testTag2);
         updateMainHeader('Upcoming Tasks');
         displayDateInput();
         clearContent();
-        const dateInput = document.querySelector('input[type=date]')
+        const dateInput = document.querySelector('input[type=date]');
         dateInput.addEventListener('change', () => {
             const upcomingDate = new Date(dateInput.value);
-            const upcomingInterval = {start: new Date(), end: upcomingDate}
+            const upcomingInterval = {start: new Date(), end: upcomingDate};
             const upcomingTasks = tasks.filter(task => isWithinInterval(task.dueDate, upcomingInterval));
             clearContent();
             displayTasks(upcomingTasks);
@@ -75,13 +75,9 @@ testTask1.addTag(testTag2);
         displayTasks(pastDueTasks);
     }
 
-    const resolveNewTaskBtnClick = () => {
-        console.log('New Task Button Pressed!');
-    }
+    const resolveNewTaskBtnClick = () => { console.log('New Task Button Pressed!') }
 
-    const resolveNewTagBtnClick = () => {
-        console.log('New Tag Button Pressed!');
-    }
+    const resolveNewTagBtnClick = () => { console.log('New Tag Button Pressed!') }
 
     displayTasks(tasks);
 })()

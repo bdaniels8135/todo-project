@@ -1,16 +1,12 @@
-import { format } from 'date-fns'
+import { format } from 'date-fns';
 
 const main = document.querySelector('main');
 const mainHeader = document.querySelector('main h1');
 const mainContent = document.querySelector('article');
 
-export function clearContent() {
-    mainContent.innerHTML = '';
-}
+export function clearContent() { mainContent.innerHTML = '' }
 
-export function updateMainHeader(mainHeaderText) {
-    mainHeader.innerText = mainHeaderText;
-}
+export function updateMainHeader(mainHeaderText) { mainHeader.innerText = mainHeaderText }
 
 export function displayTasks(tasksToDisplay) {
     const taskTable = document.createElement('table');
