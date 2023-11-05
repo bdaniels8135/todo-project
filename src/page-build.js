@@ -87,5 +87,11 @@ tagsNavHeaderContainer.appendChild(newTagIcon);
 
 // Add Main element
 const main = document.createElement('main');
-main.innerText = '';
 body.appendChild(main);
+
+const mainHeader = document.createElement('h1');
+mainHeader.innerText = 'All Tasks';
+main.appendChild(mainHeader);
+
+const contentContainer = document.createElement('article');
+main.appendChild(contentContainer);
