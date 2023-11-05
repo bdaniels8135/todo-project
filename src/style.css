@@ -5,7 +5,6 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1rem;
     font-weight: 500;
-    /* border: 1px dashed red; */
 }
 
 body {
@@ -25,13 +24,13 @@ header {
 }
 
 header h1 {
-    font-size: 3rem;
-    font-weight: 600;
+    font-size: 4rem;
+    font-weight: 750;
     text-shadow: .25rem .25rem .25rem grey;
 }
 
 aside {
-    padding: 1.5rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -46,13 +45,13 @@ aside div {
 }
 
 aside h1 {
-    font-size: 1.6rem;
+    font-size: 2rem;
     font-weight: 600;
     padding-bottom: .2rem;
 }
 
 aside div img {
-    height: 1.5rem;
+    height: 2rem;
     cursor: pointer;
 }
 
@@ -77,7 +76,7 @@ aside li img {
 }
 
 aside li p {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
 }
 
 main {
@@ -88,19 +87,21 @@ main {
 }
 
 main h1 {
-    font-size: 1.6rem;
+    font-size: 2rem;
     font-weight: 600;
     border-bottom: 3px solid black;
+    padding-bottom: .2rem;
 }
 
 main #upcoming-date-label {
     padding: 1rem 1rem 1rem 0;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
 }
 
 main input[type='date'] {
-    font-size: 1.2rem;
-    padding: .5rem;
+    font-size: 1.3rem;
+    padding: .25rem;
+    border: 2px solid black;
 }
 
 main .task-table {
@@ -110,7 +111,7 @@ main .task-table {
 
 main .task-table .due-date-cell {
     width: 0;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     padding: .5rem 1rem .5rem 0;
 }
 
@@ -119,7 +120,7 @@ main .task-table .title-cell {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: 550;
 }
 
@@ -127,9 +128,51 @@ main .task-table .desc-cell {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
 }
 
 main .task-table td {
     border-bottom: 1px solid grey;
+    cursor: pointer;
+}
+
+main form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+main form * {
+    font-size: 1.3rem;
+}
+
+main form div {
+    display: flex;
+    gap: 1rem;
+}
+
+main form label {
+    padding: .5rem;
+    font-weight: 600;
+}
+
+main form button {
+    align-self: center;
+    padding: .25rem .5rem;
+}
+
+#title-input,
+#desc-input,
+#notes-input {
+    flex: 1;
+    padding: .5rem;
+    border: 2px solid black;
+}
+
+#notes-input {
+    resize: none;
+}
+
+main * {
+    /* border: 1px dashed red; */
 }
