@@ -2,8 +2,8 @@ import './style.css';
 import './page-build.js';
 import { Task } from './task.js';
 import { Tag } from './tag.js';
-import { displayTasks } from './display-controller.js'
-import { isSameDay, isPast, endOfDay } from 'date-fns';
+import { displayTasks, displayDateInput, updateMainHeader, clearContent } from './display-controller.js'
+import { isSameDay, isPast, endOfDay, isWithinInterval } from 'date-fns';
 
 const tasks = [];
 
@@ -41,19 +41,37 @@ testTask1.addTag(testTag2);
         BUTTONS[key].addEventListener('click', () => {eval(newClickFn)()});
     }
 
-    const resolveAllBtnClick = () => { displayTasks(tasks) }
+    const resolveAllBtnClick = () => { 
+        updateMainHeader('All Tasks');
+        clearContent();
+        displayTasks(tasks);
+    }
 
     const resolveTodayBtnClick = () => {
         const todayTasks = tasks.filter(task => isSameDay(new Date(), task.dueDate));
+        updateMainHeader('Today\'s Tasks');
+        clearContent();
         displayTasks(todayTasks);
     }
 
     const resolveUpcomingBtnClick = () => {
-        console.log('Upcoming Button Pressed!');
+        updateMainHeader('Upcoming Tasks');
+        displayDateInput();
+        clearContent();
+        const dateInput = document.querySelector('input[type=date]')
+        dateInput.addEventListener('change', () => {
+            const upcomingDate = new Date(dateInput.value);
+            const upcomingInterval = {start: new Date(), end: upcomingDate}
+            const upcomingTasks = tasks.filter(task => isWithinInterval(task.dueDate, upcomingInterval));
+            clearContent();
+            displayTasks(upcomingTasks);
+        })
     }
 
     const resolvePastDueBtnClick = () => {
         const pastDueTasks = tasks.filter(task => isPast(task.dueDate));
+        updateMainHeader('Past Due Tasks');
+        clearContent();
         displayTasks(pastDueTasks);
     }
 
