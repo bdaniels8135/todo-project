@@ -1,4 +1,6 @@
 import { format } from 'date-fns';
+import { tags as tagsList } from './index.js'
+import removeIcon from './img/close-circle.svg';
 
 const main = document.querySelector('main');
 
@@ -46,14 +48,12 @@ export function displayTask(task) {
     
     const container1 = document.createElement('div');
     taskCard.appendChild(container1);
-    const titleInputLabel = document.createElement('label');
-    titleInputLabel.innerText = 'Title:';
-    container1.appendChild(titleInputLabel);
     const titleInput = document.createElement('input');
     titleInput.id = 'title-input';
     titleInput.type = 'text';
     titleInput.value = task.title;
-    titleInput.maxLength = 30;
+    titleInput.maxLength = 35;
+    titleInput.placeholder = 'Add a title';
     container1.appendChild(titleInput);
     const dueDateInputLabel = document.createElement('label');
     dueDateInputLabel.innerText = 'Due Date:';
@@ -66,46 +66,61 @@ export function displayTask(task) {
 
     const container2 = document.createElement('div');
     taskCard.appendChild(container2);
-    const descInputLabel = document.createElement('label');
-    descInputLabel.innerText = 'Description:';
-    container2.appendChild(descInputLabel);
     const descInput = document.createElement('input');
     descInput.id = 'desc-input';
     descInput.type = 'text';
     descInput.value = task.shortDesc;
-    descInput.maxLength = 45;
+    descInput.maxLength = 55;
+    descInput.placeholder = 'Add a short description';
     container2.appendChild(descInput);
-
-    const container5 = document.createElement('div');
-    taskCard.appendChild(container5);
-    const tagsLabel = document.createElement('label');
-    tagsLabel.innerText = 'Tags:';
-    container5.appendChild(tagsLabel);
-    const tags = document.createElement('ul');
-    tags.classList.add('tags-list');
-    tags.innerText = 'List of Tags goes here!';
-    container5.appendChild(tags);
 
     const container3 = document.createElement('div');
     taskCard.appendChild(container3);
-    const notesInputLabel = document.createElement('label');
-    notesInputLabel.innerText = 'Notes:';
-    container3.appendChild(notesInputLabel);
     const notesInput = document.createElement('textarea');
     notesInput.setAttribute('oninput', 'this.style.height = ""; this.style.height = this.scrollHeight + 5 + "px"');
     notesInput.id = 'notes-input';
     notesInput.value = task.notes;
+    notesInput.placeholder = 'Add additional notes';
     container3.appendChild(notesInput);
     
     const container4 = document.createElement('div');
     taskCard.appendChild(container4);
-    const checklistLabel = document.createElement('label');
-    checklistLabel.innerText = 'Checklist:';
-    container4.appendChild(checklistLabel);
+    const tags = document.createElement('ul');
+    tags.classList.add('tags-list');
+    task.tags.forEach(tag => {
+        const newItem = document.createElement('li');
+        newItem.id = tag + '-btn'
+        tags.appendChild(newItem);
+        const newItemText = document.createElement('p');
+        newItemText.innerText = tag;
+        newItem.appendChild(newItemText);
+        const newItemIcon = document.createElement('img');
+        newItemIcon.src = removeIcon;
+        newItem.appendChild(newItemIcon);
+    })
+    container4.appendChild(tags);
+    const tagsInput = document.createElement('select');
+    tagsInput.id = 'tag-input';
+    container4.appendChild(tagsInput);
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.innerText = '--Add a tag--';
+    tagsInput.appendChild(defaultOption);
+    tagsList.forEach(tag => {
+        if (!task.tags.includes(tag)) {
+            const newOption = document.createElement('option');
+            newOption.value = tag;
+            newOption.innerText = tag;
+            tagsInput.appendChild(newOption);
+        }
+    })
+    
+    const container5 = document.createElement('div');
+    taskCard.appendChild(container5);
     const checklist = document.createElement('ul');
     checklist.classList.add('checklist');
-    checklist.innerText = 'Check List goes here!';
-    container4.appendChild(checklist);
+    checklist.innerText = 'Checklist items go here!';
+    container5.appendChild(checklist);
 
     const saveBtn = document.createElement('button');
     saveBtn.type = 'button';

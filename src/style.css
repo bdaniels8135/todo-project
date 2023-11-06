@@ -12,6 +12,9 @@ body {
     grid-template-columns: 300px 1fr;
     grid-template-rows: min-content 20fr;
     height: 100vh;
+    max-width: 1500px;
+    min-width: min-content;
+    border: 3px solid black;
 }
 
 header {
@@ -52,7 +55,7 @@ aside h1 {
 
 aside div img {
     height: 2rem;
-    cursor: pointer;
+    cursor: default;
 }
 
 aside ul {
@@ -67,7 +70,7 @@ aside li {
     padding-left: 1rem;
     display: flex;
     gap: .5rem;
-    cursor: pointer;
+    cursor: default;
     align-items: center;
 }
 
@@ -133,7 +136,7 @@ main .task-table .desc-cell {
 
 main .task-table td {
     border-bottom: 1px solid grey;
-    cursor: pointer;
+    cursor: default;
 }
 
 main form {
@@ -142,35 +145,84 @@ main form {
     gap: 1.5rem;
 }
 
-main form * {
-    font-size: 1.3rem;
-}
-
 main form div {
     display: flex;
     gap: 1rem;
 }
 
 main form label {
+    font-size: 1.3rem;
     padding: .5rem;
-    font-weight: 600;
+    align-self: center;
+    white-space: nowrap;
 }
 
 main form button {
+    font-size: 1.3rem;
     align-self: center;
     padding: .25rem .5rem;
+    border-radius: .25rem;
+    background-color: rgb(200, 200, 200);
 }
 
-#title-input,
-#desc-input,
-#notes-input {
+main form ul {
+    font-size: 1.3rem;
+    padding: .5rem;
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+}
+
+main form ul img {
+    height: 1rem;
+}
+
+main form ul li {
+    display: flex;
+    gap: .25rem;
+    border: 1px solid grey;
+    background-color: rgb(200, 200, 200);
+    padding: .25rem;
+}
+
+#title-input {
+    font-size: 1.8rem;
+    flex: 1;
+    font-weight: 600;
+    padding: .5rem;
+    border: none;
+    border-bottom: 2px solid grey;
+}
+
+#desc-input {
+    font-size: 1.3rem;
     flex: 1;
     padding: .5rem;
-    border: 2px solid black;
+    border: none;
+    border-bottom: 2px solid grey;
+}
+#notes-input {
+    font-size: 1.3rem;
+    flex: 1;
+    padding: .5rem;
+    border: 2px solid grey;
+    resize: none;
+    border-radius: .25rem;
 }
 
-#notes-input {
-    resize: none;
+#due-date-input {
+    border: 2px solid grey;
+    border-radius: .25rem;
+    align-self: center;
+}
+
+#tag-input {
+    font-size: 1rem;
+    border: 2px solid grey;
+    background-color: white;
+    border-radius: .25rem;
+    height: 2rem;
+    align-self: center;
 }
 
 main * {

@@ -6,10 +6,11 @@ import { isSameDay, isPast, endOfDay, isWithinInterval } from 'date-fns';
 
 const tasks = [];
 
-const tags = [];
+export const tags = [];
 
 const testTask1 = new Task('Test Task 1', new Date(2025, 11, 5), 'This is the first test task.');
 tasks.push(testTask1);
+testTask1.createChecklistItem('This is a checklist item.');
 
 const testTask2 = new Task('Test Task 2', endOfDay(new Date()), 'This is the second test task.');
 tasks.push(testTask2);
@@ -20,6 +21,7 @@ tasks.push(testTask3);
 const importantTag = 'Important';
 tags.push(importantTag);
 testTask2.addTag(importantTag);
+testTask1.addTag(importantTag);
 
 const testTag2 = 'Test Tag 2';
 tags.push(testTag2);
