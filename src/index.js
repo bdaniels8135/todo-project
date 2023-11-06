@@ -4,27 +4,27 @@ import { Task } from './task.js';
 import { displayTasks, displayDateInput, displayMainHeader, clearMain, clearTaskTable } from './display-controller.js';
 import { isSameDay, isPast, endOfDay, isWithinInterval } from 'date-fns';
 
-const tasks = [];
+const tasksList = [];
 
-export const tags = [];
+export const tagsList = [];
 
 const testTask1 = new Task('Test Task 1', new Date(2025, 11, 5), 'This is the first test task.');
-tasks.push(testTask1);
+tasksList.push(testTask1);
 testTask1.createChecklistItem('This is a checklist item.');
 
 const testTask2 = new Task('Test Task 2', endOfDay(new Date()), 'This is the second test task.');
-tasks.push(testTask2);
+tasksList.push(testTask2);
 
 const testTask3 = new Task('Test Task 3', new Date(2020, 5, 10), 'This is the third test task.');
-tasks.push(testTask3);
+tasksList.push(testTask3);
 
 const importantTag = 'Important';
-tags.push(importantTag);
+tagsList.push(importantTag);
 testTask2.addTag(importantTag);
 testTask1.addTag(importantTag);
 
 const testTag2 = 'Test Tag 2';
-tags.push(testTag2);
+tagsList.push(testTag2);
 testTask1.addTag(testTag2);
 
 (() => {
@@ -45,12 +45,12 @@ testTask1.addTag(testTag2);
     const resolveAllBtnClick = () => { 
         clearMain();
         displayMainHeader('All Tasks');
-        displayTasks(tasks);
+        displayTasks(tasksList);
     }
 
     const resolveTodayBtnClick = () => {
         clearMain();
-        const todayTasks = tasks.filter(task => isSameDay(new Date(), task.dueDate));
+        const todayTasks = tasksList.filter(task => isSameDay(new Date(), task.dueDate));
         displayMainHeader('Today\'s Tasks');
         displayTasks(todayTasks);
     }
@@ -63,7 +63,7 @@ testTask1.addTag(testTag2);
         dateInput.addEventListener('change', () => {
             const upcomingDate = new Date(dateInput.value);
             const upcomingInterval = {start: new Date(), end: upcomingDate};
-            const upcomingTasks = tasks.filter(task => isWithinInterval(task.dueDate, upcomingInterval));
+            const upcomingTasks = tasksList.filter(task => isWithinInterval(task.dueDate, upcomingInterval));
             clearTaskTable();
             displayTasks(upcomingTasks);
         })
@@ -71,7 +71,7 @@ testTask1.addTag(testTag2);
 
     const resolvePastDueBtnClick = () => {
         clearMain();
-        const pastDueTasks = tasks.filter(task => isPast(task.dueDate));
+        const pastDueTasks = tasksList.filter(task => isPast(task.dueDate));
         displayMainHeader('Past Due Tasks');
         displayTasks(pastDueTasks);
     }

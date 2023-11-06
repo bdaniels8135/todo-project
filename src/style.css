@@ -152,7 +152,6 @@ main form div {
 
 main form label {
     font-size: 1.3rem;
-    padding: .5rem;
     align-self: center;
     white-space: nowrap;
 }
@@ -167,22 +166,34 @@ main form button {
 
 main form ul {
     font-size: 1.3rem;
-    padding: .5rem;
     list-style: none;
     display: flex;
     gap: 1rem;
+    flex: 1;
 }
 
 main form ul img {
     height: 1rem;
 }
 
-main form ul li {
+main form .tags-list li {
     display: flex;
     gap: .25rem;
     border: 1px solid grey;
     background-color: rgb(200, 200, 200);
     padding: .25rem;
+    align-items: center;
+}
+
+main form .checklist li {
+    display: flex;
+    gap: .5rem;
+    padding: .25rem;
+    align-items: center;
+}
+
+main form .checklist p {
+    font-size: 1.3rem;
 }
 
 #title-input {

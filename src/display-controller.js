@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { tags as tagsList } from './index.js'
+import { tagsList } from './index.js'
 import removeIcon from './img/close-circle.svg';
 
 const main = document.querySelector('main');
@@ -87,6 +87,7 @@ export function displayTask(task) {
     taskCard.appendChild(container4);
     const tags = document.createElement('ul');
     tags.classList.add('tags-list');
+    container4.appendChild(tags);
     task.tags.forEach(tag => {
         const newItem = document.createElement('li');
         newItem.id = tag + '-btn'
@@ -98,7 +99,6 @@ export function displayTask(task) {
         newItemIcon.src = removeIcon;
         newItem.appendChild(newItemIcon);
     })
-    container4.appendChild(tags);
     const tagsInput = document.createElement('select');
     tagsInput.id = 'tag-input';
     container4.appendChild(tagsInput);
@@ -119,8 +119,22 @@ export function displayTask(task) {
     taskCard.appendChild(container5);
     const checklist = document.createElement('ul');
     checklist.classList.add('checklist');
-    checklist.innerText = 'Checklist items go here!';
     container5.appendChild(checklist);
+    task.checklist.forEach((checklistItem, index) => {
+        const newItem = document.createElement('li')
+        newItem.id = 'checklist-item-' + String(index);
+        checklist.appendChild(newItem);
+        const newItemCheckBox = document.createElement('input');
+        newItemCheckBox.type = 'checkbox';
+        if (checklistItem.isChecked) newItemCheckBox.setAttribute('checked', '');
+        newItem.appendChild(newItemCheckBox);
+        const newItemText = document.createElement('p');
+        newItemText.innerText = checklistItem.text;
+        newItem.appendChild(newItemText);
+        const newItemIcon = document.createElement('img');
+        newItemIcon.src = removeIcon;
+        newItem.appendChild(newItemIcon);
+    })
 
     const saveBtn = document.createElement('button');
     saveBtn.type = 'button';
