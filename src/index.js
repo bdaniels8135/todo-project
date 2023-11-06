@@ -1,7 +1,6 @@
 import './style.css';
 import './page-build.js';
 import { Task } from './task.js';
-import { Tag } from './tag.js';
 import { displayTasks, displayDateInput, displayMainHeader, clearMain, clearTaskTable } from './display-controller.js';
 import { isSameDay, isPast, endOfDay, isWithinInterval } from 'date-fns';
 
@@ -18,11 +17,11 @@ tasks.push(testTask2);
 const testTask3 = new Task('Test Task 3', new Date(2020, 5, 10), 'This is the third test task.');
 tasks.push(testTask3);
 
-const importantTag = new Tag('Important', 'rgb(255, 0, 0)');
+const importantTag = 'Important';
 tags.push(importantTag);
 testTask2.addTag(importantTag);
 
-const testTag2 = new Tag('Test Tag 2', 'rgb(100, 100, 100)');
+const testTag2 = 'Test Tag 2';
 tags.push(testTag2);
 testTask1.addTag(testTag2);
 
