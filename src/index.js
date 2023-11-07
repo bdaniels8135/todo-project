@@ -1,6 +1,6 @@
 import './style.css';
 import { Task } from './task.js';
-import { displayTasks, displayDateInput, displayMainHeader, clearContainer, clearTaskTable, initializePageDisplay } from './display-controller.js';
+import { displayTasks, displayDateInput, displayMainHeader, clearContainer, clearTaskTable, initializePageDisplay } from './displayController.js';
 import { isSameDay, isPast, endOfDay, isWithinInterval } from 'date-fns';
 
 const tasksList = [];
