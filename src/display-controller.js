@@ -1,23 +1,27 @@
 import { format } from 'date-fns';
 import { tagsList } from './index.js'
+import { buildPage } from './buildPage.js';
 import removeIcon from './img/close-circle.svg';
 
-const main = document.querySelector('main');
+export function initializePageDisplay(body) {
+    body.innerHTML = '';
+    buildPage(body);
+}
 
-export function clearMain() { main.innerHTML = '' }
+export function clearContainer(container) { container.innerHTML = '' }
 
-export function clearTaskTable(parentElement) { 
+export function clearTaskTable(main) { 
     const table = main.querySelector('table');
     if (table) main.removeChild(table);
 }
 
-export function displayMainHeader(mainHeaderText) { 
+export function displayMainHeader(main, mainHeaderText) { 
     const mainHeader = document.createElement('h1');
     mainHeader.innerText = mainHeaderText;
     main.appendChild(mainHeader); 
 }
 
-export function displayTasks(tasksToDisplay) {
+export function displayTasks(main, tasksToDisplay) {
     const taskTable = document.createElement('table');
     taskTable.classList.add('task-table');
     main.appendChild(taskTable);
@@ -36,13 +40,13 @@ export function displayTasks(tasksToDisplay) {
         newDueDateCell.classList.add('due-date-cell');
         newDueDateCell.innerText = format(task.dueDate, 'MM/dd/yyyy');
         newRow.appendChild(newDueDateCell);
-        newRow.addEventListener('click', () => displayTask(task))
+        newRow.addEventListener('click', () => displayTask(main, task))
         taskTable.appendChild(newRow);
     }
 }
 
-export function displayTask(task) {
-    clearMain();
+export function displayTask(main, task) {
+    clearContainer(main);
     const taskCard = document.createElement('form');
     main.appendChild(taskCard);
     
@@ -153,7 +157,7 @@ export function displayTask(task) {
     taskCard.appendChild(saveBtn);
 }
 
-export function displayDateInput() {
+export function displayDateInput(main) {
     const dateInputContainer = document.createElement('div');
     const dateInputLabel = document.createElement('label');
     dateInputLabel.innerText = 'Display tasks due between now and:';
