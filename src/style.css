@@ -12,7 +12,7 @@ body {
     grid-template-columns: 300px 1fr;
     grid-template-rows: min-content 20fr;
     height: 100vh;
-    max-width: 1500px;
+    max-width: 1250px;
     min-width: min-content;
     border: 3px solid black;
     margin: auto;
@@ -143,7 +143,7 @@ main .task-table td {
 main form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2rem;
 }
 
 main form div {
@@ -174,7 +174,7 @@ main form ul {
     font-size: 1.3rem;
     list-style: none;
     display: flex;
-    gap: 1rem;
+    gap: .5rem;
     flex: 1;
 }
 
@@ -256,7 +256,7 @@ main form .checklist input[type='checkbox'] {
 #new-checklist-item {
     border: none;
     border-bottom: 2px solid grey;
-    margin: 0 2.5rem;
+    margin: -.5rem 2.5rem;
     font-size: 1.3rem;
     padding: .5rem;
 }

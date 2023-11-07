@@ -9,6 +9,7 @@ function buildPageHeader(){
     const headerText = document.createElement('h1');
     headerText.innerText = 'Task-ticle';
     header.appendChild(headerText);
+    
     return header;
 }
 
@@ -60,6 +61,7 @@ function buildTaskNav() {
         newItemText.innerText = pair.label;
         newItem.appendChild(newItemText);
     }
+
     return taskNav;
 }
 
@@ -86,6 +88,7 @@ function buildSidebar() {
     const sidebar = document.createElement('aside');
     sidebar.appendChild(buildTaskNav());
     sidebar.appendChild(buildTagsNav());
+
     return sidebar;
 }
 
@@ -94,5 +97,6 @@ export function buildPage() {
     fragment.appendChild(buildPageHeader());
     fragment.appendChild(buildSidebar());
     fragment.appendChild(document.createElement('main'));
+
     return fragment;
 }
