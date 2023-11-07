@@ -68,7 +68,7 @@ const resolveUpcomingBtnClick = () => {
         const upcomingDate = new Date(dateInput.value);
         const upcomingInterval = {start: new Date(), end: upcomingDate};
         const upcomingTasks = tasksList.filter(task => isWithinInterval(task.dueDate, upcomingInterval));
-        DC.clearTaskTable(main);
+        DC.deleteTableFrom(main);
         DC.displayTasks(main, upcomingTasks, tagsList);
     })
 }

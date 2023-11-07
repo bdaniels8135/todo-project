@@ -6,9 +6,9 @@ function initializePageDisplay(body) { body.appendChild(buildPage()) }
 
 function clearContainer(container) { container.innerHTML = '' }
 
-function clearTaskTable(main) { 
-    const table = main.querySelector('table');
-    if (table) main.removeChild(table);
+function deleteTableFrom(parent) { 
+    const table = parent.querySelector('table');
+    if (table) parent.removeChild(table);
 }
 
 function displayMainHeader(main, mainHeaderText) { 
@@ -17,78 +17,112 @@ function displayMainHeader(main, mainHeaderText) {
     main.appendChild(mainHeader); 
 }
 
+function displayDateInput(main) {
+    const dateInputContainer = document.createElement('div');
+    const dateInputLabel = document.createElement('label');
+    dateInputLabel.innerText = 'Display tasks due between now and:';
+    dateInputLabel.id = 'upcoming-date-label';
+    dateInputContainer.appendChild(dateInputLabel);
+    const dateInput = document.createElement('input');
+    dateInput.type = 'date';
+    dateInput.id = 'upcoming-date-input';
+    dateInput.min = new Date();
+    dateInputContainer.appendChild(dateInput);
+    main.appendChild(dateInputContainer);
+}
+
+function buildTaskRow(task) {
+    const newRow = document.createElement('tr');
+
+    const newTitleCell = document.createElement('td');
+    newTitleCell.classList.add('title-cell');
+    newTitleCell.innerText = String(task.title);
+    newRow.appendChild(newTitleCell);
+
+    const newDescCell = document.createElement('td');
+    newDescCell.classList.add('desc-cell');
+    newDescCell.innerText = String(task.shortDesc);
+    newRow.appendChild(newDescCell);
+
+    const newDueDateCell = document.createElement('td');
+    newDueDateCell.classList.add('due-date-cell');
+    newDueDateCell.innerText = format(task.dueDate, 'MM/dd/yyyy');
+    newRow.appendChild(newDueDateCell);
+
+    return newRow;
+}
+
 function displayTasks(main, tasksToDisplay, tagsList) {
     const taskTable = document.createElement('table');
     taskTable.classList.add('task-table');
     main.appendChild(taskTable);
 
     for (let task of tasksToDisplay) {
-        const newRow = document.createElement('tr');
-        const newTitleCell = document.createElement('td');
-        newTitleCell.classList.add('title-cell');
-        newTitleCell.innerText = String(task.title);
-        newRow.appendChild(newTitleCell);
-        const newDescCell = document.createElement('td');
-        newDescCell.classList.add('desc-cell');
-        newDescCell.innerText = String(task.shortDesc);
-        newRow.appendChild(newDescCell);
-        const newDueDateCell = document.createElement('td');
-        newDueDateCell.classList.add('due-date-cell');
-        newDueDateCell.innerText = format(task.dueDate, 'MM/dd/yyyy');
-        newRow.appendChild(newDueDateCell);
-        newRow.addEventListener('click', () => displayTask(main, task, tagsList))
+        const newRow = buildTaskRow(task);
+        newRow.addEventListener('click', () => displayTask(main, task, tagsList));
         taskTable.appendChild(newRow);
     }
 }
 
-function displayTask(main, task, tagsList) {
-    clearContainer(main);
-    const taskCard = document.createElement('form');
-    main.appendChild(taskCard);
+function buildTitleDateContainer(task) {
+    const container = document.createElement('div');
     
-    const container1 = document.createElement('div');
-    taskCard.appendChild(container1);
     const titleInput = document.createElement('input');
     titleInput.id = 'title-input';
     titleInput.type = 'text';
     titleInput.value = task.title;
     titleInput.maxLength = 30;
     titleInput.placeholder = 'Add a title';
-    container1.appendChild(titleInput);
+    container.appendChild(titleInput);
+    
     const dueDateInputLabel = document.createElement('label');
     dueDateInputLabel.innerText = 'Due Date:';
-    container1.appendChild(dueDateInputLabel);
+    container.appendChild(dueDateInputLabel);
+    
     const dueDateInput = document.createElement('input');
     dueDateInput.id = 'due-date-input';
     dueDateInput.type = 'date';
     dueDateInput.value = format(task.dueDate, 'yyyy-MM-dd');
-    container1.appendChild(dueDateInput);
+    container.appendChild(dueDateInput);
 
-    const container2 = document.createElement('div');
-    taskCard.appendChild(container2);
+    return container;
+}
+
+function buildShortDescContainer(task) {
+    const container = document.createElement('div');
+    
     const descInput = document.createElement('input');
     descInput.id = 'desc-input';
     descInput.type = 'text';
     descInput.value = task.shortDesc;
     descInput.maxLength = 55;
     descInput.placeholder = 'Add a short description';
-    container2.appendChild(descInput);
+    container.appendChild(descInput);
 
-    const container3 = document.createElement('div');
-    taskCard.appendChild(container3);
+    return container;
+}
+
+function buildNotesContainer(task) {
+    const container = document.createElement('div');
+
     const notesInput = document.createElement('textarea');
     notesInput.setAttribute('oninput', 'this.style.height = ""; this.style.height = this.scrollHeight + 5 + "px"');
     notesInput.id = 'notes-input';
     notesInput.value = task.notes;
     notesInput.placeholder = 'Add additional notes';
-    container3.appendChild(notesInput);
-      
-    const container5 = document.createElement('div');
-    container5.id = 'checklist-container';
-    taskCard.appendChild(container5);
+    container.appendChild(notesInput);
+
+    return container;
+}
+
+function buildChecklistContainer(task) {
+    const container = document.createElement('div');
+    container.id = 'checklist-container';
+    
     const checklist = document.createElement('ul');
     checklist.classList.add('checklist');
-    container5.appendChild(checklist);
+    container.appendChild(checklist);
+    
     task.checklist.forEach((checklistItem, index) => {
         const newItem = document.createElement('li');
         newItem.id = 'checklist-item-' + String(index);
@@ -109,17 +143,23 @@ function displayTask(main, task, tagsList) {
         newItemIcon.src = removeIcon;
         newItem.appendChild(newItemIcon);
     })
+    
     const newChecklistInput = document.createElement('input');
     newChecklistInput.type = 'text';
     newChecklistInput.id = 'new-checklist-item';
     newChecklistInput.placeholder = 'Add a checklist item'
-    container5.appendChild(newChecklistInput);
+    container.appendChild(newChecklistInput);
 
-    const container4 = document.createElement('div');
-    taskCard.appendChild(container4);
+    return container;
+}
+
+function buildTagsContainer(task, tagsList) {
+    const container = document.createElement('div');
+
     const tags = document.createElement('ul');
     tags.classList.add('tags-list');
-    container4.appendChild(tags);
+    container.appendChild(tags);
+    
     task.tags.forEach(tag => {
         const newItem = document.createElement('li');
         newItem.id = tag + '-btn';
@@ -131,13 +171,16 @@ function displayTask(main, task, tagsList) {
         newItemIcon.src = removeIcon;
         newItem.appendChild(newItemIcon);
     })
+    
     const tagsInput = document.createElement('select');
     tagsInput.id = 'tag-input';
-    container4.appendChild(tagsInput);
+    container.appendChild(tagsInput);
+    
     const defaultOption = document.createElement('option');
     defaultOption.value = '';
     defaultOption.innerText = '--Add a tag--';
     tagsInput.appendChild(defaultOption);
+    
     tagsList.forEach(tag => {
         if (!task.tags.includes(tag)) {
             const newOption = document.createElement('option');
@@ -147,24 +190,25 @@ function displayTask(main, task, tagsList) {
         }
     })
 
+    return container;
+}
+
+function displayTask(main, task, tagsList) {
+    clearContainer(main);
+    
+    const taskCard = document.createElement('form');
+    main.appendChild(taskCard);
+    
+    taskCard.appendChild(buildTitleDateContainer(task));
+    taskCard.appendChild(buildShortDescContainer(task));
+    taskCard.appendChild(buildNotesContainer(task));
+    taskCard.appendChild(buildChecklistContainer(task));
+    taskCard.appendChild(buildTagsContainer(task, tagsList));
+
     const saveBtn = document.createElement('button');
     saveBtn.type = 'button';
     saveBtn.innerText = 'Save';
     taskCard.appendChild(saveBtn);
-}
-
-function displayDateInput(main) {
-    const dateInputContainer = document.createElement('div');
-    const dateInputLabel = document.createElement('label');
-    dateInputLabel.innerText = 'Display tasks due between now and:';
-    dateInputLabel.id = 'upcoming-date-label';
-    dateInputContainer.appendChild(dateInputLabel);
-    const dateInput = document.createElement('input');
-    dateInput.type = 'date';
-    dateInput.id = 'upcoming-date-input';
-    dateInput.min = new Date();
-    dateInputContainer.appendChild(dateInput);
-    main.appendChild(dateInputContainer);
 }
 
 export const DisplayController = {
@@ -172,6 +216,6 @@ export const DisplayController = {
     displayDateInput, 
     displayMainHeader, 
     clearContainer, 
-    clearTaskTable, 
+    deleteTableFrom, 
     initializePageDisplay
 }
