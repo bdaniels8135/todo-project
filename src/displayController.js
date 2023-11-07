@@ -1,24 +1,23 @@
 import { format } from 'date-fns';
-import { tagsList } from './index.js'
 import { buildPage } from './buildPage.js';
 import removeIcon from './img/close-circle.svg';
 
-export function initializePageDisplay(body) { body.appendChild(buildPage()) }
+function initializePageDisplay(body) { body.appendChild(buildPage()) }
 
-export function clearContainer(container) { container.innerHTML = '' }
+function clearContainer(container) { container.innerHTML = '' }
 
-export function clearTaskTable(main) { 
+function clearTaskTable(main) { 
     const table = main.querySelector('table');
     if (table) main.removeChild(table);
 }
 
-export function displayMainHeader(main, mainHeaderText) { 
+function displayMainHeader(main, mainHeaderText) { 
     const mainHeader = document.createElement('h1');
     mainHeader.innerText = mainHeaderText;
     main.appendChild(mainHeader); 
 }
 
-export function displayTasks(main, tasksToDisplay) {
+function displayTasks(main, tasksToDisplay, tagsList) {
     const taskTable = document.createElement('table');
     taskTable.classList.add('task-table');
     main.appendChild(taskTable);
@@ -37,12 +36,12 @@ export function displayTasks(main, tasksToDisplay) {
         newDueDateCell.classList.add('due-date-cell');
         newDueDateCell.innerText = format(task.dueDate, 'MM/dd/yyyy');
         newRow.appendChild(newDueDateCell);
-        newRow.addEventListener('click', () => displayTask(main, task))
+        newRow.addEventListener('click', () => displayTask(main, task, tagsList))
         taskTable.appendChild(newRow);
     }
 }
 
-export function displayTask(main, task) {
+function displayTask(main, task, tagsList) {
     clearContainer(main);
     const taskCard = document.createElement('form');
     main.appendChild(taskCard);
@@ -154,7 +153,7 @@ export function displayTask(main, task) {
     taskCard.appendChild(saveBtn);
 }
 
-export function displayDateInput(main) {
+function displayDateInput(main) {
     const dateInputContainer = document.createElement('div');
     const dateInputLabel = document.createElement('label');
     dateInputLabel.innerText = 'Display tasks due between now and:';
@@ -166,4 +165,13 @@ export function displayDateInput(main) {
     dateInput.min = new Date();
     dateInputContainer.appendChild(dateInput);
     main.appendChild(dateInputContainer);
+}
+
+export const DisplayController = {
+    displayTasks, 
+    displayDateInput, 
+    displayMainHeader, 
+    clearContainer, 
+    clearTaskTable, 
+    initializePageDisplay
 }

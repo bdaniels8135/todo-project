@@ -1,11 +1,11 @@
 import './style.css';
 import { Task } from './task.js';
-import { displayTasks, displayDateInput, displayMainHeader, clearContainer, clearTaskTable, initializePageDisplay } from './displayController.js';
+import { DisplayController as DC } from './displayController.js';
 import { isSameDay, isPast, endOfDay, isWithinInterval } from 'date-fns';
 
 const tasksList = [];
 
-export const tagsList = [];
+const tagsList = [];
 
 const testTask1 = new Task('Test Task 1', new Date(2025, 11, 5), 'This is the first test task.');
 tasksList.push(testTask1);
@@ -26,62 +26,60 @@ const testTag2 = 'Test Tag 2';
 tagsList.push(testTag2);
 testTask1.addTag(testTag2);
 
-(() => {
-    const body = document.querySelector('body');
+const body = document.querySelector('body');
 
-    initializePageDisplay(body);
-    
-    const main = document.querySelector('main');
+DC.initializePageDisplay(body);
 
-    const BUTTONS = {
-        allBtn: document.getElementById('all-btn'),
-        todayBtn: document.getElementById('today-btn'),
-        upcomingBtn: document.getElementById('upcoming-btn'),
-        pastDueBtn: document.getElementById('past-due-btn'),
-        newTaskBtn: document.getElementById('new-task-btn'),
-        newTagBtn: document.getElementById('new-tag-btn'),
-    }
+const main = document.querySelector('main');
 
-    for (let key in BUTTONS) {
-        const newClickFn = 'resolve' + key[0].toUpperCase() + key.slice(1) + 'Click';
-        BUTTONS[key].addEventListener('click', () => {eval(newClickFn)()});
-    }
+const BUTTONS = {
+    allBtn: document.getElementById('all-btn'),
+    todayBtn: document.getElementById('today-btn'),
+    upcomingBtn: document.getElementById('upcoming-btn'),
+    pastDueBtn: document.getElementById('past-due-btn'),
+    newTaskBtn: document.getElementById('new-task-btn'),
+    newTagBtn: document.getElementById('new-tag-btn'),
+}
 
-    const resolveAllBtnClick = () => { 
-        clearContainer(main);
-        displayMainHeader(main, 'All Tasks');
-        displayTasks(main, tasksList);
-    }
+for (let key in BUTTONS) {
+    const newClickFn = 'resolve' + key[0].toUpperCase() + key.slice(1) + 'Click';
+    BUTTONS[key].addEventListener('click', () => {eval(newClickFn)()});
+}
 
-    const resolveTodayBtnClick = () => {
-        clearContainer(main);
-        const todayTasks = tasksList.filter(task => isSameDay(new Date(), task.dueDate));
-        displayMainHeader(main, 'Today\'s Tasks');
-        displayTasks(main, todayTasks);
-    }
+const resolveAllBtnClick = () => { 
+    DC.clearContainer(main);
+    DC.displayMainHeader(main, 'All Tasks');
+    DC.displayTasks(main, tasksList, tagsList);
+}
 
-    const resolveUpcomingBtnClick = () => {
-        clearContainer(main);
-        displayMainHeader(main, 'Upcoming Tasks');
-        displayDateInput(main);
-        const dateInput = document.querySelector('input[type=date]');
-        dateInput.addEventListener('change', () => {
-            const upcomingDate = new Date(dateInput.value);
-            const upcomingInterval = {start: new Date(), end: upcomingDate};
-            const upcomingTasks = tasksList.filter(task => isWithinInterval(task.dueDate, upcomingInterval));
-            clearTaskTable(main);
-            displayTasks(main, upcomingTasks);
-        })
-    }
+const resolveTodayBtnClick = () => {
+    DC.clearContainer(main);
+    const todayTasks = tasksList.filter(task => isSameDay(new Date(), task.dueDate));
+    DC.displayMainHeader(main, 'Today\'s Tasks');
+    DC.displayTasks(main, todayTasks, tagsList);
+}
 
-    const resolvePastDueBtnClick = () => {
-        clearContainer(main);
-        const pastDueTasks = tasksList.filter(task => isPast(task.dueDate));
-        displayMainHeader(main, 'Past Due Tasks');
-        displayTasks(main, pastDueTasks);
-    }
+const resolveUpcomingBtnClick = () => {
+    DC.clearContainer(main);
+    DC.displayMainHeader(main, 'Upcoming Tasks');
+    DC.displayDateInput(main);
+    const dateInput = document.querySelector('input[type=date]');
+    dateInput.addEventListener('change', () => {
+        const upcomingDate = new Date(dateInput.value);
+        const upcomingInterval = {start: new Date(), end: upcomingDate};
+        const upcomingTasks = tasksList.filter(task => isWithinInterval(task.dueDate, upcomingInterval));
+        DC.clearTaskTable(main);
+        DC.displayTasks(main, upcomingTasks, tagsList);
+    })
+}
 
-    const resolveNewTaskBtnClick = () => { console.log('New Task Button Pressed!') }
+const resolvePastDueBtnClick = () => {
+    DC.clearContainer(main);
+    const pastDueTasks = tasksList.filter(task => isPast(task.dueDate));
+    DC.displayMainHeader(main, 'Past Due Tasks');
+    DC.displayTasks(main, pastDueTasks, tagsList);
+}
 
-    const resolveNewTagBtnClick = () => { console.log('New Tag Button Pressed!') }
-})()
+const resolveNewTaskBtnClick = () => { console.log('New Task Button Pressed!') }
+
+const resolveNewTagBtnClick = () => { console.log('New Tag Button Pressed!') }
