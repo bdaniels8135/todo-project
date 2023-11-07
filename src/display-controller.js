@@ -52,7 +52,7 @@ export function displayTask(task) {
     titleInput.id = 'title-input';
     titleInput.type = 'text';
     titleInput.value = task.title;
-    titleInput.maxLength = 35;
+    titleInput.maxLength = 30;
     titleInput.placeholder = 'Add a title';
     container1.appendChild(titleInput);
     const dueDateInputLabel = document.createElement('label');
@@ -82,7 +82,39 @@ export function displayTask(task) {
     notesInput.value = task.notes;
     notesInput.placeholder = 'Add additional notes';
     container3.appendChild(notesInput);
-    
+      
+    const container5 = document.createElement('div');
+    container5.id = 'checklist-container';
+    taskCard.appendChild(container5);
+    const checklist = document.createElement('ul');
+    checklist.classList.add('checklist');
+    container5.appendChild(checklist);
+    task.checklist.forEach((checklistItem, index) => {
+        const newItem = document.createElement('li');
+        newItem.id = 'checklist-item-' + String(index);
+        checklist.appendChild(newItem);
+        const newItemCheckBox = document.createElement('input');
+        newItemCheckBox.type = 'checkbox';
+        if (checklistItem.isChecked) newItemCheckBox.setAttribute('checked', '');
+        newItemCheckBox.id = 'checklist-box-' + String(index);
+        newItem.appendChild(newItemCheckBox);
+        const newItemTextInput = document.createElement('input');
+        newItemTextInput.id = 'checklist-text-' + String(index);
+        newItemTextInput.type = 'text';
+        newItemTextInput.maxLength = 60;
+        newItemTextInput.value = checklistItem.text;
+        newItemTextInput.placeholder = 'Add a checklist item';
+        newItem.appendChild(newItemTextInput);
+        const newItemIcon = document.createElement('img');
+        newItemIcon.src = removeIcon;
+        newItem.appendChild(newItemIcon);
+    })
+    const newChecklistInput = document.createElement('input');
+    newChecklistInput.type = 'text';
+    newChecklistInput.id = 'new-checklist-item';
+    newChecklistInput.placeholder = 'Add a checklist item'
+    container5.appendChild(newChecklistInput);
+
     const container4 = document.createElement('div');
     taskCard.appendChild(container4);
     const tags = document.createElement('ul');
@@ -90,7 +122,7 @@ export function displayTask(task) {
     container4.appendChild(tags);
     task.tags.forEach(tag => {
         const newItem = document.createElement('li');
-        newItem.id = tag + '-btn'
+        newItem.id = tag + '-btn';
         tags.appendChild(newItem);
         const newItemText = document.createElement('p');
         newItemText.innerText = tag;
@@ -114,31 +146,10 @@ export function displayTask(task) {
             tagsInput.appendChild(newOption);
         }
     })
-    
-    const container5 = document.createElement('div');
-    taskCard.appendChild(container5);
-    const checklist = document.createElement('ul');
-    checklist.classList.add('checklist');
-    container5.appendChild(checklist);
-    task.checklist.forEach((checklistItem, index) => {
-        const newItem = document.createElement('li')
-        newItem.id = 'checklist-item-' + String(index);
-        checklist.appendChild(newItem);
-        const newItemCheckBox = document.createElement('input');
-        newItemCheckBox.type = 'checkbox';
-        if (checklistItem.isChecked) newItemCheckBox.setAttribute('checked', '');
-        newItem.appendChild(newItemCheckBox);
-        const newItemText = document.createElement('p');
-        newItemText.innerText = checklistItem.text;
-        newItem.appendChild(newItemText);
-        const newItemIcon = document.createElement('img');
-        newItemIcon.src = removeIcon;
-        newItem.appendChild(newItemIcon);
-    })
 
     const saveBtn = document.createElement('button');
     saveBtn.type = 'button';
-    saveBtn.innerText = 'Save Changes';
+    saveBtn.innerText = 'Save';
     taskCard.appendChild(saveBtn);
 }
 

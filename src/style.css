@@ -15,6 +15,7 @@ body {
     max-width: 1500px;
     min-width: min-content;
     border: 3px solid black;
+    margin: auto;
 }
 
 header {
@@ -150,6 +151,10 @@ main form div {
     gap: 1rem;
 }
 
+main form #checklist-container {
+    flex-direction: column;
+}
+
 main form label {
     font-size: 1.3rem;
     align-self: center;
@@ -162,6 +167,7 @@ main form button {
     padding: .25rem .5rem;
     border-radius: .25rem;
     background-color: rgb(200, 200, 200);
+    margin-top: 2rem;
 }
 
 main form ul {
@@ -173,7 +179,7 @@ main form ul {
 }
 
 main form ul img {
-    height: 1rem;
+    height: 1.3rem;
 }
 
 main form .tags-list li {
@@ -183,17 +189,28 @@ main form .tags-list li {
     background-color: rgb(200, 200, 200);
     padding: .25rem;
     align-items: center;
+    border-radius: .25rem;
 }
 
 main form .checklist li {
     display: flex;
-    gap: .5rem;
+    gap: 1rem;
     padding: .25rem;
     align-items: center;
+    flex: 1;
 }
 
-main form .checklist p {
+main form .checklist input[type='text'] {
     font-size: 1.3rem;
+    padding: .5rem;
+    border: none;
+    flex: 1;
+    border-bottom: 2px solid grey;
+}
+
+main form .checklist input[type='checkbox'] {
+    height: 1.3rem;
+    width: 1.3rem;
 }
 
 #title-input {
@@ -236,6 +253,10 @@ main form .checklist p {
     align-self: center;
 }
 
-main * {
-    /* border: 1px dashed red; */
+#new-checklist-item {
+    border: none;
+    border-bottom: 2px solid grey;
+    margin: 0 2.5rem;
+    font-size: 1.3rem;
+    padding: .5rem;
 }
