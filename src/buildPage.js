@@ -1,23 +1,20 @@
 import allIcon from './img/inbox.svg';
 import todayIcon from './img/calendar-today.svg';
 import upcomingIcon from './img/calendar-search.svg';
-import pastDueIcon from './img/exclamation-thick.svg'
+import pastDueIcon from './img/exclamation-thick.svg';
 import plusIcon from './img/plus-thick.svg';
 
-const body = document.querySelector('body');
-
-function buildPageHeader(body){
+function buildPageHeader(){
     const header = document.createElement('header');
-    body.appendChild(header);
     const headerText = document.createElement('h1');
     headerText.innerText = 'Task-ticle';
     header.appendChild(headerText);
+    return header;
 }
 
-function buildTaskNav(sidebar) {
+function buildTaskNav() {
     const taskNav = document.createElement('ul');
     taskNav.id = 'task-nav';
-    sidebar.appendChild(taskNav);
 
     const taskNavHeaderContainer = document.createElement('div');
     taskNav.appendChild(taskNavHeaderContainer);
@@ -48,7 +45,7 @@ function buildTaskNav(sidebar) {
             label: 'Past Due',
             icon: pastDueIcon,
         },
-    ]
+    ];
 
     for (let pair of taskLabelIconPairs) {
         const newItem = document.createElement('li');
@@ -63,12 +60,12 @@ function buildTaskNav(sidebar) {
         newItemText.innerText = pair.label;
         newItem.appendChild(newItemText);
     }
+    return taskNav;
 }
 
-function buildTagsNav(sidebar) {
+function buildTagsNav() {
     const tagsNav = document.createElement('ul');
     tagsNav.id = 'tags-nav';
-    sidebar.appendChild(tagsNav);
 
     const tagsNavHeaderContainer = document.createElement('div');
     tagsNav.appendChild(tagsNavHeaderContainer);
@@ -81,22 +78,21 @@ function buildTagsNav(sidebar) {
     newTagIcon.src = plusIcon;
     newTagIcon.id = 'new-tag-btn';
     tagsNavHeaderContainer.appendChild(newTagIcon);
+
+    return tagsNav;
 }
 
-function buildSidebar(body) {
+function buildSidebar() {
     const sidebar = document.createElement('aside');
-    body.appendChild(sidebar);
-    buildTaskNav(sidebar);
-    buildTagsNav(sidebar);
+    sidebar.appendChild(buildTaskNav());
+    sidebar.appendChild(buildTagsNav());
+    return sidebar;
 }
 
-function buildMain(body) {
-    const main = document.createElement('main');
-    body.appendChild(main);
-}
-
-export function buildPage(body) {
-    buildPageHeader(body)
-    buildSidebar(body)
-    buildMain(body)
+export function buildPage() {
+    const fragment = document.createDocumentFragment();
+    fragment.appendChild(buildPageHeader());
+    fragment.appendChild(buildSidebar());
+    fragment.appendChild(document.createElement('main'));
+    return fragment;
 }

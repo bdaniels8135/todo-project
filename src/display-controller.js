@@ -4,8 +4,7 @@ import { buildPage } from './buildPage.js';
 import removeIcon from './img/close-circle.svg';
 
 export function initializePageDisplay(body) {
-    body.innerHTML = '';
-    buildPage(body);
+    body.appendChild(buildPage());
 }
 
 export function clearContainer(container) { container.innerHTML = '' }
