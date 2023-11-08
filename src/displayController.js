@@ -1,5 +1,5 @@
 import { buildPage } from './buildPage.js';
-import { buildTaskForm, buildTaskTable, buildHeader, buildDateInputContainer} from './htmlBuilder.js'
+import { buildTaskForm, buildTaskTable, buildTableHeader, buildDateInputContainer} from './htmlBuilder.js'
 
 function initializePageDisplay(body) { 
     const page = buildPage();
@@ -15,12 +15,12 @@ function deleteTableFrom(parent) {
     if (table) parent.removeChild(table);
 }
 
-function displayHeaderOn(parent, text) { 
-    const header = buildHeader(text);
+function displayHeaderOn(parent, headerText) { 
+    const header = buildTableHeader(headerText);
     parent.appendChild(header); 
 }
 
-function displayDateInputOn(main) {
+function displayUpcomingDateInputOn(main) {
     const labelText = 'Display tasks due between now and:';
     const defaultDate = new Date();
     const dateInputContainer = buildDateInputContainer(labelText, defaultDate);
@@ -41,7 +41,7 @@ function displayTaskFormOn(main, task, tagsList) {
 export const DisplayController = {
     displayTaskFormOn,
     displayTaskTableOn, 
-    displayDateInputOn, 
+    displayUpcomingDateInputOn, 
     displayHeaderOn, 
     clearContainer, 
     deleteTableFrom, 

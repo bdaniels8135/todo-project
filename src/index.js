@@ -62,7 +62,7 @@ const resolveTodayBtnClick = () => {
 const resolveUpcomingBtnClick = () => {
     DC.clearContainer(main);
     DC.displayHeaderOn(main, 'Upcoming Tasks');
-    DC.displayDateInputOn(main);
+    DC.displayUpcomingDateInputOn(main);
     const dateInput = document.querySelector('input[type=date]');
     dateInput.addEventListener('change', (event) => {
         const upcomingDate = endOfDay(parseISO(event.target.value));

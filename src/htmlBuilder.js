@@ -2,9 +2,9 @@ import { format } from 'date-fns';
 import removeIcon from './img/close-circle.svg';
 import { DisplayController as DC } from './displayController'
 
-export function buildHeader(text) {
+export function buildTableHeader(headerText) {
     const header = document.createElement('h1');
-    header.innerText = text;
+    header.innerText = headerText;
 
     return header;
 }
@@ -37,24 +37,24 @@ export function buildDateInputContainer(labelText, defaultDate) {
 }
 
 function buildTaskRow(title, shortDesc, dueDate) {
-    const newRow = document.createElement('tr');
+    const newTaskRow = document.createElement('tr');
 
     const newTitleCell = document.createElement('td');
     newTitleCell.classList.add('title-cell');
     newTitleCell.innerText = String(title);
-    newRow.appendChild(newTitleCell);
+    newTaskRow.appendChild(newTitleCell);
 
     const newDescCell = document.createElement('td');
     newDescCell.classList.add('desc-cell');
     newDescCell.innerText = String(shortDesc);
-    newRow.appendChild(newDescCell);
+    newTaskRow.appendChild(newDescCell);
 
     const newDueDateCell = document.createElement('td');
     newDueDateCell.classList.add('due-date-cell');
     newDueDateCell.innerText = format(dueDate, 'MM/dd/yyyy');
-    newRow.appendChild(newDueDateCell);
+    newTaskRow.appendChild(newDueDateCell);
 
-    return newRow;
+    return newTaskRow;
 }
 
 export function buildTaskTable(main, tasksToDisplay, tagsList) {
