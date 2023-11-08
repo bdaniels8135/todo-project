@@ -1,5 +1,5 @@
 import { buildPage } from './buildPage.js';
-import { buildChecklistContainer, buildHeader, buildDateInputContainer, buildNotesContainer, buildShortDescContainer, buildTagsContainer, buildTaskRow, buildTitleDateContainer } from './htmlBuilder.js'
+import { buildTaskForm, buildTaskTable, buildHeader, buildDateInputContainer} from './htmlBuilder.js'
 
 function initializePageDisplay(body) { 
     const page = buildPage();
@@ -27,38 +27,20 @@ function displayDateInputOn(main) {
     main.appendChild(dateInputContainer);
 }
 
-function displayTasksOn(main, tasksToDisplay, tagsList) {
-    const taskTable = document.createElement('table');
-    taskTable.classList.add('task-table');
+function displayTaskTableOn(main, tasksToDisplay, tagsList) {
+    const taskTable = buildTaskTable(main, tasksToDisplay, tagsList);
     main.appendChild(taskTable);
-
-    for (let task of tasksToDisplay) {
-        const newRow = buildTaskRow(task.title, task.shortDesc, task.dueDate);
-        newRow.addEventListener('click', () => displayTask(main, task, tagsList));
-        taskTable.appendChild(newRow);
-    }
 }
 
-function displayTask(main, task, tagsList) {
+function displayTaskFormOn(main, task, tagsList) {
     clearContainer(main);
-    
-    const taskCard = document.createElement('form');
-    main.appendChild(taskCard);
-    
-    taskCard.appendChild(buildTitleDateContainer(task));
-    taskCard.appendChild(buildShortDescContainer(task));
-    taskCard.appendChild(buildNotesContainer(task));
-    taskCard.appendChild(buildChecklistContainer(task));
-    taskCard.appendChild(buildTagsContainer(task, tagsList));
-
-    const saveBtn = document.createElement('button');
-    saveBtn.type = 'button';
-    saveBtn.innerText = 'Save';
-    taskCard.appendChild(saveBtn);
+    const form = buildTaskForm(task, tagsList);
+    main.appendChild(form);
 }
 
 export const DisplayController = {
-    displayTasksOn, 
+    displayTaskFormOn,
+    displayTaskTableOn, 
     displayDateInputOn, 
     displayHeaderOn, 
     clearContainer, 

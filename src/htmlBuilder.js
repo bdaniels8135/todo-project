@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import removeIcon from './img/close-circle.svg';
-
+import { DisplayController as DC } from './displayController'
 
 export function buildHeader(text) {
     const header = document.createElement('h1');
@@ -36,7 +36,7 @@ export function buildDateInputContainer(labelText, defaultDate) {
     return container;
 }
 
-export function buildTaskRow(title, shortDesc, dueDate) {
+function buildTaskRow(title, shortDesc, dueDate) {
     const newRow = document.createElement('tr');
 
     const newTitleCell = document.createElement('td');
@@ -57,7 +57,20 @@ export function buildTaskRow(title, shortDesc, dueDate) {
     return newRow;
 }
 
-export function buildTitleDateContainer(task) {
+export function buildTaskTable(main, tasksToDisplay, tagsList) {
+    const taskTable = document.createElement('table');
+    taskTable.classList.add('task-table');
+
+    for (let task of tasksToDisplay) {
+        const newRow = buildTaskRow(task.title, task.shortDesc, task.dueDate);
+        newRow.addEventListener('click', () => DC.displayTaskFormOn(main, task, tagsList));
+        taskTable.appendChild(newRow);
+    }
+
+    return taskTable;
+}
+
+function buildTitleDateContainer(task) {
     const container = document.createElement('div');
     
     const titleInput = document.createElement('input');
@@ -76,7 +89,7 @@ export function buildTitleDateContainer(task) {
     return container;
 }
 
-export function buildShortDescContainer(task) {
+function buildShortDescContainer(task) {
     const container = document.createElement('div');
     
     const descInput = document.createElement('input');
@@ -90,7 +103,7 @@ export function buildShortDescContainer(task) {
     return container;
 }
 
-export function buildNotesContainer(task) {
+function buildNotesContainer(task) {
     const container = document.createElement('div');
 
     const notesInput = document.createElement('textarea');
@@ -103,7 +116,7 @@ export function buildNotesContainer(task) {
     return container;
 }
 
-export function buildChecklistContainer(task) {
+function buildChecklistContainer(task) {
     const container = document.createElement('div');
     container.id = 'checklist-container';
     
@@ -141,7 +154,7 @@ export function buildChecklistContainer(task) {
     return container;
 }
 
-export function buildTagsContainer(task, tagsList) {
+function buildTagsContainer(task, tagsList) {
     const container = document.createElement('div');
 
     const tags = document.createElement('ul');
@@ -179,4 +192,30 @@ export function buildTagsContainer(task, tagsList) {
     })
 
     return container;
+}
+
+export function buildTaskForm(task, tagsList) {
+    const form = document.createElement('form');
+    
+    const titleDateContainer = buildTitleDateContainer(task);
+    form.appendChild(titleDateContainer);
+    
+    const shortDescContainer = buildShortDescContainer(task)
+    form.appendChild(shortDescContainer);
+    
+    const notesContainer = buildNotesContainer(task);
+    form.appendChild(notesContainer);
+    
+    const checklistContainer = buildChecklistContainer(task);
+    form.appendChild(checklistContainer);
+    
+    const tagsContainer = buildTagsContainer(task, tagsList)
+    form.appendChild(tagsContainer);
+
+    const saveBtn = document.createElement('button');
+    saveBtn.type = 'button';
+    saveBtn.innerText = 'Save';
+    form.appendChild(saveBtn);
+
+    return form;
 }

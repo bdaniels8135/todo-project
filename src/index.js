@@ -49,14 +49,14 @@ for (let key in BUTTONS) {
 const resolveAllBtnClick = () => { 
     DC.clearContainer(main);
     DC.displayHeaderOn(main, 'All Tasks');
-    DC.displayTasksOn(main, tasksList, tagsList);
+    DC.displayTaskTableOn(main, tasksList, tagsList);
 }
 
 const resolveTodayBtnClick = () => {
     DC.clearContainer(main);
     const todayTasks = tasksList.filter(task => isSameDay(new Date(), task.dueDate));
     DC.displayHeaderOn(main, 'Today\'s Tasks');
-    DC.displayTasksOn(main, todayTasks, tagsList);
+    DC.displayTaskTableOn(main, todayTasks, tagsList);
 }
 
 const resolveUpcomingBtnClick = () => {
@@ -69,7 +69,7 @@ const resolveUpcomingBtnClick = () => {
         const upcomingInterval = {start: startOfDay(new Date()), end: upcomingDate};
         const upcomingTasks = tasksList.filter(task => isWithinInterval(task.dueDate, upcomingInterval));
         DC.deleteTableFrom(main);
-        DC.displayTasksOn(main, upcomingTasks, tagsList);
+        DC.displayTaskTableOn(main, upcomingTasks, tagsList);
     })
 }
 
@@ -77,7 +77,7 @@ const resolvePastDueBtnClick = () => {
     DC.clearContainer(main);
     const pastDueTasks = tasksList.filter(task => isPast(task.dueDate));
     DC.displayHeaderOn(main, 'Past Due Tasks');
-    DC.displayTasksOn(main, pastDueTasks, tagsList);
+    DC.displayTaskTableOn(main, pastDueTasks, tagsList);
 }
 
 const resolveNewTaskBtnClick = () => { console.log('New Task Button Pressed!') }
