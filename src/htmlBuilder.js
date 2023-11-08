@@ -70,32 +70,32 @@ export function buildTaskTable(main, tasksToDisplay, tagsList) {
     return taskTable;
 }
 
-function buildTitleDateContainer(task) {
+function buildTitleDateContainer(title, dueDate) {
     const container = document.createElement('div');
     
     const titleInput = document.createElement('input');
     titleInput.id = 'title-input';
     titleInput.type = 'text';
-    titleInput.value = task.title;
+    titleInput.value = title;
     titleInput.maxLength = 30;
     titleInput.placeholder = 'Add a title';
     container.appendChild(titleInput);
     
     const labelText = 'Due Date:';
-    const defaultDate = task.dueDate;
+    const defaultDate = dueDate;
     const dateInputContainer = buildDateInputContainer(labelText, defaultDate);
     container.appendChild(dateInputContainer);
 
     return container;
 }
 
-function buildShortDescContainer(task) {
+function buildShortDescContainer(shortDesc) {
     const container = document.createElement('div');
     
     const descInput = document.createElement('input');
     descInput.id = 'desc-input';
     descInput.type = 'text';
-    descInput.value = task.shortDesc;
+    descInput.value = shortDesc;
     descInput.maxLength = 55;
     descInput.placeholder = 'Add a short description';
     container.appendChild(descInput);
@@ -103,20 +103,20 @@ function buildShortDescContainer(task) {
     return container;
 }
 
-function buildNotesContainer(task) {
+function buildNotesContainer(notes) {
     const container = document.createElement('div');
 
     const notesInput = document.createElement('textarea');
     notesInput.setAttribute('oninput', 'this.style.height = ""; this.style.height = this.scrollHeight + 5 + "px"');
     notesInput.id = 'notes-input';
-    notesInput.value = task.notes;
+    notesInput.value = notes;
     notesInput.placeholder = 'Add additional notes';
     container.appendChild(notesInput);
 
     return container;
 }
 
-function buildChecklistContainer(task) {
+function buildChecklistContainer(taskChecklist) {
     const container = document.createElement('div');
     container.id = 'checklist-container';
     
@@ -124,7 +124,7 @@ function buildChecklistContainer(task) {
     checklist.classList.add('checklist');
     container.appendChild(checklist);
     
-    task.checklist.forEach((checklistItem, index) => {
+    taskChecklist.forEach((checklistItem, index) => {
         const newItem = document.createElement('li');
         newItem.id = 'checklist-item-' + String(index);
         checklist.appendChild(newItem);
@@ -154,14 +154,14 @@ function buildChecklistContainer(task) {
     return container;
 }
 
-function buildTagsContainer(task, tagsList) {
+function buildTagsContainer(taskTags, tagsList) {
     const container = document.createElement('div');
 
     const tags = document.createElement('ul');
     tags.classList.add('tags-list');
     container.appendChild(tags);
     
-    task.tags.forEach(tag => {
+    taskTags.forEach(tag => {
         const newItem = document.createElement('li');
         newItem.id = tag + '-btn';
         tags.appendChild(newItem);
@@ -183,7 +183,7 @@ function buildTagsContainer(task, tagsList) {
     tagsInput.appendChild(defaultOption);
     
     tagsList.forEach(tag => {
-        if (!task.tags.includes(tag)) {
+        if (!taskTags.includes(tag)) {
             const newOption = document.createElement('option');
             newOption.value = tag;
             newOption.innerText = tag;
@@ -194,27 +194,33 @@ function buildTagsContainer(task, tagsList) {
     return container;
 }
 
-export function buildTaskForm(task, tagsList) {
-    const form = document.createElement('form');
-    
-    const titleDateContainer = buildTitleDateContainer(task);
-    form.appendChild(titleDateContainer);
-    
-    const shortDescContainer = buildShortDescContainer(task)
-    form.appendChild(shortDescContainer);
-    
-    const notesContainer = buildNotesContainer(task);
-    form.appendChild(notesContainer);
-    
-    const checklistContainer = buildChecklistContainer(task);
-    form.appendChild(checklistContainer);
-    
-    const tagsContainer = buildTagsContainer(task, tagsList)
-    form.appendChild(tagsContainer);
-
+function buildSaveBtn() {
     const saveBtn = document.createElement('button');
     saveBtn.type = 'button';
     saveBtn.innerText = 'Save';
+
+    return saveBtn;
+}
+
+export function buildTaskForm(task, tagsList) {
+    const form = document.createElement('form');
+    
+    const titleDateContainer = buildTitleDateContainer(task.title, task.dueDate);
+    form.appendChild(titleDateContainer);
+    
+    const shortDescContainer = buildShortDescContainer(task.shortDesc)
+    form.appendChild(shortDescContainer);
+    
+    const notesContainer = buildNotesContainer(task.notes);
+    form.appendChild(notesContainer);
+    
+    const checklistContainer = buildChecklistContainer(task.checklist);
+    form.appendChild(checklistContainer);
+    
+    const tagsContainer = buildTagsContainer(task.tags, tagsList)
+    form.appendChild(tagsContainer);
+
+    const saveBtn = buildSaveBtn();
     form.appendChild(saveBtn);
 
     return form;

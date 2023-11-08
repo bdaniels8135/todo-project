@@ -83,3 +83,5 @@ const resolvePastDueBtnClick = () => {
 const resolveNewTaskBtnClick = () => { console.log('New Task Button Pressed!') }
 
 const resolveNewTagBtnClick = () => { console.log('New Tag Button Pressed!') }
+
+resolveAllBtnClick();
