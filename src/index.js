@@ -1,7 +1,7 @@
 import './style.css';
 import { Task } from './task.js';
 import { DisplayController as DC } from './displayController.js';
-import { isSameDay, isPast, endOfDay, isWithinInterval } from 'date-fns';
+import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } from 'date-fns';
 
 const tasksList = [];
 
@@ -48,36 +48,36 @@ for (let key in BUTTONS) {
 
 const resolveAllBtnClick = () => { 
     DC.clearContainer(main);
-    DC.displayMainHeader(main, 'All Tasks');
-    DC.displayTasks(main, tasksList, tagsList);
+    DC.displayHeaderOn(main, 'All Tasks');
+    DC.displayTasksOn(main, tasksList, tagsList);
 }
 
 const resolveTodayBtnClick = () => {
     DC.clearContainer(main);
     const todayTasks = tasksList.filter(task => isSameDay(new Date(), task.dueDate));
-    DC.displayMainHeader(main, 'Today\'s Tasks');
-    DC.displayTasks(main, todayTasks, tagsList);
+    DC.displayHeaderOn(main, 'Today\'s Tasks');
+    DC.displayTasksOn(main, todayTasks, tagsList);
 }
 
 const resolveUpcomingBtnClick = () => {
     DC.clearContainer(main);
-    DC.displayMainHeader(main, 'Upcoming Tasks');
+    DC.displayHeaderOn(main, 'Upcoming Tasks');
     DC.displayDateInput(main);
     const dateInput = document.querySelector('input[type=date]');
-    dateInput.addEventListener('change', () => {
-        const upcomingDate = new Date(dateInput.value);
-        const upcomingInterval = {start: new Date(), end: upcomingDate};
+    dateInput.addEventListener('change', (event) => {
+        const upcomingDate = endOfDay(parseISO(event.target.value));
+        const upcomingInterval = {start: startOfDay(new Date()), end: upcomingDate};
         const upcomingTasks = tasksList.filter(task => isWithinInterval(task.dueDate, upcomingInterval));
         DC.deleteTableFrom(main);
-        DC.displayTasks(main, upcomingTasks, tagsList);
+        DC.displayTasksOn(main, upcomingTasks, tagsList);
     })
 }
 
 const resolvePastDueBtnClick = () => {
     DC.clearContainer(main);
     const pastDueTasks = tasksList.filter(task => isPast(task.dueDate));
-    DC.displayMainHeader(main, 'Past Due Tasks');
-    DC.displayTasks(main, pastDueTasks, tagsList);
+    DC.displayHeaderOn(main, 'Past Due Tasks');
+    DC.displayTasksOn(main, pastDueTasks, tagsList);
 }
 
 const resolveNewTaskBtnClick = () => { console.log('New Task Button Pressed!') }

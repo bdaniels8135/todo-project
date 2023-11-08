@@ -97,7 +97,7 @@ main h1 {
     padding-bottom: .2rem;
 }
 
-main #upcoming-date-label {
+main label {
     padding: 1rem 1rem 1rem 0;
     font-size: 1.3rem;
 }
@@ -106,6 +106,7 @@ main input[type='date'] {
     font-size: 1.3rem;
     padding: .25rem;
     border: 2px solid black;
+    border-radius: .25rem;
 }
 
 main .task-table {
@@ -238,7 +239,7 @@ main form .checklist input[type='checkbox'] {
     border-radius: .25rem;
 }
 
-#due-date-input {
+form #date-input {
     border: 2px solid grey;
     border-radius: .25rem;
     align-self: center;

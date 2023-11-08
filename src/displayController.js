@@ -11,23 +11,34 @@ function deleteTableFrom(parent) {
     if (table) parent.removeChild(table);
 }
 
-function displayMainHeader(main, mainHeaderText) { 
-    const mainHeader = document.createElement('h1');
-    mainHeader.innerText = mainHeaderText;
-    main.appendChild(mainHeader); 
+function displayHeaderOn(parent, text) { 
+    const header = document.createElement('h1');
+    header.innerText = text;
+    parent.appendChild(header); 
+}
+
+function buildDateInput(labelText, defaultDate) {
+    const fragment = document.createDocumentFragment();
+    
+    const label = document.createElement('label');
+    label.innerText = labelText;
+    fragment.appendChild(label);
+
+    const dateInput = document.createElement('input');
+    dateInput.type = 'date';
+    dateInput.id = 'date-input';
+    dateInput.value = format(defaultDate, 'yyyy-MM-dd');
+    dateInput.min = format(new Date(), 'yyyy-MM-dd');
+    fragment.appendChild(dateInput);
+
+    return fragment;
 }
 
 function displayDateInput(main) {
     const dateInputContainer = document.createElement('div');
-    const dateInputLabel = document.createElement('label');
-    dateInputLabel.innerText = 'Display tasks due between now and:';
-    dateInputLabel.id = 'upcoming-date-label';
-    dateInputContainer.appendChild(dateInputLabel);
-    const dateInput = document.createElement('input');
-    dateInput.type = 'date';
-    dateInput.id = 'upcoming-date-input';
-    dateInput.min = new Date();
-    dateInputContainer.appendChild(dateInput);
+    const labelText = 'Display tasks due between now and:';
+    const defaultDate = new Date();
+    dateInputContainer.appendChild(buildDateInput(labelText, defaultDate))
     main.appendChild(dateInputContainer);
 }
 
@@ -52,7 +63,7 @@ function buildTaskRow(task) {
     return newRow;
 }
 
-function displayTasks(main, tasksToDisplay, tagsList) {
+function displayTasksOn(main, tasksToDisplay, tagsList) {
     const taskTable = document.createElement('table');
     taskTable.classList.add('task-table');
     main.appendChild(taskTable);
@@ -75,15 +86,9 @@ function buildTitleDateContainer(task) {
     titleInput.placeholder = 'Add a title';
     container.appendChild(titleInput);
     
-    const dueDateInputLabel = document.createElement('label');
-    dueDateInputLabel.innerText = 'Due Date:';
-    container.appendChild(dueDateInputLabel);
-    
-    const dueDateInput = document.createElement('input');
-    dueDateInput.id = 'due-date-input';
-    dueDateInput.type = 'date';
-    dueDateInput.value = format(task.dueDate, 'yyyy-MM-dd');
-    container.appendChild(dueDateInput);
+    const labelText = 'Due Date:';
+    const defaultDate = task.dueDate;
+    container.appendChild(buildDateInput(labelText, defaultDate));
 
     return container;
 }
@@ -212,9 +217,9 @@ function displayTask(main, task, tagsList) {
 }
 
 export const DisplayController = {
-    displayTasks, 
+    displayTasksOn, 
     displayDateInput, 
-    displayMainHeader, 
+    displayHeaderOn, 
     clearContainer, 
     deleteTableFrom, 
     initializePageDisplay
