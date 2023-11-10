@@ -1,5 +1,4 @@
 import removeIcon from './img/close-circle.svg';
-import { format } from 'date-fns';
 
 function packageElements(...elements) {
     const container = document.createElement('div');
@@ -19,7 +18,6 @@ function buildDateInput() {
     const dateInput = document.createElement('input');
     dateInput.type = 'date';
     dateInput.id = 'date-input';
-    dateInput.min = format(new Date(), 'yyyy-MM-dd');
 
     return dateInput;
 }

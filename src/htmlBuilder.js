@@ -1,6 +1,5 @@
 import { format } from 'date-fns';
-import removeIcon from './img/close-circle.svg';
-import { DisplayController as DC } from './displayController'
+import { DisplayController as DC } from './displayController';
 
 export function buildTableHeader(headerText) {
     const header = document.createElement('h1');
@@ -30,7 +29,7 @@ export function buildDateInputContainer(labelText, defaultDate) {
     const container = document.createElement('div');
     const label = buildLabel(labelText);
     container.appendChild(label);
-    const dateInput = buildDateInput(defaultDate)
+    const dateInput = buildDateInput(defaultDate);
     container.appendChild(dateInput);
 
     return container;
@@ -68,160 +67,4 @@ export function buildTaskTable(main, tasksToDisplay, tagsList) {
     }
 
     return taskTable;
-}
-
-function buildTitleDateContainer(title, dueDate) {
-    const container = document.createElement('div');
-    
-    const titleInput = document.createElement('input');
-    titleInput.id = 'title-input';
-    titleInput.type = 'text';
-    titleInput.value = title;
-    titleInput.maxLength = 30;
-    titleInput.placeholder = 'Add a title';
-    container.appendChild(titleInput);
-    
-    const labelText = 'Due Date:';
-    const defaultDate = dueDate;
-    const dateInputContainer = buildDateInputContainer(labelText, defaultDate);
-    container.appendChild(dateInputContainer);
-
-    return container;
-}
-
-function buildShortDescContainer(shortDesc) {
-    const container = document.createElement('div');
-    
-    const descInput = document.createElement('input');
-    descInput.id = 'desc-input';
-    descInput.type = 'text';
-    descInput.value = shortDesc;
-    descInput.maxLength = 55;
-    descInput.placeholder = 'Add a short description';
-    container.appendChild(descInput);
-
-    return container;
-}
-
-function buildNotesContainer(notes) {
-    const container = document.createElement('div');
-
-    const notesInput = document.createElement('textarea');
-    notesInput.setAttribute('oninput', 'this.style.height = ""; this.style.height = this.scrollHeight + 5 + "px"');
-    notesInput.id = 'notes-input';
-    notesInput.value = notes;
-    notesInput.placeholder = 'Add additional notes';
-    container.appendChild(notesInput);
-
-    return container;
-}
-
-function buildChecklistContainer(taskChecklist) {
-    const container = document.createElement('div');
-    container.id = 'checklist-container';
-    
-    const checklist = document.createElement('ul');
-    checklist.classList.add('checklist');
-    container.appendChild(checklist);
-    
-    taskChecklist.forEach((checklistItem, index) => {
-        const newItem = document.createElement('li');
-        newItem.id = 'checklist-item-' + String(index);
-        checklist.appendChild(newItem);
-        const newItemCheckBox = document.createElement('input');
-        newItemCheckBox.type = 'checkbox';
-        if (checklistItem.isChecked) newItemCheckBox.setAttribute('checked', '');
-        newItemCheckBox.id = 'checklist-box-' + String(index);
-        newItem.appendChild(newItemCheckBox);
-        const newItemTextInput = document.createElement('input');
-        newItemTextInput.id = 'checklist-text-' + String(index);
-        newItemTextInput.type = 'text';
-        newItemTextInput.maxLength = 60;
-        newItemTextInput.value = checklistItem.text;
-        newItemTextInput.placeholder = 'Add a checklist item';
-        newItem.appendChild(newItemTextInput);
-        const newItemIcon = document.createElement('img');
-        newItemIcon.src = removeIcon;
-        newItem.appendChild(newItemIcon);
-    })
-    
-    const newChecklistInput = document.createElement('input');
-    newChecklistInput.type = 'text';
-    newChecklistInput.id = 'new-checklist-item';
-    newChecklistInput.placeholder = 'Add a checklist item'
-    container.appendChild(newChecklistInput);
-
-    return container;
-}
-
-function buildTagsContainer(taskTags, tagsList) {
-    const container = document.createElement('div');
-
-    const tags = document.createElement('ul');
-    tags.classList.add('tags-list');
-    container.appendChild(tags);
-    
-    taskTags.forEach(tag => {
-        const newItem = document.createElement('li');
-        newItem.id = tag + '-btn';
-        tags.appendChild(newItem);
-        const newItemText = document.createElement('p');
-        newItemText.innerText = tag;
-        newItem.appendChild(newItemText);
-        const newItemIcon = document.createElement('img');
-        newItemIcon.src = removeIcon;
-        newItem.appendChild(newItemIcon);
-    })
-    
-    const tagsInput = document.createElement('select');
-    tagsInput.id = 'tag-input';
-    container.appendChild(tagsInput);
-    
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.innerText = '--Add a tag--';
-    tagsInput.appendChild(defaultOption);
-    
-    tagsList.forEach(tag => {
-        if (!taskTags.includes(tag)) {
-            const newOption = document.createElement('option');
-            newOption.value = tag;
-            newOption.innerText = tag;
-            tagsInput.appendChild(newOption);
-        }
-    })
-
-    return container;
-}
-
-function buildSaveBtn() {
-    const saveBtn = document.createElement('button');
-    saveBtn.type = 'button';
-    saveBtn.innerText = 'Save';
-
-    return saveBtn;
-}
-
-export function buildTaskForm(task, tagsList) {
-    const form = document.createElement('form');
-    
-    const titleDateContainer = buildTitleDateContainer(task.title, task.dueDate);
-    form.appendChild(titleDateContainer);
-    
-    const shortDescContainer = buildShortDescContainer(task.shortDesc)
-    form.appendChild(shortDescContainer);
-    
-    const notesContainer = buildNotesContainer(task.notes);
-    form.appendChild(notesContainer);
-    
-    const checklistContainer = buildChecklistContainer(task.checklist);
-    form.appendChild(checklistContainer);
-    
-    const tagsContainer = buildTagsContainer(task.tags, tagsList)
-    form.appendChild(tagsContainer);
-
-    const saveBtn = buildSaveBtn();
-    form.appendChild(saveBtn);
-
-    return form;
 }
