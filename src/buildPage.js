@@ -94,9 +94,12 @@ function buildSidebar() {
 
 export function buildPage() {
     const fragment = document.createDocumentFragment();
-    fragment.appendChild(buildPageHeader());
-    fragment.appendChild(buildSidebar());
-    fragment.appendChild(document.createElement('main'));
+    const pageHeader = buildPageHeader();
+    fragment.appendChild(pageHeader);
+    const sidebar = buildSidebar();
+    fragment.appendChild(sidebar);
+    const main = document.createElement('main');
+    fragment.appendChild(main);
 
     return fragment;
 }

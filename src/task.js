@@ -1,4 +1,4 @@
-import { ChecklistItem } from './checklistItem.js';
+import { ChecklistItem } from './checklistItem';
 
 export class Task {
     #checklist;
