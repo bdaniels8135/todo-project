@@ -1,3 +1,5 @@
+import removeIcon from './img/close-circle.svg';
+
 function packageElements(...elements) {
     const container = document.createElement('div');
     elements.forEach(element => container.appendChild(element));
@@ -67,7 +69,7 @@ function buildChecklist() {
 function buildChecklistItemInput() {
     const newChecklistItemInput = document.createElement('input');
     newChecklistItemInput.type = 'text';
-    newChecklistItemInput.id = 'new-checklist-item';
+    newChecklistItemInput.id = 'new-checklist-item-input';
     newChecklistItemInput.placeholder = 'Add a checklist item';
 
     return newChecklistItemInput;
@@ -82,7 +84,7 @@ function buildTags() {
 
 function buildNewTagInput() {
     const newTagInput = document.createElement('select');
-    newTagInput.id = 'tag-input';
+    newTagInput.id = 'new-tag-input';
     const defaultOption = document.createElement('option');
     defaultOption.value = '';
     defaultOption.innerText = '--Add a tag--';
@@ -93,6 +95,7 @@ function buildNewTagInput() {
 
 function buildSaveBtn() {
     const saveBtn = document.createElement('button');
+    saveBtn.id = 'save-btn'
     saveBtn.type = 'button';
     saveBtn.innerText = 'Save';
 
@@ -129,4 +132,42 @@ export function buildEmptyTaskForm() {
     form.appendChild(saveBtn);
 
     return form;
+}
+
+export function buildChecklistItem(text, isChecked, index) {
+    const newChecklistItem = document.createElement('li');
+    newChecklistItem.id = 'checklist-item-' + String(index);
+    
+    const newItemCheckBox = document.createElement('input');
+    newItemCheckBox.type = 'checkbox';
+    if (isChecked) newItemCheckBox.setAttribute('checked', '');
+    newItemCheckBox.id = 'checklist-box-' + String(index);
+    newChecklistItem.appendChild(newItemCheckBox);
+
+    const newItemTextInput = document.createElement('input');
+    newItemTextInput.id = 'checklist-text-' + String(index);
+    newItemTextInput.type = 'text';
+    newItemTextInput.maxLength = 60;
+    newItemTextInput.value = text;
+    newItemTextInput.placeholder = 'Enter checklist item description';
+    newChecklistItem.appendChild(newItemTextInput);
+
+    const newItemIcon = document.createElement('img');
+    newItemIcon.src = removeIcon;
+    newChecklistItem.appendChild(newItemIcon);
+
+    return newChecklistItem;
+}
+
+
+export function buildTagListItem(tag) {
+    const newTagItem = document.createElement('li');
+    const newItemText = document.createElement('p');
+    newItemText.innerText = tag;
+    newTagItem.appendChild(newItemText);
+    const newItemIcon = document.createElement('img');
+    newItemIcon.src = removeIcon;
+    newTagItem.appendChild(newItemIcon);
+
+    return newTagItem;
 }
