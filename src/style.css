@@ -97,11 +97,6 @@ main h1 {
     padding-bottom: .2rem;
 }
 
-main label {
-    padding: 1rem 1rem 1rem 0;
-    font-size: 1.3rem;
-}
-
 main input[type='date'] {
     font-size: 1.3rem;
     padding: .25rem;
@@ -147,16 +142,16 @@ main form {
     gap: 2rem;
 }
 
-main form div {
+main div {
     display: flex;
     gap: 1rem;
 }
 
-main form #checklist-container {
+main form .checklist-container {
     flex-direction: column;
 }
 
-main form label {
+main label {
     font-size: 1.3rem;
     align-self: center;
     white-space: nowrap;
@@ -223,7 +218,7 @@ main form .checklist input[type='checkbox'] {
     border-bottom: 2px solid grey;
 }
 
-#desc-input {
+#short-desc-input {
     font-size: 1.3rem;
     flex: 1;
     padding: .5rem;
@@ -254,7 +249,7 @@ form #date-input {
     align-self: center;
 }
 
-#new-checklist-item {
+#new-checklist-item-input {
     border: none;
     border-bottom: 2px solid grey;
     margin: -.5rem 2.5rem;

@@ -1,5 +1,6 @@
-import { buildPage } from './buildPage.js';
-import { buildTaskForm, buildTaskTable, buildTableHeader, buildDateInputContainer} from './htmlBuilder.js'
+import { buildPage } from './buildPage';
+import { buildTaskForm, buildTaskTable, buildTableHeader, buildDateInputContainer} from './htmlBuilder'
+import { taskForm } from './taskForm';
 
 function initializePageDisplay(body) { 
     const page = buildPage();
@@ -34,8 +35,8 @@ function displayTaskTableOn(main, tasksToDisplay, tagsList) {
 
 function displayTaskFormOn(main, task, tagsList) {
     clearContainer(main);
-    const form = buildTaskForm(task, tagsList);
-    main.appendChild(form);
+    taskForm.populateTaskInfo(task)
+    main.appendChild(taskForm.html);
 }
 
 export const DisplayController = {

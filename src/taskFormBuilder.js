@@ -1,4 +1,5 @@
 import removeIcon from './img/close-circle.svg';
+import { format } from 'date-fns';
 
 function packageElements(...elements) {
     const container = document.createElement('div');
@@ -121,6 +122,7 @@ export function buildEmptyTaskForm() {
     const checklist = buildChecklist();
     const checklistItemInput = buildChecklistItemInput();
     const checklistWithInput = packageElements(checklist, checklistItemInput);
+    checklistWithInput.classList.add('checklist-container');
     form.appendChild(checklistWithInput);
     
     const tags = buildTags();

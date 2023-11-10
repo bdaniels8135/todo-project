@@ -21,13 +21,15 @@ export const taskForm = (() => {
         INPUTS.title.value = task.title;
         INPUTS.shortDesc.value = task.shortDesc;
         INPUTS.notes.value = task.notes;
+        CHECKLIST.innerHTML = '';
         task.checklist.forEach(checklistItem => appendChecklistItem(checklistItem));
+        TAG_LIST.innerHTML = '';
         task.tags.forEach(tag => appendTag(tag));
     }
 
     const appendChecklistItem = checklistItemToAppend => {
         const index = CHECKLIST.childElementCount;
-        const newChecklistItem = buildChecklistItem(checklistItemToAppend, index);
+        const newChecklistItem = buildChecklistItem(checklistItemToAppend.text, checklistItemToAppend.isChecked, index);
         const removeBtn = newChecklistItem.querySelector('img');
         removeBtn.addEventListener('click', event => console.log(event));
         CHECKLIST.appendChild(newChecklistItem);
@@ -45,7 +47,7 @@ export const taskForm = (() => {
     }
 
     const removeTag = tagItemToRemove => {
-        TAG_LIST.removeChild(tagItemToRemove)
+        TAG_LIST.removeChild(tagItemToRemove);
     }
 
     return {
