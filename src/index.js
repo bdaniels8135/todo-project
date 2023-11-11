@@ -5,7 +5,7 @@ import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } f
 
 const tasksList = [];
 
-const tagsList = [];
+export const tagsList = [];
 
 const testTask1 = new Task('Test Task 1', new Date(2025, 11, 5), 'This is the first test task.');
 tasksList.push(testTask1);

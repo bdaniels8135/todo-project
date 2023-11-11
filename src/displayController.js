@@ -33,7 +33,7 @@ function displayTaskTableOn(main, tasksToDisplay, tagsList) {
     main.appendChild(taskTable);
 }
 
-function displayTaskFormOn(main, task, tagsList) {
+function displayTaskFormOn(main, task) {
     clearContainer(main);
     taskForm.populateTaskInfo(task);
     main.appendChild(taskForm.html);

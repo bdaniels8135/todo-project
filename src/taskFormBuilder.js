@@ -134,18 +134,14 @@ export function buildEmptyTaskForm() {
     return form;
 }
 
-export function buildChecklistItem(text, isChecked, index) {
+export function buildChecklistItem(text, isChecked) {
     const newChecklistItem = document.createElement('li');
-    newChecklistItem.id = 'checklist-item-' + String(index);
-    
     const newItemCheckBox = document.createElement('input');
     newItemCheckBox.type = 'checkbox';
     if (isChecked) newItemCheckBox.setAttribute('checked', '');
-    newItemCheckBox.id = 'checklist-box-' + String(index);
     newChecklistItem.appendChild(newItemCheckBox);
 
     const newItemTextInput = document.createElement('input');
-    newItemTextInput.id = 'checklist-text-' + String(index);
     newItemTextInput.type = 'text';
     newItemTextInput.maxLength = 60;
     newItemTextInput.value = text;

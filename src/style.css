@@ -188,6 +188,10 @@ main form .tags-list li {
     border-radius: .25rem;
 }
 
+main form .checklist {
+    flex-direction: column;
+}
+
 main form .checklist li {
     display: flex;
     gap: 1rem;
@@ -240,7 +244,7 @@ form #date-input {
     align-self: center;
 }
 
-#tag-input {
+#new-tag-input {
     font-size: 1rem;
     border: 2px solid grey;
     background-color: white;

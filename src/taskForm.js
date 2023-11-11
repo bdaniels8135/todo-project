@@ -1,3 +1,4 @@
+import { tagsList } from "./index";
 import { buildEmptyTaskForm, buildChecklistItem, buildTagListItem } from "./taskFormBuilder";
 import { format } from 'date-fns';
 
@@ -7,6 +8,7 @@ export const taskForm = (() => {
     const CHECKLIST = html.querySelector('.checklist');
     const TAG_LIST = html.querySelector('.tags-list');
     const SAVE_BTN = html.querySelector('#save-btn');
+    let currentTags;
 
     const INPUTS = {
         date : html.querySelector('#date-input'),
@@ -24,40 +26,58 @@ export const taskForm = (() => {
         INPUTS.shortDesc.value = task.shortDesc;
         INPUTS.notes.value = task.notes;
         CHECKLIST.innerHTML = '';
-        task.checklist.forEach(checklistItem => appendChecklistItem(checklistItem));
+        task.checklist.forEach(checklistItem => appendNewChecklistItem(checklistItem.text, checklistItem.isChecked));
         TAG_LIST.innerHTML = '';
-        task.tags.forEach(tag => appendTag(tag));
+        currentTags = [];
+        task.tags.forEach(tag => currentTags.push(tag));
+        currentTags.forEach(tag => appendNewTag(tag));
     }
 
-    const appendChecklistItem = checklistItemToAppend => {
-        const index = CHECKLIST.childElementCount;
-        const newChecklistItem = buildChecklistItem(checklistItemToAppend.text, checklistItemToAppend.isChecked, index);
+    const appendNewChecklistItem = (text, isChecked) => {
+        const newChecklistItem = buildChecklistItem(text, isChecked);
         const removeBtn = newChecklistItem.querySelector('img');
-        removeBtn.addEventListener('click', event => CHECKLIST.removeChild(event.currentTarget.parentNode));
+        removeBtn.addEventListener('click', () => CHECKLIST.removeChild(newChecklistItem));
         CHECKLIST.appendChild(newChecklistItem);
     }
 
-    const removeCheckListItem = checklistItemToRemove => {
-        CHECKLIST.removeChild(checklistItemToRemove);
-    }
-
-    const appendTag = tagToAppend => {
+    const appendNewTag = tagToAppend => {
         const newTagItem = buildTagListItem(tagToAppend);
         const removeBtn = newTagItem.querySelector('img');
-        removeBtn.addEventListener('click', event => TAG_LIST.removeChild(event.currentTarget.parentNode));
+        removeBtn.addEventListener('click', () => {
+            currentTags = currentTags.filter(tag => tag !== tagToAppend);
+            TAG_LIST.removeChild(newTagItem);
+        })
         TAG_LIST.appendChild(newTagItem);
+        currentTags.push(tagToAppend);
     }
 
-    const removeTag = tagItemToRemove => {
-        TAG_LIST.removeChild(tagItemToRemove);
+    const updateAvailableTags = () => {
+        while (INPUTS.newTagInput.childElementCount > 1) INPUTS.newTagInput.removeChild(INPUTS.newTagInput.lastChild)
+        tagsList.forEach(tag => {
+            if (!currentTags.includes(tag)) {
+                const newOption = document.createElement('option');
+                newOption.value = tag;
+                newOption.innerText = tag;
+                INPUTS.newTagInput.appendChild(newOption);
+            }
+        })
     }
+
+    INPUTS.newChecklistItem.addEventListener('mouseup', () => {
+        appendNewChecklistItem('', false);
+        const newChecklistItem = CHECKLIST.lastElementChild;
+        newChecklistItem.querySelector('input[type=text]').focus();
+    })
+
+    INPUTS.newTagInput.addEventListener('mousedown', () => updateAvailableTags());
+
+    INPUTS.newTagInput.addEventListener('change', event => {
+        appendNewTag(event.target.value);
+        INPUTS.newTagInput.value = '';
+    });
 
     return {
         html,
         populateTaskInfo,
-        appendChecklistItem,
-        removeCheckListItem,
-        appendTag,
-        removeTag,
     }
 })();
