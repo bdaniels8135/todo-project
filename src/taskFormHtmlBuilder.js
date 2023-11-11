@@ -108,6 +108,11 @@ export function buildEmptyTaskFormHtml() {
     const shortDesc = packageHtmlElements(shortDescInput);
     form.appendChild(shortDesc);
     
+    const tags = buildTagsListHtml();
+    const newTagInput = buildNewTagInputHtml();
+    const tagsWithInput = packageHtmlElements(tags, newTagInput);
+    form.appendChild(tagsWithInput);
+
     const notesInput = buildNotesInputHtml();
     const notes = packageHtmlElements(notesInput);
     form.appendChild(notes);
@@ -118,11 +123,6 @@ export function buildEmptyTaskFormHtml() {
     checklistWithInput.classList.add('checklist-container');
     form.appendChild(checklistWithInput);
     
-    const tags = buildTagsListHtml();
-    const newTagInput = buildNewTagInputHtml();
-    const tagsWithInput = packageHtmlElements(tags, newTagInput);
-    form.appendChild(tagsWithInput);
-
     return form;
 }
 
