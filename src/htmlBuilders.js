@@ -2,18 +2,44 @@ import { format } from 'date-fns';
 import { DisplayController as DC } from './displayController';
 import { buildTaskForm } from './taskForm';
 
+export function packageHtmlElements(...elements) {
+    const container = document.createElement('div');
+    elements.forEach(element => container.appendChild(element));
+
+    return container;
+}
+
+function buildLabelHtml(labelText) {
+    const label = document.createElement('label');
+    label.innerText = labelText;
+
+    return label;
+}
+
+function buildDateInputHtml() {
+    const dateInput = document.createElement('input');
+    dateInput.type = 'date';
+    dateInput.id = 'date-input';
+
+    return dateInput;
+}
+
+export function buildLabeledDateInputHtml(labelText) {
+    const label = buildLabelHtml(labelText);
+    const dateInput = buildDateInputHtml();
+
+    return packageHtmlElements(label, dateInput);
+}
+
+
+
+
+
 export function buildTableHeader(headerText) {
     const header = document.createElement('h1');
     header.innerText = headerText;
 
     return header;
-}
-
-function buildLabel(labelText) {
-    const label = document.createElement('label');
-    label.innerText = labelText;
-
-    return label;
 }
 
 function buildDateInput(defaultDate) {
@@ -28,7 +54,7 @@ function buildDateInput(defaultDate) {
 
 export function buildDateInputContainer(labelText, defaultDate) {
     const container = document.createElement('div');
-    const label = buildLabel(labelText);
+    const label = buildLabelHtml(labelText);
     container.appendChild(label);
     const dateInput = buildDateInput(defaultDate);
     container.appendChild(dateInput);

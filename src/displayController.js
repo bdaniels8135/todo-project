@@ -1,5 +1,5 @@
 import { buildPage } from './buildPage';
-import { buildTaskTable, buildTableHeader, buildDateInputContainer} from './htmlBuilder';
+import { buildTaskTable, buildTableHeader, buildDateInputContainer} from './htmlBuilders';
 
 function initializePageDisplay(body) { 
     const page = buildPage();

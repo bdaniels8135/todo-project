@@ -1,5 +1,5 @@
 import { format, endOfDay, parseISO } from 'date-fns';
-import { buildEmptyTaskFormHtml, buildChecklistItemHtml, buildTagListItemHtml, buildNewTagInputOptionHtml } from "./taskFormHtmlBuilder";
+import { buildEmptyTaskFormHtml, buildChecklistItemHtml, buildTagListItemHtml, buildNewTagInputOptionHtml } from "./taskFormHtmlBuilders";
 
 export function buildTaskForm(task, tagsList) {
     return (() => {

@@ -1,33 +1,6 @@
 import removeIcon from './img/close-circle.svg';
+import { packageHtmlElements, buildLabeledDateInputHtml} from './htmlBuilders'
 
-function packageHtmlElements(...elements) {
-    const container = document.createElement('div');
-    elements.forEach(element => container.appendChild(element));
-
-    return container;
-}
-
-function buildLabelHtml(labelText) {
-    const label = document.createElement('label');
-    label.innerText = labelText;
-
-    return label;
-}
-
-function buildDateInputHtml() {
-    const dateInput = document.createElement('input');
-    dateInput.type = 'date';
-    dateInput.id = 'date-input';
-
-    return dateInput;
-}
-
-function buildLabeledDateInputHtml(labelText) {
-    const label = buildLabelHtml(labelText);
-    const dateInput = buildDateInputHtml();
-
-    return packageHtmlElements(label, dateInput);
-}
 
 
 // Actual start of functions specifically for task form building
