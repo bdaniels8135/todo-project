@@ -1,20 +1,20 @@
 import removeIcon from './img/close-circle.svg';
 
-function packageElements(...elements) {
+function packageHtmlElements(...elements) {
     const container = document.createElement('div');
     elements.forEach(element => container.appendChild(element));
 
     return container;
 }
 
-function buildLabel(labelText) {
+function buildLabelHtml(labelText) {
     const label = document.createElement('label');
     label.innerText = labelText;
 
     return label;
 }
 
-function buildDateInput() {
+function buildDateInputHtml() {
     const dateInput = document.createElement('input');
     dateInput.type = 'date';
     dateInput.id = 'date-input';
@@ -22,18 +22,18 @@ function buildDateInput() {
     return dateInput;
 }
 
-function buildLabeledDateInput(labelText) {
-    const label = buildLabel(labelText);
-    const dateInput = buildDateInput();
+function buildLabeledDateInputHtml(labelText) {
+    const label = buildLabelHtml(labelText);
+    const dateInput = buildDateInputHtml();
 
-    return packageElements(label, dateInput);
+    return packageHtmlElements(label, dateInput);
 }
 
 
 // Actual start of functions specifically for task form building
 
 
-function buildTitleInput() {
+function buildTitleInputHtml() {
     const titleInput = document.createElement('input');
     titleInput.id = 'title-input';
     titleInput.type = 'text';
@@ -43,7 +43,7 @@ function buildTitleInput() {
     return titleInput;
 }
 
-function buildShortDescInput() {
+function buildShortDescInputHtml() {
     const shortDescInput = document.createElement('input');
     shortDescInput.id = 'short-desc-input';
     shortDescInput.type = 'text';
@@ -53,7 +53,7 @@ function buildShortDescInput() {
     return shortDescInput;
 }
 
-function buildNotesInput() {
+function buildNotesInputHtml() {
     const notesInput = document.createElement('textarea');
     notesInput.setAttribute('oninput', 'this.style.height = ""; this.style.height = this.scrollHeight + 5 + "px"');
     notesInput.id = 'notes-input';
@@ -62,14 +62,14 @@ function buildNotesInput() {
     return notesInput;
 }
 
-function buildChecklist() {
+function buildChecklistHtml() {
     const checklist = document.createElement('ul');
     checklist.classList.add('checklist');
 
     return checklist;
 }
 
-function buildNewChecklistItemInput() {
+function buildNewChecklistItemInputHtml() {
     const newChecklistItemInput = document.createElement('input');
     newChecklistItemInput.type = 'text';
     newChecklistItemInput.id = 'new-checklist-item-input';
@@ -78,14 +78,14 @@ function buildNewChecklistItemInput() {
     return newChecklistItemInput;
 }
 
-function buildTagsList() {
+function buildTagsListHtml() {
     const tags = document.createElement('ul');
     tags.classList.add('tags-list');
     
     return tags;
 }
 
-function buildNewTagInput() {
+function buildNewTagInputHtml() {
     const newTagInput = document.createElement('select');
     newTagInput.id = 'new-tag-input';
     const defaultOption = document.createElement('option');
@@ -96,37 +96,37 @@ function buildNewTagInput() {
     return newTagInput;
 }
 
-export function buildEmptyTaskForm() {
+export function buildEmptyTaskFormHtml() {
     const form = document.createElement('form');
     
-    const titleInput = buildTitleInput();
-    const dueDateInput = buildLabeledDateInput('Due Date:');
-    const titleDate = packageElements(titleInput, dueDateInput);
+    const titleInput = buildTitleInputHtml();
+    const dueDateInput = buildLabeledDateInputHtml('Due Date:');
+    const titleDate = packageHtmlElements(titleInput, dueDateInput);
     form.appendChild(titleDate);
     
-    const shortDescInput = buildShortDescInput();
-    const shortDesc = packageElements(shortDescInput);
+    const shortDescInput = buildShortDescInputHtml();
+    const shortDesc = packageHtmlElements(shortDescInput);
     form.appendChild(shortDesc);
     
-    const notesInput = buildNotesInput();
-    const notes = packageElements(notesInput);
+    const notesInput = buildNotesInputHtml();
+    const notes = packageHtmlElements(notesInput);
     form.appendChild(notes);
     
-    const checklist = buildChecklist();
-    const checklistItemInput = buildNewChecklistItemInput();
-    const checklistWithInput = packageElements(checklist, checklistItemInput);
+    const checklist = buildChecklistHtml();
+    const checklistItemInput = buildNewChecklistItemInputHtml();
+    const checklistWithInput = packageHtmlElements(checklist, checklistItemInput);
     checklistWithInput.classList.add('checklist-container');
     form.appendChild(checklistWithInput);
     
-    const tags = buildTagsList();
-    const newTagInput = buildNewTagInput();
-    const tagsWithInput = packageElements(tags, newTagInput);
+    const tags = buildTagsListHtml();
+    const newTagInput = buildNewTagInputHtml();
+    const tagsWithInput = packageHtmlElements(tags, newTagInput);
     form.appendChild(tagsWithInput);
 
     return form;
 }
 
-export function buildChecklistItem(text, isChecked) {
+export function buildChecklistItemHtml(text, isChecked) {
     const newChecklistItem = document.createElement('li');
     const newItemCheckBox = document.createElement('input');
     newItemCheckBox.type = 'checkbox';
@@ -147,7 +147,7 @@ export function buildChecklistItem(text, isChecked) {
     return newChecklistItem;
 }
 
-export function buildTagListItem(tag) {
+export function buildTagListItemHtml(tag) {
     const newTagItem = document.createElement('li');
     const newItemText = document.createElement('p');
     newItemText.innerText = tag;
@@ -157,4 +157,12 @@ export function buildTagListItem(tag) {
     newTagItem.appendChild(newItemIcon);
 
     return newTagItem;
+}
+
+export function buildNewTagInputOptionHtml(tag) {
+    const newOption = document.createElement('option');
+    newOption.value = tag;
+    newOption.innerText = tag;
+
+    return newOption;
 }
