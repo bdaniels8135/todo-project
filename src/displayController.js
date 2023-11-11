@@ -1,6 +1,5 @@
 import { buildPage } from './buildPage';
 import { buildTaskTable, buildTableHeader, buildDateInputContainer} from './htmlBuilder';
-import { taskForm } from './taskForm';
 
 function initializePageDisplay(body) { 
     const page = buildPage();
@@ -33,9 +32,8 @@ function displayTaskTableOn(main, tasksToDisplay, tagsList) {
     main.appendChild(taskTable);
 }
 
-function displayTaskFormOn(main, task) {
+function displayTaskFormOn(main, taskForm) {
     clearContainer(main);
-    taskForm.populateTaskInfo(task);
     main.appendChild(taskForm.html);
 }
 

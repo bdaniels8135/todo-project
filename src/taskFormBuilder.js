@@ -29,6 +29,10 @@ function buildLabeledDateInput(labelText) {
     return packageElements(label, dateInput);
 }
 
+
+// Actual start of functions specifically for task form building
+
+
 function buildTitleInput() {
     const titleInput = document.createElement('input');
     titleInput.id = 'title-input';
@@ -65,7 +69,7 @@ function buildChecklist() {
     return checklist;
 }
 
-function buildChecklistItemInput() {
+function buildNewChecklistItemInput() {
     const newChecklistItemInput = document.createElement('input');
     newChecklistItemInput.type = 'text';
     newChecklistItemInput.id = 'new-checklist-item-input';
@@ -74,7 +78,7 @@ function buildChecklistItemInput() {
     return newChecklistItemInput;
 }
 
-function buildTags() {
+function buildTagsList() {
     const tags = document.createElement('ul');
     tags.classList.add('tags-list');
     
@@ -90,15 +94,6 @@ function buildNewTagInput() {
     newTagInput.appendChild(defaultOption);
 
     return newTagInput;
-}
-
-function buildSaveBtn() {
-    const saveBtn = document.createElement('button');
-    saveBtn.id = 'save-btn'
-    saveBtn.type = 'button';
-    saveBtn.innerText = 'Save';
-
-    return saveBtn;
 }
 
 export function buildEmptyTaskForm() {
@@ -118,18 +113,15 @@ export function buildEmptyTaskForm() {
     form.appendChild(notes);
     
     const checklist = buildChecklist();
-    const checklistItemInput = buildChecklistItemInput();
+    const checklistItemInput = buildNewChecklistItemInput();
     const checklistWithInput = packageElements(checklist, checklistItemInput);
     checklistWithInput.classList.add('checklist-container');
     form.appendChild(checklistWithInput);
     
-    const tags = buildTags();
+    const tags = buildTagsList();
     const newTagInput = buildNewTagInput();
     const tagsWithInput = packageElements(tags, newTagInput);
     form.appendChild(tagsWithInput);
-
-    const saveBtn = buildSaveBtn();
-    form.appendChild(saveBtn);
 
     return form;
 }
@@ -154,7 +146,6 @@ export function buildChecklistItem(text, isChecked) {
 
     return newChecklistItem;
 }
-
 
 export function buildTagListItem(tag) {
     const newTagItem = document.createElement('li');

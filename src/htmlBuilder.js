@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { DisplayController as DC } from './displayController';
+import { buildTaskForm } from './taskForm';
 
 export function buildTableHeader(headerText) {
     const header = document.createElement('h1');
@@ -62,7 +63,8 @@ export function buildTaskTable(main, tasksToDisplay, tagsList) {
 
     for (let task of tasksToDisplay) {
         const newRow = buildTaskRow(task.title, task.shortDesc, task.dueDate);
-        newRow.addEventListener('click', () => DC.displayTaskFormOn(main, task, tagsList));
+        const taskForm = buildTaskForm(task, tagsList);
+        newRow.addEventListener('click', () => DC.displayTaskFormOn(main, taskForm));
         taskTable.appendChild(newRow);
     }
 
