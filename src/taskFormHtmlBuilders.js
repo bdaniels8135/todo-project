@@ -1,11 +1,6 @@
 import removeIcon from './img/close-circle.svg';
 import { packageHtmlElements, buildLabeledDateInputHtml} from './htmlBuilders'
 
-
-
-// Actual start of functions specifically for task form building
-
-
 function buildTitleInputHtml() {
     const titleInput = document.createElement('input');
     titleInput.id = 'title-input';

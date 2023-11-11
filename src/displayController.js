@@ -1,8 +1,11 @@
-import { buildPage } from './buildPage';
-import { buildTaskTable, buildTableHeader, buildDateInputContainer} from './htmlBuilders';
+import { format } from 'date-fns';
+import { buildPageHtml } from './pageLoadHtmlBuilders';
+import { buildLabeledDateInputHtml } from './htmlBuilders';
+import { buildTaskTableHtml, buildMainHeaderHtml, buildTaskRowHtml } from './taskTableHtmlBuilders'
+import { buildTaskForm } from './taskForm';
 
 function initializePageDisplay(body) { 
-    const page = buildPage();
+    const page = buildPageHtml();
     body.appendChild(page);
 }
 
@@ -16,25 +19,33 @@ function deleteTableFrom(parent) {
 }
 
 function displayHeaderOn(parent, headerText) { 
-    const header = buildTableHeader(headerText);
+    const header = buildMainHeaderHtml(headerText);
     parent.appendChild(header); 
 }
 
 function displayUpcomingDateInputOn(main) {
     const labelText = 'Display tasks due between now and:';
-    const defaultDate = new Date();
-    const dateInputContainer = buildDateInputContainer(labelText, defaultDate);
-    main.appendChild(dateInputContainer);
-}
-
-function displayTaskTableOn(main, tasksToDisplay, tagsList) {
-    const taskTable = buildTaskTable(main, tasksToDisplay, tagsList);
-    main.appendChild(taskTable);
+    const labeledDateInputContainer = buildLabeledDateInputHtml(labelText);
+    const upcomingDateInput = labeledDateInputContainer.querySelector('input');
+    upcomingDateInput.min = format(new Date(), 'yyyy-MM-dd');
+    upcomingDateInput.value = format(new Date(), 'yyyy-MM-dd');
+    main.appendChild(labeledDateInputContainer);
 }
 
 function displayTaskFormOn(main, taskForm) {
     clearContainer(main);
     main.appendChild(taskForm.html);
+}
+
+function displayTaskTableOn(main, tasksToDisplay, tagsList) {
+    const taskTable = buildTaskTableHtml();
+    for (let task of tasksToDisplay) {
+        const newRow = buildTaskRowHtml(task);
+        const taskForm = buildTaskForm(task, tagsList);
+        newRow.addEventListener('click', () => displayTaskFormOn(main, taskForm));
+        taskTable.appendChild(newRow);
+    }
+    main.appendChild(taskTable);
 }
 
 export const DisplayController = {
@@ -46,3 +57,7 @@ export const DisplayController = {
     deleteTableFrom, 
     initializePageDisplay
 }
+
+
+
+
