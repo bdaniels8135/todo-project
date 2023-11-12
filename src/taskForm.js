@@ -6,7 +6,7 @@ export function buildTaskForm(task, tagsList) {
         const html = buildEmptyTaskFormHtml();
         
         const CHECKLIST = html.querySelector('.checklist');
-        const TAG_LIST = html.querySelector('.tags-list');
+        const TAGS_LIST = html.querySelector('.tags-list');
         const INPUTS = {
             title: html.querySelector('#title-input'),
             dueDate : html.querySelector('#date-input'),
@@ -35,9 +35,9 @@ export function buildTaskForm(task, tagsList) {
         const _appendNewTag = tagToAppend => {
             const newTagItemHtml = buildTagListItemHtml(tagToAppend);
             const removeBtn = newTagItemHtml.querySelector('img');
-            TAG_LIST.appendChild(newTagItemHtml);
+            TAGS_LIST.appendChild(newTagItemHtml);
             removeBtn.addEventListener('click', () => {
-                TAG_LIST.removeChild(newTagItemHtml);
+                TAGS_LIST.removeChild(newTagItemHtml);
                 task.removeTag(tagToAppend);
             })
         }
@@ -72,9 +72,11 @@ export function buildTaskForm(task, tagsList) {
             newChecklistItemTextInput.focus();
         })
         INPUTS.newTagInput.addEventListener('mousedown', () => _updateAvailableNewTags());
-        INPUTS.newTagInput.addEventListener('change', event => {
-            task.addTag(event.target.value);
-            _appendNewTag(event.target.value);
+        INPUTS.newTagInput.addEventListener('change', () => {
+            const tagToAdd = tagsList.find(tag => tag.text === INPUTS.newTagInput.value);
+            console.log(tagToAdd);
+            task.addTag(tagToAdd);
+            _appendNewTag(tagToAdd);
             INPUTS.newTagInput.value = '';
         });
     

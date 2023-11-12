@@ -51,11 +51,11 @@ function buildNewChecklistItemInputHtml() {
     return newChecklistItemInput;
 }
 
-function buildTagsListHtml() {
-    const tags = document.createElement('ul');
-    tags.classList.add('tags-list');
+function buildTaskTagsListHtml() {
+    const taskTagsList = document.createElement('ul');
+    taskTagsList.classList.add('tags-list');
     
-    return tags;
+    return taskTagsList;
 }
 
 function buildNewTagInputHtml() {
@@ -81,10 +81,10 @@ export function buildEmptyTaskFormHtml() {
     const shortDesc = packageHtmlElements(shortDescInput);
     form.appendChild(shortDesc);
     
-    const tags = buildTagsListHtml();
+    const taskTagsList = buildTaskTagsListHtml();
     const newTagInput = buildNewTagInputHtml();
-    const tagsWithInput = packageHtmlElements(tags, newTagInput);
-    form.appendChild(tagsWithInput);
+    const taskTagsListWithInput = packageHtmlElements(taskTagsList, newTagInput);
+    form.appendChild(taskTagsListWithInput);
 
     const notesInput = buildNotesInputHtml();
     const notes = packageHtmlElements(notesInput);
@@ -123,7 +123,7 @@ export function buildChecklistItemHtml(text, isChecked) {
 export function buildTagListItemHtml(tag) {
     const newTagItem = document.createElement('li');
     const newItemText = document.createElement('p');
-    newItemText.innerText = tag;
+    newItemText.innerText = tag.text;
     newTagItem.appendChild(newItemText);
     const newItemIcon = document.createElement('img');
     newItemIcon.src = removeIcon;
@@ -134,8 +134,8 @@ export function buildTagListItemHtml(tag) {
 
 export function buildNewTagInputOptionHtml(tag) {
     const newOption = document.createElement('option');
-    newOption.value = tag;
-    newOption.innerText = tag;
+    newOption.value = tag.text;
+    newOption.innerText = tag.text;
 
     return newOption;
 }
