@@ -18,7 +18,7 @@ export class Task {
     createChecklistItem(newItemText) { this.#checklist.push(new ChecklistItem(newItemText)) }
 
     deleteChecklistItem(itemToDelete) {
-        const deleteIndex = this.#checklist.findIndex(item => item === itemToDelete);
+        const deleteIndex = this.#checklist.indexOf(itemToDelete);
         if (deleteIndex > -1) this.#checklist.splice(deleteIndex, 1);
     }
 
@@ -27,7 +27,7 @@ export class Task {
     addTag(tagToAdd) { this.#tags.push(tagToAdd) }
 
     removeTag(tagToRemove) {
-        const removeIndex = this.#tags.findIndex(tag => tag === tagToRemove);
+        const removeIndex = this.#tags.indexOf(tagToRemove);
         if (removeIndex > -1) this.#tags.splice(removeIndex, 1);
     }
 

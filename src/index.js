@@ -9,7 +9,7 @@ import { Tag } from './tag';
 import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } from 'date-fns';
 
 const TASKS_LIST = [];
-const TAGS_LIST = [new Tag('Important'), new Tag('Household'), new Tag('Generic Tag 3')];
+const TAGS_LIST = [new Tag('Important')];
 
 const body = document.querySelector('body');
 const pageHtml = buildPageHtml();
@@ -64,7 +64,6 @@ const compareTasksByDate = (firstTask, secondTask) => {
 }
 
 const sortTaskListByDate = taskList => { taskList.sort((firstTask, secondTask) => compareTasksByDate(firstTask,secondTask)) }
-
 
 const resolveAllBtnClick = () => { 
     main.innerHTML = '';
@@ -124,14 +123,15 @@ const resolveTagBtnClick = tag => {
     main.appendChild(taskTableElements.elements);
 }
 
-const createNewTagItem = newTag => {
+const appendNewTagItemAt = (newTag, insertIndex) => {
     const tagItem = document.createElement('li');
     tagItem.innerHTML = newTag.text;
     tagItem.addEventListener('click', () => resolveTagBtnClick(newTag));
-    tagsNav.appendChild(tagItem);
+    const elementToInsertAfter = Array.from(tagsNav.childNodes).at(insertIndex);
+    elementToInsertAfter.insertAdjacentElement('afterend', tagItem);
 }
 
-TAGS_LIST.forEach(tag => createNewTagItem(tag));
+TAGS_LIST.forEach(tag => appendNewTagItemAt(tag, 0));
 
 const resolveNewTagBtnClick = event => {
     const newTagButton = event.target;
@@ -145,8 +145,10 @@ const resolveNewTagBtnClick = event => {
             const tagAlreadyExists = TAGS_LIST.some(tag => tag.text === trimmedInputValue);
             if (trimmedInputValue && !tagAlreadyExists) {
                 const newTag = new Tag(trimmedInputValue);
-                createNewTagItem(newTag);
-                TAGS_LIST.push(newTag);
+                const possibleIndex = TAGS_LIST.findIndex(tag => tag.text > newTag.text);
+                const insertIndex = possibleIndex === -1 ? TAGS_LIST.length : possibleIndex;
+                appendNewTagItemAt(newTag, insertIndex);
+                TAGS_LIST.splice(insertIndex, 0, newTag);
             }
             tagsNav.removeChild(newTagInput);
             newTagButton.addEventListener('click', resolveNewTagBtnClick);
