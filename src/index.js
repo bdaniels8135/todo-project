@@ -117,8 +117,8 @@ const resolveTagBtnClick = tag => {
 const createNewTagItem = newTag => {
     const tagItem = document.createElement('li');
     tagItem.innerHTML = newTag;
-    tagItem.addEventListener('click', () => resolveTagBtnClick(newTag))
-    tagsNav.appendChild(tagItem)
+    tagItem.addEventListener('click', () => resolveTagBtnClick(newTag));
+    tagsNav.appendChild(tagItem);
 }
 
 TAGS_LIST.forEach(tag => createNewTagItem(tag))
@@ -128,12 +128,16 @@ const resolveNewTagBtnClick = () => {
     newTagInput.type = 'text';
     newTagInput.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
-            createNewTagItem(newTagInput.value);
-            TAGS_LIST.push(newTagInput.value);
+            const trimmedInputValue = newTagInput.value.trim()
+            if (trimmedInputValue) {
+                createNewTagItem(trimmedInputValue);
+                TAGS_LIST.push(trimmedInputValue);
+            }
             tagsNav.removeChild(newTagInput);
         }
     })
     tagsNav.appendChild(newTagInput);
+    newTagInput.focus();
 }
 
 resolveAllBtnClick();
