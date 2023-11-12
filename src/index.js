@@ -57,11 +57,6 @@ const BUTTONS = {
     newTagBtn: document.getElementById('new-tag-btn'),
 }
 
-for (let key in BUTTONS) {
-    const newClickFn = 'resolve' + key[0].toUpperCase() + key.slice(1) + 'Click';
-    BUTTONS[key].addEventListener('click', () => {eval(newClickFn)()});
-}
-
 const compareTasksByDate = (firstTask, secondTask) => {
     if (firstTask.dueDate < secondTask.dueDate) return -1;
     if (firstTask.dueDate > secondTask.dueDate) return 1;
@@ -138,11 +133,13 @@ const createNewTagItem = newTag => {
 
 TAGS_LIST.forEach(tag => createNewTagItem(tag));
 
-const resolveNewTagBtnClick = () => { 
+const resolveNewTagBtnClick = event => {
+    const newTagButton = event.target;
+    newTagButton.removeEventListener('click', resolveNewTagBtnClick);
     const newTagInput = document.createElement('input');
     newTagInput.type = 'text';
     newTagInput.maxLength = 15;
-    newTagInput.addEventListener('keypress', (event) => {
+    newTagInput.addEventListener('keypress', event => {
         if (event.key === 'Enter') {
             const trimmedInputValue = newTagInput.value.trim();
             const tagAlreadyExists = TAGS_LIST.some(tag => tag.text === trimmedInputValue);
@@ -152,10 +149,18 @@ const resolveNewTagBtnClick = () => {
                 TAGS_LIST.push(newTag);
             }
             tagsNav.removeChild(newTagInput);
+            newTagButton.addEventListener('click', resolveNewTagBtnClick);
         }
     })
     tagsNav.appendChild(newTagInput);
     newTagInput.focus();
 }
+
+BUTTONS.allBtn.addEventListener('click', resolveAllBtnClick);
+BUTTONS.todayBtn.addEventListener('click', resolveTodayBtnClick);
+BUTTONS.upcomingBtn.addEventListener('click', resolveUpcomingBtnClick);
+BUTTONS.pastDueBtn.addEventListener('click', resolvePastDueBtnClick);
+BUTTONS.newTaskBtn.addEventListener('click', resolveNewTaskBtnClick);
+BUTTONS.newTagBtn.addEventListener('click', resolveNewTagBtnClick);
 
 resolveAllBtnClick();
