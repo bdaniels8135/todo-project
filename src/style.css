@@ -188,6 +188,10 @@ main form ul img {
     height: 1.3rem;
 }
 
+main form .tags-list {
+    flex-wrap: wrap;
+}
+
 main form .tags-list li {
     display: flex;
     gap: .25rem;
