@@ -4,9 +4,9 @@ export class Task {
     #checklist;
     #tags;
 
-    constructor() {
+    constructor(dueDate) {
         this.title = '';
-        this.dueDate = new Date();
+        this.dueDate = dueDate;
         this.shortDesc = '';
         this.notes = '';
         this.#checklist = [];
