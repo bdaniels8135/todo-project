@@ -83,6 +83,16 @@ aside li p {
     font-size: 1.5rem;
 }
 
+aside #tags-nav li {
+    font-size: 1.5rem;
+}
+
+aside #tags-nav input {
+    font-size: 1.5rem;
+    padding: .5rem;
+    margin: 0 .5rem;
+}
+
 main {
     padding: 3rem;
     display: flex;

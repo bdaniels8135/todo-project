@@ -110,7 +110,7 @@ const tagsNav = document.querySelector('#tags-nav');
 const resolveTagBtnClick = tag => {
     main.innerHTML = '';
     const taggedTasks = TASKS_LIST.filter(task => task.hasTag(tag));
-    const taskTableElements = buildTaskTableElements(`Tasks Tagged with "${tag}"`, false, taggedTasks);
+    const taskTableElements = buildTaskTableElements(`${tag} Tasks`, false, taggedTasks);
     main.appendChild(taskTableElements.elements);
 }
 
