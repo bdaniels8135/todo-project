@@ -139,6 +139,19 @@ const resolveNewTagBtnClick = event => {
     const newTagInput = document.createElement('input');
     newTagInput.type = 'text';
     newTagInput.maxLength = 15;
+    newTagInput.addEventListener('focusout', () => {
+        const trimmedInputValue = newTagInput.value.trim();
+        const tagAlreadyExists = TAGS_LIST.some(tag => tag.text === trimmedInputValue);
+        if (trimmedInputValue && !tagAlreadyExists) {
+            const newTag = new Tag(trimmedInputValue);
+            const possibleIndex = TAGS_LIST.findIndex(tag => tag.text > newTag.text);
+            const insertIndex = possibleIndex === -1 ? TAGS_LIST.length : possibleIndex;
+            appendNewTagItemAt(newTag, insertIndex);
+            TAGS_LIST.splice(insertIndex, 0, newTag);
+        }
+        tagsNav.removeChild(newTagInput);
+        newTagButton.addEventListener('click', resolveNewTagBtnClick);
+    })
     newTagInput.addEventListener('keypress', event => {
         if (event.key === 'Enter') {
             const trimmedInputValue = newTagInput.value.trim();
