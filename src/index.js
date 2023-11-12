@@ -114,13 +114,26 @@ const resolveTagBtnClick = tag => {
     main.appendChild(taskTableElements.elements);
 }
 
-TAGS_LIST.forEach(tag => {
+const createNewTagItem = newTag => {
     const tagItem = document.createElement('li');
-    tagItem.innerHTML = tag;
-    tagItem.addEventListener('click', () => resolveTagBtnClick(tag))
+    tagItem.innerHTML = newTag;
+    tagItem.addEventListener('click', () => resolveTagBtnClick(newTag))
     tagsNav.appendChild(tagItem)
-})
+}
 
-const resolveNewTagBtnClick = () => { console.log('New Tag Button Pressed!') }
+TAGS_LIST.forEach(tag => createNewTagItem(tag))
+
+const resolveNewTagBtnClick = () => { 
+    const newTagInput = document.createElement('input');
+    newTagInput.type = 'text';
+    newTagInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            createNewTagItem(newTagInput.value);
+            TAGS_LIST.push(newTagInput.value);
+            tagsNav.removeChild(newTagInput);
+        }
+    })
+    tagsNav.appendChild(newTagInput);
+}
 
 resolveAllBtnClick();
