@@ -105,6 +105,22 @@ const resolveNewTaskBtnClick = () => {
     main.appendChild(taskForm.html);
 }
 
+const tagsNav = document.querySelector('#tags-nav');
+
+const resolveTagBtnClick = tag => {
+    main.innerHTML = '';
+    const taggedTasks = TASKS_LIST.filter(task => task.hasTag(tag));
+    const taskTableElements = buildTaskTableElements(`Tasks Tagged with "${tag}"`, false, taggedTasks);
+    main.appendChild(taskTableElements.elements);
+}
+
+TAGS_LIST.forEach(tag => {
+    const tagItem = document.createElement('li');
+    tagItem.innerHTML = tag;
+    tagItem.addEventListener('click', () => resolveTagBtnClick(tag))
+    tagsNav.appendChild(tagItem)
+})
+
 const resolveNewTagBtnClick = () => { console.log('New Tag Button Pressed!') }
 
 resolveAllBtnClick();
