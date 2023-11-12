@@ -17,7 +17,7 @@ export function buildTaskTableHtml() {
 function buildTitleCellHtml(title) {
     const titleCell = document.createElement('td');
     titleCell.classList.add('title-cell');
-    titleCell.innerText = title;
+    titleCell.innerText = title ? title : '(NO TITLE)';
     
     return titleCell;
 }
