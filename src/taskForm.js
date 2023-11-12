@@ -63,7 +63,7 @@ export function buildTaskForm(task, tagsList) {
         INPUTS.title.addEventListener('keyup', () => task.title = INPUTS.title.value);
         INPUTS.shortDesc.addEventListener('keyup', () => task.shortDesc = INPUTS.shortDesc.value);
         INPUTS.notes.addEventListener('keyup', () => task.notes = INPUTS.notes.value);
-        INPUTS.newChecklistItem.addEventListener('mouseup', () => {
+        INPUTS.newChecklistItem.addEventListener('focus', () => {
             task.createChecklistItem('');
             const newChecklistItem = task.checklist.at(-1);
             _appendNewChecklistItem(newChecklistItem);
