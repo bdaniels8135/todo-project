@@ -136,15 +136,17 @@ const createNewTagItem = newTag => {
     tagsNav.appendChild(tagItem);
 }
 
-TAGS_LIST.forEach(tag => createNewTagItem(tag))
+TAGS_LIST.forEach(tag => createNewTagItem(tag));
 
 const resolveNewTagBtnClick = () => { 
     const newTagInput = document.createElement('input');
     newTagInput.type = 'text';
+    newTagInput.maxLength = 15;
     newTagInput.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
-            const trimmedInputValue = newTagInput.value.trim()
-            if (trimmedInputValue) {
+            const trimmedInputValue = newTagInput.value.trim();
+            const tagAlreadyExists = TAGS_LIST.some(tag => tag.text === trimmedInputValue);
+            if (trimmedInputValue && !tagAlreadyExists) {
                 const newTag = new Tag(trimmedInputValue);
                 createNewTagItem(newTag);
                 TAGS_LIST.push(newTag);
