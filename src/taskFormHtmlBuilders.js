@@ -1,11 +1,16 @@
 import removeIcon from './img/close-circle.svg';
 import { packageHtmlElements, buildLabeledDateInputHtml} from './htmlBuilders'
 
+const TITLE_MAX_LENGTH = 30;
+const SHORT_DESC_MAX_LENGTH = 55;
+const CHECKLIST_ITEM_MAX_LENGTH = 60;
+
+
 function buildTitleInputHtml() {
     const titleInput = document.createElement('input');
     titleInput.id = 'title-input';
     titleInput.type = 'text';
-    titleInput.maxLength = 30;
+    titleInput.maxLength = TITLE_MAX_LENGTH;
     titleInput.placeholder = 'Add a title';
 
     return titleInput;
@@ -15,7 +20,7 @@ function buildShortDescInputHtml() {
     const shortDescInput = document.createElement('input');
     shortDescInput.id = 'short-desc-input';
     shortDescInput.type = 'text';
-    shortDescInput.maxLength = 55;
+    shortDescInput.maxLength = SHORT_DESC_MAX_LENGTH;
     shortDescInput.placeholder = 'Add a short description';
 
     return shortDescInput;
@@ -103,7 +108,7 @@ export function buildChecklistItemHtml(text, isChecked) {
 
     const newItemTextInput = document.createElement('input');
     newItemTextInput.type = 'text';
-    newItemTextInput.maxLength = 60;
+    newItemTextInput.maxLength = CHECKLIST_ITEM_MAX_LENGTH;
     newItemTextInput.value = text;
     newItemTextInput.placeholder = 'Enter checklist item description';
     newChecklistItem.appendChild(newItemTextInput);

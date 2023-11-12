@@ -1,6 +1,10 @@
 import './style.css';
+import { format } from 'date-fns';
+import { buildPageHtml } from './pageLoadHtmlBuilders';
+import { buildLabeledDateInputHtml } from './htmlBuilders';
+import { buildTaskTableHtml, buildTaskTableHeaderHtml, buildTaskRowHtml } from './taskTableHtmlBuilders'
+import { buildTaskForm } from './taskForm';
 import { Task } from './task.js';
-import { DisplayController as DC } from './displayController.js';
 import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } from 'date-fns';
 
 const tasksList = [];
@@ -27,10 +31,49 @@ tagsList.push(testTag2);
 testTask1.addTag(testTag2);
 
 const body = document.querySelector('body');
-
-DC.initializePageDisplay(body);
+const pageHtml = buildPageHtml();
+body.appendChild(pageHtml);
 
 const main = document.querySelector('main');
+
+function clearContainer(container) { 
+    container.innerHTML = '';
+}
+
+function deleteTableFrom(parent) { 
+    const table = parent.querySelector('table');
+    if (table) parent.removeChild(table);
+}
+
+function displayHeader(headerText) { 
+    const header = buildTaskTableHeaderHtml(headerText);
+    parent.appendChild(header); 
+}
+
+function displayUpcomingDateInputOn(main) {
+    const labelText = 'Display tasks due between now and:';
+    const labeledDateInputContainer = buildLabeledDateInputHtml(labelText);
+    const upcomingDateInput = labeledDateInputContainer.querySelector('input');
+    upcomingDateInput.min = format(new Date(), 'yyyy-MM-dd');
+    upcomingDateInput.value = format(new Date(), 'yyyy-MM-dd');
+    main.appendChild(labeledDateInputContainer);
+}
+
+function displayTaskFormOn(main, taskForm) {
+    clearContainer(main);
+    main.appendChild(taskForm.html);
+}
+
+function displayTaskTableOn(main, tasksToDisplay, tagsList) {
+    const taskTable = buildTaskTableHtml();
+    for (let task of tasksToDisplay) {
+        const newRow = buildTaskRowHtml(task.title, task.shortDesc, task.dueDate);
+        const taskForm = buildTaskForm(task, tagsList);
+        newRow.addEventListener('click', () => displayTaskFormOn(main, taskForm));
+        taskTable.appendChild(newRow);
+    }
+    main.appendChild(taskTable);
+}
 
 const BUTTONS = {
     allBtn: document.getElementById('all-btn'),
@@ -47,37 +90,37 @@ for (let key in BUTTONS) {
 }
 
 const resolveAllBtnClick = () => { 
-    DC.clearContainer(main);
-    DC.displayHeaderOn(main, 'All Tasks');
-    DC.displayTaskTableOn(main, tasksList, tagsList);
+    clearContainer(main);
+    displayHeader('All Tasks');
+    displayTaskTableOn(main, tasksList, tagsList);
 }
 
 const resolveTodayBtnClick = () => {
-    DC.clearContainer(main);
+    clearContainer(main);
     const todayTasks = tasksList.filter(task => isSameDay(new Date(), task.dueDate));
-    DC.displayHeaderOn(main, 'Today\'s Tasks');
-    DC.displayTaskTableOn(main, todayTasks, tagsList);
+    displayHeader('Today\'s Tasks');
+    displayTaskTableOn(main, todayTasks, tagsList);
 }
 
 const resolveUpcomingBtnClick = () => {
-    DC.clearContainer(main);
-    DC.displayHeaderOn(main, 'Upcoming Tasks');
-    DC.displayUpcomingDateInputOn(main);
+    clearContainer(main);
+    displayHeader('Upcoming Tasks');
+    displayUpcomingDateInputOn(main);
     const dateInput = document.querySelector('input[type=date]');
     dateInput.addEventListener('change', (event) => {
         const upcomingDate = endOfDay(parseISO(event.target.value));
         const upcomingInterval = {start: startOfDay(new Date()), end: upcomingDate};
         const upcomingTasks = tasksList.filter(task => isWithinInterval(task.dueDate, upcomingInterval));
-        DC.deleteTableFrom(main);
-        DC.displayTaskTableOn(main, upcomingTasks, tagsList);
+        deleteTableFrom(main);
+        displayTaskTableOn(main, upcomingTasks, tagsList);
     })
 }
 
 const resolvePastDueBtnClick = () => {
-    DC.clearContainer(main);
+    clearContainer(main);
     const pastDueTasks = tasksList.filter(task => isPast(task.dueDate));
-    DC.displayHeaderOn(main, 'Past Due Tasks');
-    DC.displayTaskTableOn(main, pastDueTasks, tagsList);
+    displayHeader('Past Due Tasks');
+    displayTaskTableOn(main, pastDueTasks, tagsList);
 }
 
 const resolveNewTaskBtnClick = () => { console.log('New Task Button Pressed!') }

@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-export function buildMainHeaderHtml(headerText) {
+export function buildTaskTableHeaderHtml(headerText) {
     const header = document.createElement('h1');
     header.innerText = headerText;
 
@@ -17,7 +17,7 @@ export function buildTaskTableHtml() {
 function buildTitleCellHtml(title) {
     const titleCell = document.createElement('td');
     titleCell.classList.add('title-cell');
-    titleCell.innerText = String(title);
+    titleCell.innerText = title;
     
     return titleCell;
 }
@@ -25,7 +25,7 @@ function buildTitleCellHtml(title) {
 function buildShortDescCellHtml(shortDesc) {
     const shortDescCell = document.createElement('td');
     shortDescCell.classList.add('short-desc-cell');
-    shortDescCell.innerText = String(shortDesc);
+    shortDescCell.innerText = shortDesc;
     
     return shortDescCell;
 }
@@ -38,16 +38,16 @@ function buildDueDateCellHtml(dueDate) {
     return dueDateCell
 }
 
-export function buildTaskRowHtml(task) {
+export function buildTaskRowHtml(title, shortDesc, dueDate) {
     const taskRow = document.createElement('tr');
 
-    const titleCell = buildTitleCellHtml(task.title);
+    const titleCell = buildTitleCellHtml(title);
     taskRow.appendChild(titleCell);
 
-    const shortDescCell = buildShortDescCellHtml(task.shortDesc);
+    const shortDescCell = buildShortDescCellHtml(shortDesc);
     taskRow.appendChild(shortDescCell);
 
-    const newDueDateCell = buildDueDateCellHtml(task.dueDate);
+    const newDueDateCell = buildDueDateCellHtml(dueDate);
     taskRow.appendChild(newDueDateCell);
 
     return taskRow;
