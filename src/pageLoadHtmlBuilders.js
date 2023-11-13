@@ -4,17 +4,36 @@ import upcomingIcon from './img/calendar-search.svg';
 import pastDueIcon from './img/exclamation-thick.svg';
 import plusIcon from './img/plus-thick.svg';
 
-function buildPageHeaderHtml(){
-    const header = document.createElement('header');
-    const headerText = document.createElement('h1');
-    headerText.innerText = 'Task-ticle';
-    header.appendChild(headerText);
-    const subheaderText = document.createElement('h2');
-    subheaderText.innerHTML = 'How <em>you</em> TO-DOin\'?';
-    header.appendChild(subheaderText);
-    
-    return header;
+function buildHeaderTextHtml(headerText, headerLevel) {
+    const headerTextHtml = document.createElement(`h${headerLevel}`);
+    headerTextHtml.innerHTML = headerText;
+
+    return headerTextHtml;
 }
+
+function buildPageHeaderHtml(headerText, subheaderText){
+    const pageHeaderHtml = document.createElement('header');
+    
+    const headerTextHtml = buildHeaderTextHtml(headerText, 1);
+    pageHeaderHtml.appendChild(headerTextHtml);
+    
+    const subheaderTextHtml = buildHeaderTextHtml(subheaderText, 2);
+    pageHeaderHtml.appendChild(subheaderTextHtml);
+    
+    return pageHeaderHtml;
+}
+
+function buildNavHtml() {
+    
+}
+
+function buildListHtml(isOrdered) {
+    const listType = isOrdered ? 'ol' : 'ul';
+    const listHtml = document.createElement(listType);
+
+    return listHtml;
+}
+
 
 function buildTaskNavHtml() {
     const taskNav = document.createElement('ul');
@@ -97,7 +116,9 @@ function buildSidebarHtml() {
 
 export function buildPageHtml() {
     const fragment = document.createDocumentFragment();
-    const pageHeader = buildPageHeaderHtml();
+    const headerText = 'Task-ticle'
+    const subheaderText = 'How <em>you</em> TO-DOin\'?';
+    const pageHeader = buildPageHeaderHtml(headerText, subheaderText);
     fragment.appendChild(pageHeader);
     const sidebar = buildSidebarHtml();
     fragment.appendChild(sidebar);
