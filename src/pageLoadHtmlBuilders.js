@@ -1,16 +1,5 @@
-import allIcon from './img/inbox.svg';
-import todayIcon from './img/calendar-today.svg';
-import upcomingIcon from './img/calendar-search.svg';
-import pastDueIcon from './img/exclamation-thick.svg';
-import plusIcon from './img/plus-thick.svg';
-import { wrapHtmlElements } from './htmlBuilders';
+import { wrapHtmlElements, buildHeaderTextHtml, buildIconHtml } from './htmlBuilders';
 
-function buildHeaderTextHtml(headerText, headerLevel) {
-    const headerTextHtml = document.createElement(`h${headerLevel}`);
-    headerTextHtml.innerHTML = headerText;
-
-    return headerTextHtml;
-}
 
 function buildPageHeaderHtml(headerText, subheaderText){   
     const headerTextHtml = buildHeaderTextHtml(headerText, 1); 
@@ -21,107 +10,86 @@ function buildPageHeaderHtml(headerText, subheaderText){
     return pageHeaderHtml;
 }
 
-function buildNavHtml() {
+function buildNavHeaderHtml(navHeaderText, newItemIcon, btnId) {
+    const navHeaderTextHtml = buildHeaderTextHtml(navHeaderText, 1);
+  
+    const newItemIconHtml = buildIconHtml(newItemIcon);
+    newItemIconHtml.id = btnId;
 
+    const wrapperType = 'div';
+    const navHeaderHtml = wrapHtmlElements(wrapperType, navHeaderTextHtml, newItemIconHtml);
+    
+    return navHeaderHtml;
 }
 
-function buildListHtml(isOrdered) {
-    const listType = isOrdered ? 'ol' : 'ul';
-    const listHtml = document.createElement(listType);
+function buildTasksNavListItemHtml(icon, text) {
+    const tasksNavItemIcon = document.createElement('img');
+    tasksNavItemIcon.src = icon;
+    
+    const tasksNavItemText = document.createElement('p');
+    tasksNavItemText.innerText = text;
 
-    return listHtml;
+    const wrapperType = 'li';
+    const tasksNavListItemHtml = wrapHtmlElements(wrapperType, tasksNavItemIcon, tasksNavItemText);
+
+    return tasksNavListItemHtml;
 }
 
-
-function buildTaskNavHtml() {
-    const taskNav = document.createElement('ul');
-    taskNav.id = 'task-nav';
-
-    const taskNavHeaderContainer = document.createElement('div');
-    taskNav.appendChild(taskNavHeaderContainer);
-
-    const taskNavHeaderText = document.createElement('h1');
-    taskNavHeaderText.innerText = 'Tasks';
-    taskNavHeaderContainer.appendChild(taskNavHeaderText);
-
-    const newTaskIcon = document.createElement('img');
-    newTaskIcon.src = plusIcon;
-    newTaskIcon.id = 'new-task-btn';
-    taskNavHeaderContainer.appendChild(newTaskIcon);
-
-    const taskLabelIconPairs = [
-        {
-            label: 'All',
-            icon: allIcon,
-        },
-        {
-            label: 'Today',
-            icon: todayIcon,
-        },
-        {
-            label: 'Upcoming',
-            icon: upcomingIcon,
-        },
-        {
-            label: 'Past Due',
-            icon: pastDueIcon,
-        },
-    ];
-
-    for (let pair of taskLabelIconPairs) {
-        const newItem = document.createElement('li');
-        newItem.id = `${pair.label.toLowerCase().replace(' ', '-')}-btn`;
-        taskNav.appendChild(newItem);
-
-        const newItemIcon = document.createElement('img');
-        newItemIcon.src = pair.icon;
-        newItem.appendChild(newItemIcon);
-        
-        const newItemText = document.createElement('p');
-        newItemText.innerText = pair.label;
-        newItem.appendChild(newItemText);
+function buildTasksNavListHtml(tasksNavItemIconTextPairs) {
+    const tasksNavListItems = []; 
+    for (let pair of tasksNavItemIconTextPairs) {
+        const tasksNavListItemHtml = buildTasksNavListItemHtml(pair.icon, pair.text);
+        tasksNavListItemHtml.id = `${pair.text.toLowerCase().replace(' ', '-')}-btn`;
+        tasksNavListItems.push(tasksNavListItemHtml);
     }
 
-    return taskNav;
+    const wrapperType = 'ul'
+    const tasksNavListHtml = wrapHtmlElements(wrapperType, ...tasksNavListItems);
+
+    return tasksNavListHtml;
 }
 
-function buildTagsNavHtml() {
-    const tagsNav = document.createElement('ul');
-    tagsNav.id = 'tags-nav';
+function buildTasksNavHtml(tasksNavHeaderText, newTaskIcon, tasksNavItemIconTextPairs) {
+    const newTaskBtnId = 'new-task-btn'
+    const tasksNavHeaderHtml = buildNavHeaderHtml(tasksNavHeaderText, newTaskIcon, newTaskBtnId);
+    const tasksNavListHtml = buildTasksNavListHtml(tasksNavItemIconTextPairs);
 
-    const tagsNavHeaderContainer = document.createElement('div');
-    tagsNav.appendChild(tagsNavHeaderContainer);
+    const wrapperType = 'nav';
+    const tasksNavHtml = wrapHtmlElements(wrapperType, tasksNavHeaderHtml, tasksNavListHtml);
+    tasksNavHtml.id = 'task-nav'
 
-    const tagsNavHeaderText = document.createElement('h1');
-    tagsNavHeaderText.innerText = 'Tags';
-    tagsNavHeaderContainer.appendChild(tagsNavHeaderText);
-
-    const newTagIcon = document.createElement('img');
-    newTagIcon.src = plusIcon;
-    newTagIcon.id = 'new-tag-btn';
-    tagsNavHeaderContainer.appendChild(newTagIcon);
-
-    return tagsNav;
+    return tasksNavHtml;
 }
 
-function buildSidebarHtml() {
-    const sidebar = document.createElement('aside');
-    sidebar.appendChild(buildTaskNavHtml());
-    sidebar.appendChild(buildTagsNavHtml());
+function buildTagsNavHtml(tagNaveHeaderText, newTagIcon) {
+    const newTagBtnId = 'new-tag-btn';
+    const tagsNavHeaderHtml = buildNavHeaderHtml(tagNaveHeaderText, newTagIcon, newTagBtnId);
+    const tagsNavListHtml = document.createElement('ul');
 
-    return sidebar;
+    const wrapperType = 'nav';
+    const tagsNavHtml = wrapHtmlElements(wrapperType, tagsNavHeaderHtml, tagsNavListHtml);
+    tagsNavHtml.id = 'tags-nav';
+
+    return tagsNavHtml;
 }
 
-export function buildPageHtml() {
-    const fragment = document.createDocumentFragment();
-    const headerText = 'Task-ticle'
-    const subheaderText = 'How <em>you</em> TO-DOin\'?';
-    const pageHeader = buildPageHeaderHtml(headerText, subheaderText);
-    fragment.appendChild(pageHeader);
-    const sidebar = buildSidebarHtml();
-    fragment.appendChild(sidebar);
-    const main = document.createElement('main');
-    fragment.appendChild(main);
+function buildSidebarHtml(tasksNavHeaderText, newTaskIcon, tasksNavItemIconTextPairs, tagsNavHeaderText, newTagIcon) {
+    const tasksNavHtml = buildTasksNavHtml(tasksNavHeaderText, newTaskIcon, tasksNavItemIconTextPairs);
+    const tagsNavHtml = buildTagsNavHtml(tagsNavHeaderText, newTagIcon);
+    const wrapperType = 'aside'
+    const sidebarHtml = wrapHtmlElements(wrapperType, tasksNavHtml, tagsNavHtml)
 
-    return fragment;
+    return sidebarHtml;
+}
+
+export function buildPageHtml(pageHeaderText, pageSubheaderText, tasksNavItemIconTextPairs, tasksNavHeaderText, newTaskIcon, tagsNavHeaderText, newTagIcon) {
+    
+    const fragmentHtml = document.createDocumentFragment();
+    const pageHeaderHtml = buildPageHeaderHtml(pageHeaderText, pageSubheaderText);
+    const sidebarHtml = buildSidebarHtml(tasksNavHeaderText, newTaskIcon, tasksNavItemIconTextPairs, tagsNavHeaderText, newTagIcon);
+    const mainHtml = document.createElement('main');
+
+    fragmentHtml.append(pageHeaderHtml, sidebarHtml, mainHtml);
+
+    return fragmentHtml;
 }
