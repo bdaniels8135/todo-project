@@ -7,8 +7,9 @@ import { buildTaskForm } from './taskForm';
 import { Task } from './task';
 import { Tag } from './tag';
 import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } from 'date-fns';
+import removeIcon from './img/close-circle.svg';
 
-const TASKS_LIST = [];
+const TASKS_LIST = [new Task(endOfDay(new Date()))];
 const TAGS_LIST = [new Tag('Important')];
 
 const body = document.querySelector('body');
@@ -125,7 +126,12 @@ const resolveTagBtnClick = tag => {
 
 const appendNewTagItemAt = (newTag, insertIndex) => {
     const tagItem = document.createElement('li');
-    tagItem.innerHTML = newTag.text;
+    const tagItemText = document.createElement('p');
+    tagItemText.innerHTML = newTag.text;
+    tagItem.appendChild(tagItemText);
+    const tagItemIcon = document.createElement('img')
+    tagItemIcon.src = removeIcon;
+    tagItem.appendChild(tagItemIcon);
     tagItem.addEventListener('click', () => resolveTagBtnClick(newTag));
     const elementToInsertAfter = Array.from(tagsNav.childNodes).at(insertIndex);
     elementToInsertAfter.insertAdjacentElement('afterend', tagItem);
