@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import removeIcon from './img/close-circle.svg';
 
 export function buildTaskTableHeaderHtml(headerText) {
     const header = document.createElement('h1');
@@ -35,7 +36,16 @@ function buildDueDateCellHtml(dueDate) {
     dueDateCell.classList.add('due-date-cell');
     dueDateCell.innerText = format(dueDate, 'MM/dd/yyyy');
 
-    return dueDateCell
+    return dueDateCell;
+}
+
+function buildRemoveBtnCell() {
+    const removeBtnCell = document.createElement('td');
+    const removeBtn = document.createElement('img');
+    removeBtn.src = removeIcon;
+    removeBtnCell.appendChild(removeBtn);
+
+    return removeBtnCell;
 }
 
 export function buildTaskRowHtml(title, shortDesc, dueDate) {
@@ -47,8 +57,11 @@ export function buildTaskRowHtml(title, shortDesc, dueDate) {
     const shortDescCell = buildShortDescCellHtml(shortDesc);
     taskRow.appendChild(shortDescCell);
 
-    const newDueDateCell = buildDueDateCellHtml(dueDate);
-    taskRow.appendChild(newDueDateCell);
+    const dueDateCell = buildDueDateCellHtml(dueDate);
+    taskRow.appendChild(dueDateCell);
+
+    const removeBtnCell = buildRemoveBtnCell();
+    taskRow.appendChild(removeBtnCell);
 
     return taskRow;
 }
