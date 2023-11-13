@@ -23,7 +23,8 @@ function buildTaskTableElements(headerText, isUpcoming, tasksToDisplay) {
         const taskTableHeaderHtml = buildTaskTableHeaderHtml(headerText);
         elements.appendChild(taskTableHeaderHtml);
 
-        const labeledUpcomingDateInputHtml = buildLabeledDateInputHtml('Display tasks due between now and:');
+        const upcomingDateInputLabelText = 'Display tasks due between now and:'
+        const labeledUpcomingDateInputHtml = buildLabeledDateInputHtml(upcomingDateInputLabelText);
         const upcomingDateInput = labeledUpcomingDateInputHtml.querySelector('input');
         upcomingDateInput.min = format(new Date(), 'yyyy-MM-dd');
         if (isUpcoming) elements.appendChild(labeledUpcomingDateInputHtml);
