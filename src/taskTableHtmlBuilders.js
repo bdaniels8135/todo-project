@@ -39,15 +39,6 @@ function buildDueDateCellHtml(dueDate) {
     return dueDateCell;
 }
 
-function buildRemoveBtnCell() {
-    const removeBtnCell = document.createElement('td');
-    const removeBtn = document.createElement('img');
-    removeBtn.src = removeIcon;
-    removeBtnCell.appendChild(removeBtn);
-
-    return removeBtnCell;
-}
-
 export function buildTaskRowHtml(title, shortDesc, dueDate) {
     const taskRow = document.createElement('tr');
 
@@ -59,9 +50,6 @@ export function buildTaskRowHtml(title, shortDesc, dueDate) {
 
     const dueDateCell = buildDueDateCellHtml(dueDate);
     taskRow.appendChild(dueDateCell);
-
-    const removeBtnCell = buildRemoveBtnCell();
-    taskRow.appendChild(removeBtnCell);
 
     return taskRow;
 }

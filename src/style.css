@@ -127,17 +127,12 @@ main .task-table {
     width: 100%;
 }
 
-main .task-table * {
-    /* border: 2px dashed red; */
-
-}
-
 main .task-table .title-cell {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     font-weight: 550;
-    width: 32%;
+    width: 35%;
 }
 
 main .task-table .short-desc-cell {
@@ -149,11 +144,6 @@ main .task-table .short-desc-cell {
 
 main .task-table .due-date-cell {
     width: 15%;
-}
-
-main .task-table img {
-    height: 1.6rem;
-    vertical-align: middle;
 }
 
 main .task-table td {
