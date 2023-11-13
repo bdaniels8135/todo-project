@@ -9,6 +9,9 @@ function buildPageHeaderHtml(){
     const headerText = document.createElement('h1');
     headerText.innerText = 'Task-ticle';
     header.appendChild(headerText);
+    const subheaderText = document.createElement('h2');
+    subheaderText.innerHTML = 'How <em>you</em> TO-DOin\'?';
+    header.appendChild(subheaderText);
     
     return header;
 }
