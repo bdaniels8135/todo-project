@@ -8,12 +8,41 @@ import { Task } from './task';
 import { Tag } from './tag';
 import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } from 'date-fns';
 import removeIcon from './img/close-circle.svg';
+import allIcon from './img/inbox.svg';
+import todayIcon from './img/calendar-today.svg';
+import upcomingIcon from './img/calendar-search.svg';
+import pastDueIcon from './img/exclamation-thick.svg';
+import plusIcon from './img/plus-thick.svg';
 
 const TASKS_LIST = [];
 const TAGS_LIST = [new Tag('Important')];
 
 const body = document.querySelector('body');
-const pageHtml = buildPageHtml();
+const pageHeaderText = 'Task-ticle'
+const pageSubheaderText = 'How <em>you</em> TO-DOin\'?';
+const tasksNavItemIconTextPairs = [
+    {
+        icon: allIcon,
+        text: 'All',
+    },
+    {
+        icon: todayIcon,
+        text: 'Today',
+    },
+    {
+        icon: upcomingIcon,
+        text: 'Upcoming',
+    },
+    {
+        icon: pastDueIcon,
+        text: 'Past Due',
+    },
+];
+const tasksNavHeaderText = 'Tasks';
+const newTaskIcon = plusIcon;
+const tagsNavHeaderText = 'Tags';
+const newTagIcon = plusIcon;
+const pageHtml = buildPageHtml(pageHeaderText, pageSubheaderText, tasksNavItemIconTextPairs, tasksNavHeaderText, newTaskIcon, tagsNavHeaderText, newTagIcon);
 body.appendChild(pageHtml);
 
 function buildTaskTableElements(headerText, isUpcoming, tasksToDisplay) {
@@ -122,6 +151,7 @@ const resolveNewTaskBtnClick = () => {
 }
 
 const tagsNav = document.querySelector('#tags-nav');
+const tagsNavList = tagsNav.querySelector('ul');
 
 const resolveTagBtnClick = tag => {
     main.innerHTML = '';
@@ -140,8 +170,9 @@ const appendNewTagItemAt = (newTag, insertIndex) => {
     // tagItemIcon.src = removeIcon;
     // tagItem.appendChild(tagItemIcon);
     tagItem.addEventListener('click', () => resolveTagBtnClick(newTag));
-    const elementToInsertAfter = Array.from(tagsNav.childNodes).at(insertIndex);
-    elementToInsertAfter.insertAdjacentElement('afterend', tagItem);
+    const possibleElementToInsertAfter = Array.from(tagsNavList.childNodes).at(insertIndex);
+    if (possibleElementToInsertAfter) possibleElementToInsertAfter.insertAdjacentElement('afterend', tagItem);
+    else tagsNavList.appendChild(tagItem);
 }
 
 TAGS_LIST.forEach(tag => appendNewTagItemAt(tag, 0));
@@ -162,7 +193,7 @@ const resolveNewTagBtnClick = event => {
             appendNewTagItemAt(newTag, insertIndex);
             TAGS_LIST.splice(insertIndex, 0, newTag);
         }
-        tagsNav.removeChild(newTagInput);
+        tagsNavList.removeChild(newTagInput);
         newTagButton.addEventListener('click', resolveNewTagBtnClick);
     })
     newTagInput.addEventListener('keypress', event => {
@@ -176,11 +207,11 @@ const resolveNewTagBtnClick = event => {
                 appendNewTagItemAt(newTag, insertIndex);
                 TAGS_LIST.splice(insertIndex, 0, newTag);
             }
-            tagsNav.removeChild(newTagInput);
+            tagsNavList.removeChild(newTagInput);
             newTagButton.addEventListener('click', resolveNewTagBtnClick);
         }
     })
-    tagsNav.appendChild(newTagInput);
+    tagsNavList.appendChild(newTagInput);
     newTagInput.focus();
 }
 
