@@ -4,16 +4,19 @@ import upcomingIcon from './img/calendar-search.svg';
 import pastDueIcon from './img/exclamation-thick.svg';
 import plusIcon from './img/plus-thick.svg';
 
-function buildPageHeader(){
+function buildPageHeaderHtml(){
     const header = document.createElement('header');
     const headerText = document.createElement('h1');
     headerText.innerText = 'Task-ticle';
     header.appendChild(headerText);
+    const subheaderText = document.createElement('h2');
+    subheaderText.innerHTML = 'How <em>you</em> TO-DOin\'?';
+    header.appendChild(subheaderText);
     
     return header;
 }
 
-function buildTaskNav() {
+function buildTaskNavHtml() {
     const taskNav = document.createElement('ul');
     taskNav.id = 'task-nav';
 
@@ -65,7 +68,7 @@ function buildTaskNav() {
     return taskNav;
 }
 
-function buildTagsNav() {
+function buildTagsNavHtml() {
     const tagsNav = document.createElement('ul');
     tagsNav.id = 'tags-nav';
 
@@ -84,19 +87,22 @@ function buildTagsNav() {
     return tagsNav;
 }
 
-function buildSidebar() {
+function buildSidebarHtml() {
     const sidebar = document.createElement('aside');
-    sidebar.appendChild(buildTaskNav());
-    sidebar.appendChild(buildTagsNav());
+    sidebar.appendChild(buildTaskNavHtml());
+    sidebar.appendChild(buildTagsNavHtml());
 
     return sidebar;
 }
 
-export function buildPage() {
+export function buildPageHtml() {
     const fragment = document.createDocumentFragment();
-    fragment.appendChild(buildPageHeader());
-    fragment.appendChild(buildSidebar());
-    fragment.appendChild(document.createElement('main'));
+    const pageHeader = buildPageHeaderHtml();
+    fragment.appendChild(pageHeader);
+    const sidebar = buildSidebarHtml();
+    fragment.appendChild(sidebar);
+    const main = document.createElement('main');
+    fragment.appendChild(main);
 
     return fragment;
 }
