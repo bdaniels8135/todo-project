@@ -81,8 +81,9 @@ export function buildEmptyTaskFormHtml() {
     const form = document.createElement('form');
     
     const titleInput = buildTitleInputHtml();
-    const dueDateInput = buildLabeledDateInputHtml('Due Date:');
-    const titleDate = packageHtmlElements(titleInput, dueDateInput);
+    const dueDateInputLabelText = 'Due Date:'
+    const labeledDueDateInput = buildLabeledDateInputHtml(dueDateInputLabelText);
+    const titleDate = packageHtmlElements(titleInput, labeledDueDateInput);
     form.appendChild(titleDate);
     
     const shortDescInput = buildShortDescInputHtml();
