@@ -3,6 +3,7 @@ import todayIcon from './img/calendar-today.svg';
 import upcomingIcon from './img/calendar-search.svg';
 import pastDueIcon from './img/exclamation-thick.svg';
 import plusIcon from './img/plus-thick.svg';
+import { wrapHtmlElements } from './htmlBuilders';
 
 function buildHeaderTextHtml(headerText, headerLevel) {
     const headerTextHtml = document.createElement(`h${headerLevel}`);
@@ -11,20 +12,17 @@ function buildHeaderTextHtml(headerText, headerLevel) {
     return headerTextHtml;
 }
 
-function buildPageHeaderHtml(headerText, subheaderText){
-    const pageHeaderHtml = document.createElement('header');
-    
-    const headerTextHtml = buildHeaderTextHtml(headerText, 1);
-    pageHeaderHtml.appendChild(headerTextHtml);
-    
+function buildPageHeaderHtml(headerText, subheaderText){   
+    const headerTextHtml = buildHeaderTextHtml(headerText, 1); 
     const subheaderTextHtml = buildHeaderTextHtml(subheaderText, 2);
-    pageHeaderHtml.appendChild(subheaderTextHtml);
-    
+    const wrapperType = 'header';
+    const pageHeaderHtml = wrapHtmlElements(wrapperType, headerTextHtml, subheaderTextHtml);
+
     return pageHeaderHtml;
 }
 
 function buildNavHtml() {
-    
+
 }
 
 function buildListHtml(isOrdered) {

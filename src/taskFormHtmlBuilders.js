@@ -1,5 +1,5 @@
 import removeIcon from './img/close-circle.svg';
-import { packageHtmlElements, buildLabeledDateInputHtml} from './htmlBuilders'
+import { wrapHtmlElements, buildLabeledDateInputHtml} from './htmlBuilders'
 
 const TITLE_MAX_LENGTH = 30;
 const SHORT_DESC_MAX_LENGTH = 55;
@@ -80,28 +80,30 @@ function buildTaskDeleteBtn() {
 export function buildEmptyTaskFormHtml() {
     const form = document.createElement('form');
     
+    const wrapperType = 'div';
+
     const titleInput = buildTitleInputHtml();
     const dueDateInputLabelText = 'Due Date:'
     const labeledDueDateInput = buildLabeledDateInputHtml(dueDateInputLabelText);
-    const titleDate = packageHtmlElements(titleInput, labeledDueDateInput);
+    const titleDate = wrapHtmlElements(wrapperType, titleInput, labeledDueDateInput);
     form.appendChild(titleDate);
     
     const shortDescInput = buildShortDescInputHtml();
-    const shortDesc = packageHtmlElements(shortDescInput);
+    const shortDesc = wrapHtmlElements(wrapperType, shortDescInput);
     form.appendChild(shortDesc);
     
     const taskTagsList = buildTaskTagsListHtml();
     const newTagInput = buildNewTagInputHtml();
-    const taskTagsListWithInput = packageHtmlElements(taskTagsList, newTagInput);
+    const taskTagsListWithInput = wrapHtmlElements(wrapperType, taskTagsList, newTagInput);
     form.appendChild(taskTagsListWithInput);
 
     const notesInput = buildNotesInputHtml();
-    const notes = packageHtmlElements(notesInput);
+    const notes = wrapHtmlElements(wrapperType, notesInput);
     form.appendChild(notes);
     
     const checklist = buildChecklistHtml();
     const checklistItemInput = buildNewChecklistItemInputHtml();
-    const checklistWithInput = packageHtmlElements(checklist, checklistItemInput);
+    const checklistWithInput = wrapHtmlElements(wrapperType, checklist, checklistItemInput);
     checklistWithInput.classList.add('checklist-container');
     form.appendChild(checklistWithInput);
 
