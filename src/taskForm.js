@@ -1,19 +1,20 @@
 import { format, endOfDay, parseISO } from 'date-fns';
-import { buildEmptyTaskFormHtml, buildChecklistItemHtml, buildTagListItemHtml, buildNewTagInputOptionHtml } from "./taskFormHtmlBuilders";
+import { buildEmptyTaskFormHtml, buildChecklistItemHtml, buildTaskTagListItemHtml } from "./taskFormHtmlBuilders";
+import { buildSelectOption } from './htmlBuilders';
 
 export function buildTaskForm(task, tagsList) {
     return (() => {
         const html = buildEmptyTaskFormHtml();
         
         const CHECKLIST = html.querySelector('.checklist');
-        const TAGS_LIST = html.querySelector('.tags-list');
+        const TAGS_LIST = html.querySelector('.task-tags-list');
         const INPUTS = {
             title: html.querySelector('#title-input'),
             dueDate : html.querySelector('#date-input'),
             shortDesc: html.querySelector('#short-desc-input'),
             notes: html.querySelector('#notes-input'),
             newChecklistItem: html.querySelector('#new-checklist-item-input'),
-            newTagInput: html.querySelector('#new-tag-input'),
+            newTagInput: html.querySelector('#new-task-tag-select'),
         }
        
         const _appendNewChecklistItem = checklistItemToAppend => {
@@ -33,7 +34,7 @@ export function buildTaskForm(task, tagsList) {
         }
 
         const _appendNewTag = tagToAppend => {
-            const newTagItemHtml = buildTagListItemHtml(tagToAppend);
+            const newTagItemHtml = buildTaskTagListItemHtml(tagToAppend.text);
             const removeBtn = newTagItemHtml.querySelector('img');
             TAGS_LIST.appendChild(newTagItemHtml);
             removeBtn.addEventListener('click', () => {
@@ -46,7 +47,7 @@ export function buildTaskForm(task, tagsList) {
             while (INPUTS.newTagInput.childElementCount > 1) INPUTS.newTagInput.removeChild(INPUTS.newTagInput.lastChild);
             tagsList.forEach(tag => {
                 if (!task.tags.includes(tag)) {
-                    const newTagInputOptionHtml = buildNewTagInputOptionHtml(tag);
+                    const newTagInputOptionHtml = buildSelectOption(tag.text, tag.text);
                     INPUTS.newTagInput.appendChild(newTagInputOptionHtml);
                 }
             })

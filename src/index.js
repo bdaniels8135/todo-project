@@ -1,6 +1,6 @@
 import './style.css';
 import { format } from 'date-fns';
-import { buildPageHtml } from './pageLoadHtmlBuilders';
+import { buildPageElementsHtml } from './pageLoadHtmlBuilders';
 import { buildLabeledDateInputHtml } from './htmlBuilders';
 import { buildTaskTableHtml, buildTaskTableHeaderHtml, buildTaskRowHtml } from './taskTableHtmlBuilders';
 import { buildTaskForm } from './taskForm';
@@ -8,41 +8,12 @@ import { Task } from './task';
 import { Tag } from './tag';
 import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } from 'date-fns';
 import removeIcon from './img/close-circle.svg';
-import allIcon from './img/inbox.svg';
-import todayIcon from './img/calendar-today.svg';
-import upcomingIcon from './img/calendar-search.svg';
-import pastDueIcon from './img/exclamation-thick.svg';
-import plusIcon from './img/plus-thick.svg';
 
 const TASKS_LIST = [];
 const TAGS_LIST = [new Tag('Important')];
 
 const body = document.querySelector('body');
-const pageHeaderText = 'Task-ticle'
-const pageSubheaderText = 'How <em>you</em> TO-DOin\'?';
-const tasksNavItemIconTextPairs = [
-    {
-        icon: allIcon,
-        text: 'All',
-    },
-    {
-        icon: todayIcon,
-        text: 'Today',
-    },
-    {
-        icon: upcomingIcon,
-        text: 'Upcoming',
-    },
-    {
-        icon: pastDueIcon,
-        text: 'Past Due',
-    },
-];
-const tasksNavHeaderText = 'Tasks';
-const newTaskIcon = plusIcon;
-const tagsNavHeaderText = 'Tags';
-const newTagIcon = plusIcon;
-const pageHtml = buildPageHtml(pageHeaderText, pageSubheaderText, tasksNavItemIconTextPairs, tasksNavHeaderText, newTaskIcon, tagsNavHeaderText, newTagIcon);
+const pageHtml = buildPageElementsHtml();
 body.appendChild(pageHtml);
 
 function buildTaskTableElements(headerText, isUpcoming, tasksToDisplay) {
