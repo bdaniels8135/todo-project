@@ -12,17 +12,17 @@ export function buildLabelHtml(labelText) {
     return labelHtml;
 }
 
-export function buildDateInputHtml() {
-    const dateInputHtml = document.createElement('input');
-    dateInputHtml.type = 'date';
-    dateInputHtml.id = 'date-input';
-
-    return dateInputHtml;
+export function buildInputHtml(type, id=null) {
+    const inputHtml = document.createElement('input');
+    inputHtml.type = type;
+    if (id) inputHtml.id = id;
+    
+    return inputHtml;
 }
 
 export function buildLabeledDateInputHtml(labelText) {
     const labelHtml = buildLabelHtml(labelText);
-    const dateInputHtml = buildDateInputHtml();
+    const dateInputHtml = buildInputHtml('date', 'date-input');
     const wrapperType = 'div';
     const labeledDateInputHtml = wrapHtmlElements(wrapperType, labelHtml, dateInputHtml);
 
@@ -41,4 +41,12 @@ export function buildIconHtml(icon) {
     iconHtml.src = icon;
 
     return iconHtml;
+}
+
+export function buildSelectOption(text, value) {
+    const optionHtml = document.createElement('option');
+    optionHtml.value = value;
+    optionHtml.innerText = text;
+
+    return optionHtml;
 }
