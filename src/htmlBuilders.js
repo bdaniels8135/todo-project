@@ -28,3 +28,10 @@ export function buildLabeledDateInputHtml(labelText) {
 
     return labeledDateInputHtml;
 }
+
+export function buildHeaderTextHtml(headerText, headerLevel) {
+    const headerTextHtml = document.createElement(`h${headerLevel}`);
+    headerTextHtml.innerHTML = headerText;
+
+    return headerTextHtml;
+}
