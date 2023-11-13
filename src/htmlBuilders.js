@@ -35,3 +35,10 @@ export function buildHeaderTextHtml(headerText, headerLevel) {
 
     return headerTextHtml;
 }
+
+export function buildIconHtml(icon) {
+    const iconHtml = document.createElement('img');
+    iconHtml.src = icon;
+
+    return iconHtml;
+}
