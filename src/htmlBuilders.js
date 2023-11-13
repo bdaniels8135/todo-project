@@ -6,23 +6,23 @@ export function packageHtmlElements(...elements) {
 }
 
 export function buildLabelHtml(labelText) {
-    const label = document.createElement('label');
-    label.innerText = labelText;
+    const labelHtml = document.createElement('label');
+    labelHtml.innerText = labelText;
 
-    return label;
+    return labelHtml;
 }
 
 export function buildDateInputHtml() {
-    const dateInput = document.createElement('input');
-    dateInput.type = 'date';
-    dateInput.id = 'date-input';
+    const dateInputHtml = document.createElement('input');
+    dateInputHtml.type = 'date';
+    dateInputHtml.id = 'date-input';
 
-    return dateInput;
+    return dateInputHtml;
 }
 
 export function buildLabeledDateInputHtml(labelText) {
-    const label = buildLabelHtml(labelText);
-    const dateInput = buildDateInputHtml();
+    const labelHtml = buildLabelHtml(labelText);
+    const dateInputHtml = buildDateInputHtml();
 
-    return packageHtmlElements(label, dateInput);
+    return packageHtmlElements(labelHtml, dateInputHtml);
 }
