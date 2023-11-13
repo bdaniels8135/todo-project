@@ -69,6 +69,14 @@ function buildNewTagInputHtml() {
     return newTagInput;
 }
 
+function buildTaskDeleteBtn() {
+    const taskDeleteBtn = document.createElement('button');
+    taskDeleteBtn.type = 'button';
+    taskDeleteBtn.innerText = 'Delete Task';
+
+    return taskDeleteBtn;
+}
+
 export function buildEmptyTaskFormHtml() {
     const form = document.createElement('form');
     
@@ -95,6 +103,10 @@ export function buildEmptyTaskFormHtml() {
     const checklistWithInput = packageHtmlElements(checklist, checklistItemInput);
     checklistWithInput.classList.add('checklist-container');
     form.appendChild(checklistWithInput);
+
+    const taskDeleteBtn = buildTaskDeleteBtn();
+    taskDeleteBtn.id = 'task-delete-btn';
+    form.appendChild(taskDeleteBtn);
     
     return form;
 }

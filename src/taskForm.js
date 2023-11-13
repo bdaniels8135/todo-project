@@ -15,7 +15,7 @@ export function buildTaskForm(task, tagsList) {
             newChecklistItem: html.querySelector('#new-checklist-item-input'),
             newTagInput: html.querySelector('#new-tag-input'),
         }
-        
+       
         const _appendNewChecklistItem = checklistItemToAppend => {
             const newChecklistItemText = checklistItemToAppend.text;
             const newChecklistItemIsChecked = checklistItemToAppend.isChecked;

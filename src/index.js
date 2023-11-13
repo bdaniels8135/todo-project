@@ -32,6 +32,12 @@ function buildTaskTableElements(headerText, isUpcoming, tasksToDisplay) {
         tasksToDisplay.forEach(task => {
             const taskRowHtml = buildTaskRowHtml(task.title, task.shortDesc, task.dueDate);
             const taskForm = buildTaskForm(task, TAGS_LIST);
+            const taskDeleteButton = taskForm.html.querySelector('#task-delete-btn');
+            taskDeleteButton.addEventListener('click', () => {
+                const deleteIndex = TASKS_LIST.indexOf(task);
+                TASKS_LIST.splice(deleteIndex, 1);
+                resolveAllBtnClick();
+            })
             taskRowHtml.addEventListener('click', () => {
                 main.innerHTML = '';
                 main.appendChild(taskForm.html);
