@@ -50,3 +50,9 @@ export function buildSelectOption(text, value) {
 
     return optionHtml;
 }
+
+export function buildTableCellHtml(cellText, className) {
+    const tableCellHtml = document.createElement('td');
+    tableCellHtml.classList.add(className);
+    tableCellHtml.innerText = cellText;
+}
