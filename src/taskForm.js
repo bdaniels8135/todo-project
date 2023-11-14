@@ -16,19 +16,19 @@ export function buildTaskForm(task, tagsList) {
             newChecklistItem: HTML.querySelector('#new-checklist-item-input'),
             newTagSelect: HTML.querySelector('#new-task-tag-select'),
         }
-       
-        function _appendNewChecklistItem(checklistItemToAppend) {
-            const newChecklistItemText = checklistItemToAppend.text;
-            const newChecklistItemIsChecked = checklistItemToAppend.isChecked;
-            const newChecklistItemHtml = buildChecklistItemHtml(newChecklistItemText, newChecklistItemIsChecked);
-            CHECKLIST_HTML.appendChild(newChecklistItemHtml);
-            const newChecklistItemCheckbox = newChecklistItemHtml.querySelector('input[type=checkbox]');
-            newChecklistItemCheckbox.addEventListener('change', () => checklistItemToAppend.toggleCheck());
-            const newChecklistItemTextInput = newChecklistItemHtml.querySelector('input[type=text]');
+
+        function _appendChecklistItem(checklistItemToAppend) {
+            const checklistItemText = checklistItemToAppend.text;
+            const checklistItemIsChecked = checklistItemToAppend.isChecked;
+            const checklistItemHtml = buildChecklistItemHtml(checklistItemText, checklistItemIsChecked);
+            CHECKLIST_HTML.appendChild(checklistItemHtml);
+            const newChecklistItemCheckbox = checklistItemHtml.querySelector('input[type=checkbox]');
+            newChecklistItemCheckbox.addEventListener('change', checklistItemToAppend.toggleCheck());
+            const newChecklistItemTextInput = checklistItemHtml.querySelector('input[type=text]');
             newChecklistItemTextInput.addEventListener('keyup', () => checklistItemToAppend.text = newChecklistItemTextInput.value);
-            const removeBtn = newChecklistItemHtml.querySelector('img');
+            const removeBtn = checklistItemHtml.querySelector('img');
             removeBtn.addEventListener('click', () => {
-                CHECKLIST_HTML.removeChild(newChecklistItemHtml);
+                CHECKLIST_HTML.removeChild(checklistItemHtml);
                 task.deleteChecklistItem(checklistItemToAppend);
             });
         }
@@ -58,7 +58,7 @@ export function buildTaskForm(task, tagsList) {
         INPUTS.title.value = task.title;
         INPUTS.shortDesc.value = task.shortDesc;
         INPUTS.notes.value = task.notes;
-        task.checklist.forEach(checklistItem => _appendNewChecklistItem(checklistItem));
+        task.checklist.forEach(checklistItem => _appendChecklistItem(checklistItem));
         task.tags.forEach(tag => _appendNewTag(tag));
         INPUTS.dueDate.addEventListener('change', () => task.dueDate = endOfDay(parseISO(INPUTS.dueDate.value)));
         INPUTS.title.addEventListener('keyup', () => task.title = INPUTS.title.value);
@@ -67,7 +67,7 @@ export function buildTaskForm(task, tagsList) {
         INPUTS.newChecklistItem.addEventListener('focus', () => {
             task.createChecklistItem('');
             const newChecklistItem = task.checklist.at(-1);
-            _appendNewChecklistItem(newChecklistItem);
+            _appendChecklistItem(newChecklistItem);
             const newChecklistItemHtml = CHECKLIST_HTML.lastElementChild;
             const newChecklistItemTextInput = newChecklistItemHtml.querySelector('input[type=text]');
             newChecklistItemTextInput.focus();

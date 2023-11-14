@@ -32,7 +32,7 @@ function buildTaskTableElements(headerText, isUpcoming, tasksToDisplay) {
         tasksToDisplay.forEach(task => {
             const taskRowHtml = buildTaskRowHtml(task.title, task.shortDesc, task.dueDate);
             const taskForm = buildTaskForm(task, TAGS_LIST);
-            const taskDeleteButton = taskForm.html.querySelector('#task-delete-btn');
+            const taskDeleteButton = taskForm.HTML.querySelector('#task-delete-btn');
             taskDeleteButton.addEventListener('click', () => {
                 const deleteIndex = TASKS_LIST.indexOf(task);
                 TASKS_LIST.splice(deleteIndex, 1);
@@ -40,7 +40,7 @@ function buildTaskTableElements(headerText, isUpcoming, tasksToDisplay) {
             })
             taskRowHtml.addEventListener('click', () => {
                 main.innerHTML = '';
-                main.appendChild(taskForm.html);
+                main.appendChild(taskForm.HTML);
             })
             taskTableHtml.appendChild(taskRowHtml);
         })
@@ -117,7 +117,7 @@ const resolveNewTaskBtnClick = () => {
     TASKS_LIST.push(newTask)
     const taskForm = buildTaskForm(newTask, TAGS_LIST);
     main.innerHTML = '';
-    main.appendChild(taskForm.html);
+    main.appendChild(taskForm.HTML);
 }
 
 const tagsNav = document.querySelector('#tags-nav');
