@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import { wrapHtmlElements, buildTableCellHtml } from './htmlBuilders';
 
 const NO_TITLE_PLACEHOLDER = '(NO TITLE)';
@@ -10,12 +9,11 @@ export function buildTaskTableHtml() {
     return taskTableHtml;
 }
 
-export function buildTaskRowHtml(title, shortDescText, dueDate) {
+export function buildTaskRowHtml(title, shortDescText, dueDateString) {
     const titleText = title ? title : NO_TITLE_PLACEHOLDER;
     const titleCellHtml = buildTableCellHtml(titleText, 'title-cell');
     const shortDescCellHtml = buildTableCellHtml(shortDescText, 'short-desc-cell');
-    const dueDateText = format(dueDate, 'MM/dd/yyyy');
-    const dueDateCellHtml = buildTableCellHtml(dueDateText, 'due-date-cell');
+    const dueDateCellHtml = buildTableCellHtml(dueDateString, 'due-date-cell');
     const taskRowHtml = wrapHtmlElements('tr', titleCellHtml, shortDescCellHtml, dueDateCellHtml);
 
     return taskRowHtml;
