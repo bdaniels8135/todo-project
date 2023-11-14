@@ -1,13 +1,12 @@
 import './style.css';
 import { format } from 'date-fns';
 import { buildPageElementsHtml } from './pageLoadHtmlBuilders';
-import { buildLabeledDateInputHtml } from './htmlBuilders';
-import { buildTaskTableHtml, buildTaskTableHeaderHtml, buildTaskRowHtml } from './taskTableHtmlBuilders';
+import { buildLabeledDateInputHtml, buildHeaderTextHtml } from './htmlBuilders';
+import { buildTaskTableHtml, buildTaskRowHtml } from './taskTableHtmlBuilders';
 import { buildTaskForm } from './taskForm';
 import { Task } from './task';
 import { Tag } from './tag';
 import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } from 'date-fns';
-import removeIcon from './img/close-circle.svg';
 
 const TASKS_LIST = [];
 const TAGS_LIST = [new Tag('Important')];
@@ -20,7 +19,7 @@ function buildTaskTableElements(headerText, isUpcoming, tasksToDisplay) {
     return (() => {
         const elements = document.createDocumentFragment();
         
-        const taskTableHeaderHtml = buildTaskTableHeaderHtml(headerText);
+        const taskTableHeaderHtml = buildHeaderTextHtml(headerText, 1);
         elements.appendChild(taskTableHeaderHtml);
 
         const upcomingDateInputLabelText = 'Display tasks due between now and:'
