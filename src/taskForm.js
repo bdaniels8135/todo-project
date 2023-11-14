@@ -4,51 +4,51 @@ import { buildSelectOption } from './htmlBuilders';
 
 export function buildTaskForm(task, tagsList) {
     return (() => {
-        const html = buildEmptyTaskFormHtml();
+        const HTML = buildEmptyTaskFormHtml();
         
-        const CHECKLIST = html.querySelector('.checklist');
-        const TAGS_LIST = html.querySelector('.task-tags-list');
+        const CHECKLIST_HTML = HTML.querySelector('.checklist');
+        const TAGS_LIST_HTML = HTML.querySelector('.task-tags-list');
         const INPUTS = {
-            title: html.querySelector('#title-input'),
-            dueDate : html.querySelector('#date-input'),
-            shortDesc: html.querySelector('#short-desc-input'),
-            notes: html.querySelector('#notes-input'),
-            newChecklistItem: html.querySelector('#new-checklist-item-input'),
-            newTagInput: html.querySelector('#new-task-tag-select'),
+            title: HTML.querySelector('#title-input'),
+            dueDate : HTML.querySelector('#date-input'),
+            shortDesc: HTML.querySelector('#short-desc-input'),
+            notes: HTML.querySelector('#notes-input'),
+            newChecklistItem: HTML.querySelector('#new-checklist-item-input'),
+            newTagSelect: HTML.querySelector('#new-task-tag-select'),
         }
        
-        const _appendNewChecklistItem = checklistItemToAppend => {
+        function _appendNewChecklistItem(checklistItemToAppend) {
             const newChecklistItemText = checklistItemToAppend.text;
             const newChecklistItemIsChecked = checklistItemToAppend.isChecked;
             const newChecklistItemHtml = buildChecklistItemHtml(newChecklistItemText, newChecklistItemIsChecked);
-            CHECKLIST.appendChild(newChecklistItemHtml);
+            CHECKLIST_HTML.appendChild(newChecklistItemHtml);
             const newChecklistItemCheckbox = newChecklistItemHtml.querySelector('input[type=checkbox]');
             newChecklistItemCheckbox.addEventListener('change', () => checklistItemToAppend.toggleCheck());
             const newChecklistItemTextInput = newChecklistItemHtml.querySelector('input[type=text]');
             newChecklistItemTextInput.addEventListener('keyup', () => checklistItemToAppend.text = newChecklistItemTextInput.value);
             const removeBtn = newChecklistItemHtml.querySelector('img');
             removeBtn.addEventListener('click', () => {
-                CHECKLIST.removeChild(newChecklistItemHtml);
+                CHECKLIST_HTML.removeChild(newChecklistItemHtml);
                 task.deleteChecklistItem(checklistItemToAppend);
             });
         }
 
-        const _appendNewTag = tagToAppend => {
+        function _appendNewTag(tagToAppend) {
             const newTagItemHtml = buildTaskTagListItemHtml(tagToAppend.text);
             const removeBtn = newTagItemHtml.querySelector('img');
-            TAGS_LIST.appendChild(newTagItemHtml);
+            TAGS_LIST_HTML.appendChild(newTagItemHtml);
             removeBtn.addEventListener('click', () => {
-                TAGS_LIST.removeChild(newTagItemHtml);
+                TAGS_LIST_HTML.removeChild(newTagItemHtml);
                 task.removeTag(tagToAppend);
             })
         }
     
-        const _updateAvailableNewTags = () => {
-            while (INPUTS.newTagInput.childElementCount > 1) INPUTS.newTagInput.removeChild(INPUTS.newTagInput.lastChild);
+        function _updateAvailableNewTags() {
+            while (INPUTS.newTagSelect.childElementCount > 1) INPUTS.newTagSelect.removeChild(INPUTS.newTagSelect.lastChild);
             tagsList.forEach(tag => {
                 if (!task.tags.includes(tag)) {
                     const newTagInputOptionHtml = buildSelectOption(tag.text, tag.text);
-                    INPUTS.newTagInput.appendChild(newTagInputOptionHtml);
+                    INPUTS.newTagSelect.appendChild(newTagInputOptionHtml);
                 }
             })
         }
@@ -68,21 +68,21 @@ export function buildTaskForm(task, tagsList) {
             task.createChecklistItem('');
             const newChecklistItem = task.checklist.at(-1);
             _appendNewChecklistItem(newChecklistItem);
-            const newChecklistItemHtml = CHECKLIST.lastElementChild;
+            const newChecklistItemHtml = CHECKLIST_HTML.lastElementChild;
             const newChecklistItemTextInput = newChecklistItemHtml.querySelector('input[type=text]');
             newChecklistItemTextInput.focus();
         })
-        INPUTS.newTagInput.addEventListener('mousedown', () => _updateAvailableNewTags());
-        INPUTS.newTagInput.addEventListener('change', () => {
-            const tagToAdd = tagsList.find(tag => tag.text === INPUTS.newTagInput.value);
+        INPUTS.newTagSelect.addEventListener('mousedown', () => _updateAvailableNewTags());
+        INPUTS.newTagSelect.addEventListener('change', () => {
+            const tagToAdd = tagsList.find(tag => tag.text === INPUTS.newTagSelect.value);
             console.log(tagToAdd);
             task.addTag(tagToAdd);
             _appendNewTag(tagToAdd);
-            INPUTS.newTagInput.value = '';
+            INPUTS.newTagSelect.value = '';
         });
     
         return {
-            html
+            HTML
         }
 
     })();
