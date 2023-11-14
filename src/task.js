@@ -37,5 +37,5 @@ export class Task {
 
     get isCompleted() { return this.#isCompleted }
 
-    toggleCompleted() { this.#isCompleted = !this.#isCompleted }
+    toggleIsCompleted() { this.#isCompleted = !this.#isCompleted }
 }
