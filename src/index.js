@@ -30,7 +30,8 @@ function buildTaskTableElements(headerText, isUpcoming, tasksToDisplay) {
 
         const taskTableHtml = buildTaskTableHtml();
         tasksToDisplay.forEach(task => {
-            const taskRowHtml = buildTaskRowHtml(task.title, task.shortDesc, task.dueDate);
+            const dueDateString = !isNaN(task.dueDate) ? format(task.dueDate, 'MM/dd/yyyy') : '(NO DATE)';
+            const taskRowHtml = buildTaskRowHtml(task.title, task.shortDesc, dueDateString);
             const taskForm = buildTaskForm(task, TAGS_LIST);
             const taskDeleteButton = taskForm.HTML.querySelector('#task-delete-btn');
             taskDeleteButton.addEventListener('click', () => {
