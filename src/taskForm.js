@@ -22,9 +22,9 @@ export function buildTaskForm(task, tagsList) {
             const checklistItemIsChecked = checklistItemToAppend.isChecked;
             const checklistItemHtml = buildChecklistItemHtml(checklistItemText, checklistItemIsChecked);
             const checklistItemCheckbox = checklistItemHtml.querySelector('input[type=checkbox]');
-            checklistItemCheckbox.addEventListener('change', () => checklistItemToAppend.toggleCheck());
+            checklistItemCheckbox.addEventListener('change', () => { checklistItemToAppend.toggleCheck() });
             const checklistItemTextInput = checklistItemHtml.querySelector('input[type=text]');
-            checklistItemTextInput.addEventListener('keyup', () => checklistItemToAppend.text = checklistItemTextInput.value);
+            checklistItemTextInput.addEventListener('keyup', () => { checklistItemToAppend.text = checklistItemTextInput.value });
             const removeBtn = checklistItemHtml.querySelector('img');
             removeBtn.addEventListener('click', () => {
                 CHECKLIST_HTML.removeChild(checklistItemHtml);
@@ -59,16 +59,16 @@ export function buildTaskForm(task, tagsList) {
             INPUTS.dueDate.value = taskDueDateValueString;
             INPUTS.dueDate.min = format(new Date(), 'yyyy-MM-dd');
             INPUTS.shortDesc.value = task.shortDesc;
-            task.checklist.forEach(checklistItem => _appendChecklistItem(checklistItem));
-            task.tags.forEach(tag => _appendTag(tag));
+            task.checklist.forEach(checklistItem => { _appendChecklistItem(checklistItem) });
+            task.tags.forEach(tag => { _appendTag(tag) });
         })();
 
         (function _addInputEventListeners() {
-            INPUTS.title.addEventListener('keyup', () => task.title = INPUTS.title.value);
-            INPUTS.dueDate.addEventListener('change', () => task.dueDate = endOfDay(parseISO(INPUTS.dueDate.value)));
-            INPUTS.shortDesc.addEventListener('keyup', () => task.shortDesc = INPUTS.shortDesc.value);
+            INPUTS.title.addEventListener('keyup', () => { task.title = INPUTS.title.value });
+            INPUTS.dueDate.addEventListener('change', () => { task.dueDate = endOfDay(parseISO(INPUTS.dueDate.value)) });
+            INPUTS.shortDesc.addEventListener('keyup', () => { task.shortDesc = INPUTS.shortDesc.value });
             INPUTS.notes.value = task.notes;
-            INPUTS.notes.addEventListener('keyup', () => task.notes = INPUTS.notes.value);
+            INPUTS.notes.addEventListener('keyup', () => { task.notes = INPUTS.notes.value });
             INPUTS.newChecklistItem.addEventListener('focus', () => {
                 task.createChecklistItem('');
                 const newChecklistItem = task.checklist.at(-1);
@@ -77,7 +77,7 @@ export function buildTaskForm(task, tagsList) {
                 const newChecklistItemTextInput = newChecklistItemHtml.querySelector('input[type=text]');
                 newChecklistItemTextInput.focus();
             })
-            INPUTS.newTagSelect.addEventListener('mousedown', () => _updateSelectableTags());
+            INPUTS.newTagSelect.addEventListener('mousedown', () => { _updateSelectableTags() });
             INPUTS.newTagSelect.addEventListener('change', () => {
                 const tagToAdd = tagsList.find(tag => tag.text === INPUTS.newTagSelect.value);
                 task.addTag(tagToAdd);
