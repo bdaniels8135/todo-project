@@ -3,7 +3,7 @@ import todayIcon from './img/calendar-today.svg';
 import upcomingIcon from './img/calendar-search.svg';
 import pastDueIcon from './img/exclamation-thick.svg';
 import plusIcon from './img/plus-thick.svg';
-import { wrapHtmlElements, buildHeaderTextHtml, buildIconHtml } from './htmlBuilders';
+import { wrapHtmlElements, buildHeaderTextHtml, buildIconHtml, buildTextHtml } from './htmlBuilders';
 
 const PAGE_HEADER_TEXT = 'Task-ticle'
 const PAGE_SUBHEADER_TEXT = 'How <em>you</em> TO-DOin\'?';
@@ -48,10 +48,8 @@ function buildNavHeaderHtml(navHeaderText, newItemIcon, btnId) {
 }
 
 function buildTasksNavListItemHtml(icon, text) {
-    const tasksNavItemIcon = document.createElement('img');
-    tasksNavItemIcon.src = icon;
-    const tasksNavItemText = document.createElement('p');
-    tasksNavItemText.innerText = text;
+    const tasksNavItemIcon = buildIconHtml(icon);
+    const tasksNavItemText = buildTextHtml(text);
     const tasksNavListItemHtml = wrapHtmlElements('li', tasksNavItemIcon, tasksNavItemText);
 
     return tasksNavListItemHtml;
