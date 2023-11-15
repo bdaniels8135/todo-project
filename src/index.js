@@ -65,22 +65,24 @@ const BUTTONS = {
     newTagBtn: document.getElementById('new-tag-btn'),
 }
 
-const compareTasksByDate = (firstTask, secondTask) => {
+function compareTasksByDate(firstTask, secondTask) {
     if (firstTask.dueDate < secondTask.dueDate) return -1;
     if (firstTask.dueDate > secondTask.dueDate) return 1;
     return 0;
 }
 
-const sortTaskListByDate = taskList => { taskList.sort((firstTask, secondTask) => compareTasksByDate(firstTask,secondTask)) }
+function sortTaskListByDate(taskList) { 
+    taskList.sort((firstTask, secondTask) => compareTasksByDate(firstTask,secondTask)) 
+}
 
-const resolveAllBtnClick = () => { 
+function resolveAllBtnClick() { 
     main.innerHTML = '';
     sortTaskListByDate(TASKS_LIST)
     const taskTableElements = buildTaskTableElements('All Tasks', false, TASKS_LIST);
     main.appendChild(taskTableElements.elements);
 }
 
-const resolveTodayBtnClick = () => {
+function resolveTodayBtnClick() {
     main.innerHTML = '';
     const todayTasks = TASKS_LIST.filter(task => isSameDay(new Date(), task.dueDate));
     sortTaskListByDate(todayTasks);
@@ -88,7 +90,7 @@ const resolveTodayBtnClick = () => {
     main.appendChild(taskTableElements.elements);
 }
 
-const resolveUpcomingBtnClick = () => {
+function resolveUpcomingBtnClick() {
     main.innerHTML = '';
     const taskTableElements = buildTaskTableElements('Upcoming Tasks', true, []);
     main.appendChild(taskTableElements.elements);
@@ -105,7 +107,7 @@ const resolveUpcomingBtnClick = () => {
     })
 }
 
-const resolvePastDueBtnClick = () => {
+function resolvePastDueBtnClick() {
     main.innerHTML = '';
     const pastDueTasks = TASKS_LIST.filter(task => isPast(task.dueDate));
     sortTaskListByDate(pastDueTasks);
@@ -113,7 +115,7 @@ const resolvePastDueBtnClick = () => {
     main.appendChild(taskTableElements.elements);
 }
 
-const resolveNewTaskBtnClick = () => {
+function resolveNewTaskBtnClick() {
     const newTask = new Task(endOfDay(new Date()))
     TASKS_LIST.push(newTask)
     const taskForm = buildTaskForm(newTask, TAGS_LIST);
@@ -124,7 +126,7 @@ const resolveNewTaskBtnClick = () => {
 const tagsNav = document.querySelector('#tags-nav');
 const tagsNavList = tagsNav.querySelector('ul');
 
-const resolveTagBtnClick = tag => {
+function resolveTagBtnClick(tag) {
     main.innerHTML = '';
     const taggedTasks = TASKS_LIST.filter(task => task.hasTag(tag));
     sortTaskListByDate(taggedTasks);
@@ -132,7 +134,7 @@ const resolveTagBtnClick = tag => {
     main.appendChild(taskTableElements.elements);
 }
 
-const appendNewTagItemAt = (newTag, insertIndex) => {
+function appendNewTagItemAt(newTag, insertIndex) {
     const tagItem = document.createElement('li');
     const tagItemText = document.createElement('p');
     tagItemText.innerHTML = newTag.text;
@@ -140,15 +142,15 @@ const appendNewTagItemAt = (newTag, insertIndex) => {
     // const tagItemIcon = document.createElement('img')
     // tagItemIcon.src = removeIcon;
     // tagItem.appendChild(tagItemIcon);
-    tagItem.addEventListener('click', () => resolveTagBtnClick(newTag));
+    tagItem.addEventListener('click', () => { resolveTagBtnClick(newTag) });
     const possibleElementToInsertAfter = Array.from(tagsNavList.childNodes).at(insertIndex);
     if (possibleElementToInsertAfter) possibleElementToInsertAfter.insertAdjacentElement('afterend', tagItem);
     else tagsNavList.appendChild(tagItem);
 }
 
-TAGS_LIST.forEach(tag => appendNewTagItemAt(tag, 0));
+TAGS_LIST.forEach(tag => { appendNewTagItemAt(tag, 0) });
 
-const resolveNewTagBtnClick = event => {
+function resolveNewTagBtnClick(event) {
     const newTagButton = event.target;
     newTagButton.removeEventListener('click', resolveNewTagBtnClick);
     const newTagInput = document.createElement('input');
