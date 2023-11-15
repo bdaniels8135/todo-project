@@ -2,7 +2,7 @@ import './style.css';
 import removeIcon from './img/close-circle.svg';
 import { format } from 'date-fns';
 import { buildPageElementsHtml } from './pageLoadHtmlBuilders';
-import { buildLabeledDateInputHtml, buildHeaderTextHtml } from './htmlBuilders';
+import { buildLabeledDateInputHtml, buildHeaderTextHtml, buildInputHtml, wrapHtmlElements, buildIconHtml, buildTextHtml } from './htmlBuilders';
 import { buildTaskTableHtml, buildTaskRowHtml } from './taskTableHtmlBuilders';
 import { buildTaskForm } from './taskForm';
 import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } from 'date-fns';
@@ -74,6 +74,7 @@ function clearContainer(container) {
     container.innerHTML = ''
 }
 
+// Define button event listener functions
 function resolveAllBtnClick() { 
     clearContainer(main);
     const taskTableElements = buildTaskTableElements('All Tasks', false, tasksList.getTasks());
@@ -117,6 +118,7 @@ function resolveNewTaskBtnClick() {
     main.appendChild(taskForm.HTML);
 }
 
+// tags functions
 function resolveTagBtnClick(tag) {
     clearContainer(main);
     const taggedTasks = tasksList.getTasks().filter(task => task.hasTag(tag));
@@ -125,13 +127,9 @@ function resolveTagBtnClick(tag) {
 }
 
 function buildTagNavListItemHtml(text) {
-    const tagNavListItemHtml = document.createElement('li');
-    const tagNavListItemTextHtml = document.createElement('p');
-    tagNavListItemTextHtml.innerText = text;
-    tagNavListItemHtml.appendChild(tagNavListItemTextHtml);
-    const tagNavListItemIconHtml = document.createElement('img')
-    tagNavListItemIconHtml.src = removeIcon;
-    tagNavListItemHtml.appendChild(tagNavListItemIconHtml);
+    const tagNavListItemTextHtml = buildTextHtml(text);
+    const tagNavListItemIconHtml = buildIconHtml(removeIcon);
+    const tagNavListItemHtml = wrapHtmlElements('li', tagNavListItemTextHtml, tagNavListItemIconHtml)
 
     return tagNavListItemHtml;
 }
@@ -146,17 +144,10 @@ function populateTagsNavList() {
     tagsList.getTags().forEach(tag => { appendTagItem(tag) });
 }
 
+
 function updateTagsNavList() {
     clearContainer(tagsNavList);
     populateTagsNavList();
-}
-
-function buildTagNavNewTagInput() {
-    const tagNavNewTagInput = document.createElement('input');
-    tagNavNewTagInput.type = 'text';
-    tagNavNewTagInput.maxLength = 15;
-
-    return tagNavNewTagInput;
 }
 
 function resolveTagNavNewTagInput(event) {
@@ -170,13 +161,15 @@ function resolveTagNavNewTagInput(event) {
 
 function resolveNewTagBtnClick() {
     BUTTONS.newTagBtn.removeEventListener('click', resolveNewTagBtnClick);
-    const tagNavNewTagInput = buildTagNavNewTagInput();
+    const tagNavNewTagInput = buildInputHtml('text');
+    tagNavNewTagInput.maxLength = 15;
     tagNavNewTagInput.addEventListener('focusout', event => { resolveTagNavNewTagInput(event) })
     tagNavNewTagInput.addEventListener('keypress', event => { if (event.key === 'Enter') resolveTagNavNewTagInput(event) })
     tagsNavList.appendChild(tagNavNewTagInput);
     tagNavNewTagInput.focus();
 }
 
+// Add button event listeners
 BUTTONS.allBtn.addEventListener('click', resolveAllBtnClick);
 BUTTONS.todayBtn.addEventListener('click', resolveTodayBtnClick);
 BUTTONS.upcomingBtn.addEventListener('click', resolveUpcomingBtnClick);
@@ -184,4 +177,5 @@ BUTTONS.pastDueBtn.addEventListener('click', resolvePastDueBtnClick);
 BUTTONS.newTaskBtn.addEventListener('click', resolveNewTaskBtnClick);
 BUTTONS.newTagBtn.addEventListener('click', resolveNewTagBtnClick);
 
+// Initialize the page
 resolveAllBtnClick();
