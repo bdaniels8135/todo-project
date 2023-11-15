@@ -1,4 +1,5 @@
 import './style.css';
+import removeIcon from './img/close-circle.svg';
 import { format } from 'date-fns';
 import { buildPageElementsHtml } from './pageLoadHtmlBuilders';
 import { buildLabeledDateInputHtml, buildHeaderTextHtml } from './htmlBuilders';
@@ -7,7 +8,6 @@ import { buildTaskForm } from './taskForm';
 import { Task } from './task';
 import { Tag } from './tag';
 import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } from 'date-fns';
-
 
 function buildTaskList() {
     return (() => {
@@ -28,7 +28,6 @@ function buildTaskList() {
         function _compareTasksByDate(firstTask, secondTask) {
             if (firstTask.dueDate < secondTask.dueDate) return -1;
             if (firstTask.dueDate > secondTask.dueDate) return 1;
-
             return 0;
         }
 
@@ -49,7 +48,49 @@ function buildTaskList() {
 
 const TASKS_LIST = buildTaskList();
 
-const TAGS_LIST = [new Tag('Important')];
+const DEFAULT_TAGS = [new Tag('Important')];
+
+function buildTagsList(defaultTags) {
+    return (() => {
+        const tags = [...defaultTags];
+
+        function _compareTagsAlphabetically(firstTag, secondTag) {
+            if (firstTag.text.toLowerCase() < secondTag.text.toLowerCase()) return -1;
+            if (firstTag.text.toLowerCase() > secondTag.text.toLowerCase()) return 1;
+            return 0;
+        }
+
+        function getTags() {
+            tags.sort((firstTag, secondTag) => _compareTagsAlphabetically(firstTag, secondTag));
+
+            return tags;
+        }
+
+        function createNewTag(text) {
+            const tagAlreadyExists = tags.some(tag => tag.text === text);
+            if (!tagAlreadyExists) {
+                const newTag = new Tag(text);
+                tags.push(newTag);
+                return newTag;
+            }           
+        }
+
+        function deleteTag(tag) {
+            const deleteIndex = tags.indexOf(tag);
+            tags.splice(deleteIndex, 1);
+        }
+
+        return {
+            getTags,
+            createNewTag,
+            deleteTag,
+        }
+
+    })();
+}
+
+
+const TAGS_LIST = buildTagsList(DEFAULT_TAGS);
 
 const body = document.querySelector('body');
 const pageHtml = buildPageElementsHtml();
@@ -71,7 +112,7 @@ function buildTaskTableElements(headerText, isUpcoming, tasksToDisplay) {
         const taskTableHtml = buildTaskTableHtml();
         tasksToDisplay.forEach(task => {
             const taskRowHtml = buildTaskRowHtml(task.title, task.shortDesc, task.dueDate);
-            const taskForm = buildTaskForm(task, TAGS_LIST);
+            const taskForm = buildTaskForm(task, TAGS_LIST.getTags());
             const taskDeleteButton = taskForm.HTML.querySelector('#task-delete-btn');
             taskDeleteButton.addEventListener('click', () => {
                 TASKS_LIST.deleteTask(task);
@@ -141,13 +182,15 @@ function resolvePastDueBtnClick() {
 
 function resolveNewTaskBtnClick() {
     const newTask = TASKS_LIST.createNewTask()    
-    const taskForm = buildTaskForm(newTask, TAGS_LIST);
+    const taskForm = buildTaskForm(newTask, TAGS_LIST.getTags());
     main.innerHTML = '';
     main.appendChild(taskForm.HTML);
 }
 
 const tagsNav = document.querySelector('#tags-nav');
 const tagsNavList = tagsNav.querySelector('ul');
+
+populateTagsNavList();
 
 function resolveTagBtnClick(tag) {
     main.innerHTML = '';
@@ -156,58 +199,61 @@ function resolveTagBtnClick(tag) {
     main.appendChild(taskTableElements.elements);
 }
 
-function appendNewTagItemAt(newTag, insertIndex) {
-    const tagItem = document.createElement('li');
-    const tagItemText = document.createElement('p');
-    tagItemText.innerHTML = newTag.text;
-    tagItem.appendChild(tagItemText);
-    // const tagItemIcon = document.createElement('img')
-    // tagItemIcon.src = removeIcon;
-    // tagItem.appendChild(tagItemIcon);
-    tagItem.addEventListener('click', () => { resolveTagBtnClick(newTag) });
-    const possibleElementToInsertAfter = Array.from(tagsNavList.childNodes).at(insertIndex);
-    if (possibleElementToInsertAfter) possibleElementToInsertAfter.insertAdjacentElement('afterend', tagItem);
-    else tagsNavList.appendChild(tagItem);
+function clearTagsNavList() {
+    tagsNavList.innerHTML = ''
 }
 
-TAGS_LIST.forEach(tag => { appendNewTagItemAt(tag, 0) });
+function buildTagNavListItemHtml(text) {
+    const tagNavListItemHtml = document.createElement('li');
+    const tagNavListItemTextHtml = document.createElement('p');
+    tagNavListItemTextHtml.innerText = text;
+    tagNavListItemHtml.appendChild(tagNavListItemTextHtml);
+    const tagNavListItemIconHtml = document.createElement('img')
+    tagNavListItemIconHtml.src = removeIcon;
+    tagNavListItemHtml.appendChild(tagNavListItemIconHtml);
 
-function resolveNewTagBtnClick(event) {
-    const newTagButton = event.target;
-    newTagButton.removeEventListener('click', resolveNewTagBtnClick);
-    const newTagInput = document.createElement('input');
-    newTagInput.type = 'text';
-    newTagInput.maxLength = 15;
-    newTagInput.addEventListener('focusout', () => {
-        const trimmedInputValue = newTagInput.value.trim();
-        const tagAlreadyExists = TAGS_LIST.some(tag => tag.text === trimmedInputValue);
-        if (trimmedInputValue && !tagAlreadyExists) {
-            const newTag = new Tag(trimmedInputValue);
-            const possibleIndex = TAGS_LIST.findIndex(tag => tag.text > newTag.text);
-            const insertIndex = possibleIndex === -1 ? TAGS_LIST.length : possibleIndex;
-            appendNewTagItemAt(newTag, insertIndex);
-            TAGS_LIST.splice(insertIndex, 0, newTag);
+    return tagNavListItemHtml;
+}
+
+function appendTagItem(tag) {
+    const tagNavListItemHtml = buildTagNavListItemHtml(tag.text);
+    tagNavListItemHtml.addEventListener('click', () => { resolveTagBtnClick(tag) });
+    tagsNavList.appendChild(tagNavListItemHtml);
+}
+
+function populateTagsNavList() {
+    TAGS_LIST.getTags().forEach(tag => { appendTagItem(tag) });
+}
+
+function updateTagsNavList() {
+    clearTagsNavList();
+    populateTagsNavList();
+}
+
+function buildTagNavNewTagInput() {
+    const tagNavNewTagInput = document.createElement('input');
+    tagNavNewTagInput.type = 'text';
+    tagNavNewTagInput.maxLength = 15;
+
+    return tagNavNewTagInput;
+}
+
+function resolveTagNavNewTagInput(event) {
+    const trimmedInputValue = event.target.value.trim();
+        if (trimmedInputValue) {
+            TAGS_LIST.createNewTag(trimmedInputValue);
+            updateTagsNavList()
         }
-        tagsNavList.removeChild(newTagInput);
-        newTagButton.addEventListener('click', resolveNewTagBtnClick);
-    })
-    newTagInput.addEventListener('keypress', event => {
-        if (event.key === 'Enter') {
-            const trimmedInputValue = newTagInput.value.trim();
-            const tagAlreadyExists = TAGS_LIST.some(tag => tag.text === trimmedInputValue);
-            if (trimmedInputValue && !tagAlreadyExists) {
-                const newTag = new Tag(trimmedInputValue);
-                const possibleIndex = TAGS_LIST.findIndex(tag => tag.text > newTag.text);
-                const insertIndex = possibleIndex === -1 ? TAGS_LIST.length : possibleIndex;
-                appendNewTagItemAt(newTag, insertIndex);
-                TAGS_LIST.splice(insertIndex, 0, newTag);
-            }
-            tagsNavList.removeChild(newTagInput);
-            newTagButton.addEventListener('click', resolveNewTagBtnClick);
-        }
-    })
-    tagsNavList.appendChild(newTagInput);
-    newTagInput.focus();
+    BUTTONS.newTagBtn.addEventListener('click', resolveNewTagBtnClick);
+}
+
+function resolveNewTagBtnClick() {
+    BUTTONS.newTagBtn.removeEventListener('click', resolveNewTagBtnClick);
+    const tagNavNewTagInput = buildTagNavNewTagInput();
+    tagNavNewTagInput.addEventListener('focusout', event => { resolveTagNavNewTagInput(event) })
+    tagNavNewTagInput.addEventListener('keypress', event => { if (event.key === 'Enter') resolveTagNavNewTagInput(event) })
+    tagsNavList.appendChild(tagNavNewTagInput);
+    tagNavNewTagInput.focus();
 }
 
 BUTTONS.allBtn.addEventListener('click', resolveAllBtnClick);
