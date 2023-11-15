@@ -8,7 +8,47 @@ import { Task } from './task';
 import { Tag } from './tag';
 import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } from 'date-fns';
 
-const TASKS_LIST = [];
+
+function buildTaskList() {
+    return (() => {
+        const tasks = [];
+
+        function deleteTask(task){
+            const deleteIndex = tasks.indexOf(task);
+            tasks.splice(deleteIndex, 1);
+        }
+
+        function createNewTask() {
+            const newTask = new Task(endOfDay(new Date()));
+            tasks.push(newTask);
+
+            return newTask;
+        }
+
+        function _compareTasksByDate(firstTask, secondTask) {
+            if (firstTask.dueDate < secondTask.dueDate) return -1;
+            if (firstTask.dueDate > secondTask.dueDate) return 1;
+
+            return 0;
+        }
+
+        function getTasks() {
+            tasks.sort((firstTask, secondTask) => _compareTasksByDate(firstTask,secondTask));
+            
+            return tasks;
+        }
+
+        return {
+            deleteTask,
+            createNewTask,
+            getTasks,
+        }
+
+    })();
+}
+
+const TASKS_LIST = buildTaskList();
+
 const TAGS_LIST = [new Tag('Important')];
 
 const body = document.querySelector('body');
@@ -30,13 +70,11 @@ function buildTaskTableElements(headerText, isUpcoming, tasksToDisplay) {
 
         const taskTableHtml = buildTaskTableHtml();
         tasksToDisplay.forEach(task => {
-            const dueDateString = !isNaN(task.dueDate) ? format(task.dueDate, 'MM/dd/yyyy') : '(NO DATE)';
-            const taskRowHtml = buildTaskRowHtml(task.title, task.shortDesc, dueDateString);
+            const taskRowHtml = buildTaskRowHtml(task.title, task.shortDesc, task.dueDate);
             const taskForm = buildTaskForm(task, TAGS_LIST);
             const taskDeleteButton = taskForm.HTML.querySelector('#task-delete-btn');
             taskDeleteButton.addEventListener('click', () => {
-                const deleteIndex = TASKS_LIST.indexOf(task);
-                TASKS_LIST.splice(deleteIndex, 1);
+                TASKS_LIST.deleteTask(task);
                 resolveAllBtnClick();
             })
             taskRowHtml.addEventListener('click', () => {
@@ -65,27 +103,15 @@ const BUTTONS = {
     newTagBtn: document.getElementById('new-tag-btn'),
 }
 
-function compareTasksByDate(firstTask, secondTask) {
-    if (firstTask.dueDate < secondTask.dueDate) return -1;
-    if (firstTask.dueDate > secondTask.dueDate) return 1;
-    return 0;
-}
-
-function sortTaskListByDate(taskList) { 
-    taskList.sort((firstTask, secondTask) => compareTasksByDate(firstTask,secondTask)) 
-}
-
 function resolveAllBtnClick() { 
     main.innerHTML = '';
-    sortTaskListByDate(TASKS_LIST)
-    const taskTableElements = buildTaskTableElements('All Tasks', false, TASKS_LIST);
+    const taskTableElements = buildTaskTableElements('All Tasks', false, TASKS_LIST.getTasks());
     main.appendChild(taskTableElements.elements);
 }
 
 function resolveTodayBtnClick() {
     main.innerHTML = '';
-    const todayTasks = TASKS_LIST.filter(task => isSameDay(new Date(), task.dueDate));
-    sortTaskListByDate(todayTasks);
+    const todayTasks = TASKS_LIST.getTasks().filter(task => isSameDay(new Date(), task.dueDate));
     const taskTableElements = buildTaskTableElements('Today\'s Tasks', false, todayTasks);
     main.appendChild(taskTableElements.elements);
 }
@@ -98,10 +124,9 @@ function resolveUpcomingBtnClick() {
     dateInput.addEventListener('change', () => {
         const upcomingDate = endOfDay(parseISO(dateInput.value));
         const upcomingInterval = {start: startOfDay(new Date()), end: upcomingDate};
-        const upcomingTasks = TASKS_LIST.filter(task => isWithinInterval(task.dueDate, upcomingInterval));
+        const upcomingTasks = TASKS_LIST.getTasks().filter(task => isWithinInterval(task.dueDate, upcomingInterval));
         const table = main.querySelector('table');
         main.removeChild(table);
-        sortTaskListByDate(upcomingTasks);
         const taskTableElements = buildTaskTableElements('Upcoming Tasks', true, upcomingTasks);
         main.appendChild(taskTableElements.taskTableHtml);
     })
@@ -109,15 +134,13 @@ function resolveUpcomingBtnClick() {
 
 function resolvePastDueBtnClick() {
     main.innerHTML = '';
-    const pastDueTasks = TASKS_LIST.filter(task => isPast(task.dueDate));
-    sortTaskListByDate(pastDueTasks);
+    const pastDueTasks = TASKS_LIST.getTasks().filter(task => isPast(task.dueDate));
     const taskTableElements = buildTaskTableElements('Past Due Tasks', false, pastDueTasks);
     main.appendChild(taskTableElements.elements);
 }
 
 function resolveNewTaskBtnClick() {
-    const newTask = new Task(endOfDay(new Date()))
-    TASKS_LIST.push(newTask)
+    const newTask = TASKS_LIST.createNewTask()    
     const taskForm = buildTaskForm(newTask, TAGS_LIST);
     main.innerHTML = '';
     main.appendChild(taskForm.HTML);
@@ -128,8 +151,7 @@ const tagsNavList = tagsNav.querySelector('ul');
 
 function resolveTagBtnClick(tag) {
     main.innerHTML = '';
-    const taggedTasks = TASKS_LIST.filter(task => task.hasTag(tag));
-    sortTaskListByDate(taggedTasks);
+    const taggedTasks = TASKS_LIST.getTasks().filter(task => task.hasTag(tag));
     const taskTableElements = buildTaskTableElements(`${tag.text} Tasks`, false, taggedTasks);
     main.appendChild(taskTableElements.elements);
 }
