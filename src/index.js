@@ -5,96 +5,33 @@ import { buildPageElementsHtml } from './pageLoadHtmlBuilders';
 import { buildLabeledDateInputHtml, buildHeaderTextHtml } from './htmlBuilders';
 import { buildTaskTableHtml, buildTaskRowHtml } from './taskTableHtmlBuilders';
 import { buildTaskForm } from './taskForm';
-import { Task } from './task';
-import { Tag } from './tag';
 import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } from 'date-fns';
+import { buildTaskList } from './taskList';
+import { buildTagsList } from './tagsList';
 
-function buildTaskList() {
-    return (() => {
-        const tasks = [];
-
-        function deleteTask(task){
-            const deleteIndex = tasks.indexOf(task);
-            tasks.splice(deleteIndex, 1);
-        }
-
-        function createNewTask() {
-            const newTask = new Task(endOfDay(new Date()));
-            tasks.push(newTask);
-
-            return newTask;
-        }
-
-        function _compareTasksByDate(firstTask, secondTask) {
-            if (firstTask.dueDate < secondTask.dueDate) return -1;
-            if (firstTask.dueDate > secondTask.dueDate) return 1;
-            return 0;
-        }
-
-        function getTasks() {
-            tasks.sort((firstTask, secondTask) => _compareTasksByDate(firstTask,secondTask));
-            
-            return tasks;
-        }
-
-        return {
-            deleteTask,
-            createNewTask,
-            getTasks,
-        }
-
-    })();
-}
-
-const TASKS_LIST = buildTaskList();
-
-const DEFAULT_TAGS = [new Tag('Important')];
-
-function buildTagsList(defaultTags) {
-    return (() => {
-        const tags = [...defaultTags];
-
-        function _compareTagsAlphabetically(firstTag, secondTag) {
-            if (firstTag.text.toLowerCase() < secondTag.text.toLowerCase()) return -1;
-            if (firstTag.text.toLowerCase() > secondTag.text.toLowerCase()) return 1;
-            return 0;
-        }
-
-        function getTags() {
-            tags.sort((firstTag, secondTag) => _compareTagsAlphabetically(firstTag, secondTag));
-
-            return tags;
-        }
-
-        function createNewTag(text) {
-            const tagAlreadyExists = tags.some(tag => tag.text === text);
-            if (!tagAlreadyExists) {
-                const newTag = new Tag(text);
-                tags.push(newTag);
-                return newTag;
-            }           
-        }
-
-        function deleteTag(tag) {
-            const deleteIndex = tags.indexOf(tag);
-            tags.splice(deleteIndex, 1);
-        }
-
-        return {
-            getTags,
-            createNewTag,
-            deleteTag,
-        }
-
-    })();
-}
-
-
-const TAGS_LIST = buildTagsList(DEFAULT_TAGS);
+const DEFAULT_TAG_STRINGS = ['Important'];
 
 const body = document.querySelector('body');
 const pageHtml = buildPageElementsHtml();
 body.appendChild(pageHtml);
+
+const tasksList = buildTaskList();
+const tagsList = buildTagsList(DEFAULT_TAG_STRINGS);
+
+const tagsNav = document.querySelector('#tags-nav');
+const tagsNavList = tagsNav.querySelector('ul');
+populateTagsNavList();
+
+const main = document.querySelector('main');
+
+const BUTTONS = {
+    allBtn: document.getElementById('all-btn'),
+    todayBtn: document.getElementById('today-btn'),
+    upcomingBtn: document.getElementById('upcoming-btn'),
+    pastDueBtn: document.getElementById('past-due-btn'),
+    newTaskBtn: document.getElementById('new-task-btn'),
+    newTagBtn: document.getElementById('new-tag-btn'),
+}
 
 function buildTaskTableElements(headerText, isUpcoming, tasksToDisplay) {
     return (() => {
@@ -112,14 +49,14 @@ function buildTaskTableElements(headerText, isUpcoming, tasksToDisplay) {
         const taskTableHtml = buildTaskTableHtml();
         tasksToDisplay.forEach(task => {
             const taskRowHtml = buildTaskRowHtml(task.title, task.shortDesc, task.dueDate);
-            const taskForm = buildTaskForm(task, TAGS_LIST.getTags());
+            const taskForm = buildTaskForm(task, tagsList.getTags());
             const taskDeleteButton = taskForm.HTML.querySelector('#task-delete-btn');
             taskDeleteButton.addEventListener('click', () => {
-                TASKS_LIST.deleteTask(task);
+                tasksList.deleteTask(task);
                 resolveAllBtnClick();
             })
             taskRowHtml.addEventListener('click', () => {
-                main.innerHTML = '';
+                clearContainer(main);
                 main.appendChild(taskForm.HTML);
             })
             taskTableHtml.appendChild(taskRowHtml);
@@ -133,39 +70,32 @@ function buildTaskTableElements(headerText, isUpcoming, tasksToDisplay) {
     })()
 }
 
-const main = document.querySelector('main');
-
-const BUTTONS = {
-    allBtn: document.getElementById('all-btn'),
-    todayBtn: document.getElementById('today-btn'),
-    upcomingBtn: document.getElementById('upcoming-btn'),
-    pastDueBtn: document.getElementById('past-due-btn'),
-    newTaskBtn: document.getElementById('new-task-btn'),
-    newTagBtn: document.getElementById('new-tag-btn'),
+function clearContainer(container) {
+    container.innerHTML = ''
 }
 
 function resolveAllBtnClick() { 
-    main.innerHTML = '';
-    const taskTableElements = buildTaskTableElements('All Tasks', false, TASKS_LIST.getTasks());
+    clearContainer(main);
+    const taskTableElements = buildTaskTableElements('All Tasks', false, tasksList.getTasks());
     main.appendChild(taskTableElements.elements);
 }
 
 function resolveTodayBtnClick() {
-    main.innerHTML = '';
-    const todayTasks = TASKS_LIST.getTasks().filter(task => isSameDay(new Date(), task.dueDate));
+    clearContainer(main);
+    const todayTasks = tasksList.getTasks().filter(task => isSameDay(new Date(), task.dueDate));
     const taskTableElements = buildTaskTableElements('Today\'s Tasks', false, todayTasks);
     main.appendChild(taskTableElements.elements);
 }
 
 function resolveUpcomingBtnClick() {
-    main.innerHTML = '';
+    clearContainer(main);
     const taskTableElements = buildTaskTableElements('Upcoming Tasks', true, []);
     main.appendChild(taskTableElements.elements);
     const dateInput = document.querySelector('input[type=date]');
     dateInput.addEventListener('change', () => {
         const upcomingDate = endOfDay(parseISO(dateInput.value));
         const upcomingInterval = {start: startOfDay(new Date()), end: upcomingDate};
-        const upcomingTasks = TASKS_LIST.getTasks().filter(task => isWithinInterval(task.dueDate, upcomingInterval));
+        const upcomingTasks = tasksList.getTasks().filter(task => isWithinInterval(task.dueDate, upcomingInterval));
         const table = main.querySelector('table');
         main.removeChild(table);
         const taskTableElements = buildTaskTableElements('Upcoming Tasks', true, upcomingTasks);
@@ -174,33 +104,24 @@ function resolveUpcomingBtnClick() {
 }
 
 function resolvePastDueBtnClick() {
-    main.innerHTML = '';
-    const pastDueTasks = TASKS_LIST.getTasks().filter(task => isPast(task.dueDate));
+    clearContainer(main);
+    const pastDueTasks = tasksList.getTasks().filter(task => isPast(task.dueDate));
     const taskTableElements = buildTaskTableElements('Past Due Tasks', false, pastDueTasks);
     main.appendChild(taskTableElements.elements);
 }
 
 function resolveNewTaskBtnClick() {
-    const newTask = TASKS_LIST.createNewTask()    
-    const taskForm = buildTaskForm(newTask, TAGS_LIST.getTags());
-    main.innerHTML = '';
+    const newTask = tasksList.createNewTask()    
+    const taskForm = buildTaskForm(newTask, tagsList.getTags());
+    clearContainer(main);
     main.appendChild(taskForm.HTML);
 }
 
-const tagsNav = document.querySelector('#tags-nav');
-const tagsNavList = tagsNav.querySelector('ul');
-
-populateTagsNavList();
-
 function resolveTagBtnClick(tag) {
-    main.innerHTML = '';
-    const taggedTasks = TASKS_LIST.getTasks().filter(task => task.hasTag(tag));
+    clearContainer(main);
+    const taggedTasks = tasksList.getTasks().filter(task => task.hasTag(tag));
     const taskTableElements = buildTaskTableElements(`${tag.text} Tasks`, false, taggedTasks);
     main.appendChild(taskTableElements.elements);
-}
-
-function clearTagsNavList() {
-    tagsNavList.innerHTML = ''
 }
 
 function buildTagNavListItemHtml(text) {
@@ -222,11 +143,11 @@ function appendTagItem(tag) {
 }
 
 function populateTagsNavList() {
-    TAGS_LIST.getTags().forEach(tag => { appendTagItem(tag) });
+    tagsList.getTags().forEach(tag => { appendTagItem(tag) });
 }
 
 function updateTagsNavList() {
-    clearTagsNavList();
+    clearContainer(tagsNavList);
     populateTagsNavList();
 }
 
@@ -241,7 +162,7 @@ function buildTagNavNewTagInput() {
 function resolveTagNavNewTagInput(event) {
     const trimmedInputValue = event.target.value.trim();
         if (trimmedInputValue) {
-            TAGS_LIST.createNewTag(trimmedInputValue);
+            tagsList.createNewTag(trimmedInputValue);
             updateTagsNavList()
         }
     BUTTONS.newTagBtn.addEventListener('click', resolveNewTagBtnClick);
