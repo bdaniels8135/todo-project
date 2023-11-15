@@ -12,6 +12,13 @@ export function buildLabelHtml(labelText) {
     return labelHtml;
 }
 
+export function buildTextHtml(text) {
+    const textHtml = document.createElement('p');
+    textHtml.innerText = text;
+
+    return textHtml;
+}
+
 export function buildInputHtml(type, id=null) {
     const inputHtml = document.createElement('input');
     inputHtml.type = type;
