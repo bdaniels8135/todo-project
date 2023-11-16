@@ -1,13 +1,12 @@
 import './style.css';
 import removeIcon from './img/close-circle.svg';
-import { format } from 'date-fns';
 import { buildPageElementsHtml } from './pageLoadHtmlBuilders';
-import { buildLabeledDateInputHtml, buildHeaderTextHtml, buildInputHtml, wrapHtmlElements, buildIconHtml, buildTextHtml } from './htmlBuilders';
-import { buildTaskTableHtml, buildTaskRowHtml } from './taskTableHtmlBuilders';
+import { buildInputHtml, wrapHtmlElements, buildIconHtml, buildTextHtml } from './htmlBuilders';
 import { buildTaskForm } from './taskForm';
 import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } from 'date-fns';
 import { buildTaskList } from './taskList';
 import { buildTagsList } from './tagsList';
+import { buildTaskTable } from './taskTable';
 
 const DEFAULT_TAG_STRINGS = ['Important'];
 
@@ -33,43 +32,6 @@ const BUTTONS = {
     newTagBtn: document.getElementById('new-tag-btn'),
 }
 
-function buildTaskTableElements(headerText, isUpcoming, tasksToDisplay) {
-    return (() => {
-        const elements = document.createDocumentFragment();
-        
-        const taskTableHeaderHtml = buildHeaderTextHtml(headerText, 1);
-        elements.appendChild(taskTableHeaderHtml);
-
-        const upcomingDateInputLabelText = 'Display tasks due between now and:'
-        const labeledUpcomingDateInputHtml = buildLabeledDateInputHtml(upcomingDateInputLabelText);
-        const upcomingDateInput = labeledUpcomingDateInputHtml.querySelector('input');
-        upcomingDateInput.min = format(new Date(), 'yyyy-MM-dd');
-        if (isUpcoming) elements.appendChild(labeledUpcomingDateInputHtml);
-
-        const taskTableHtml = buildTaskTableHtml();
-        tasksToDisplay.forEach(task => {
-            const taskRowHtml = buildTaskRowHtml(task.title, task.shortDesc, task.dueDate);
-            const taskForm = buildTaskForm(task, tagsList);
-            const taskDeleteButton = taskForm.HTML.querySelector('#task-delete-btn');
-            taskDeleteButton.addEventListener('click', () => {
-                tasksList.deleteTask(task);
-                resolveAllBtnClick();
-            })
-            taskRowHtml.addEventListener('click', () => {
-                clearContainer(main);
-                main.appendChild(taskForm.HTML);
-            })
-            taskTableHtml.appendChild(taskRowHtml);
-        })
-        elements.appendChild(taskTableHtml);
-
-        return {
-            elements,
-            taskTableHtml
-        }
-    })()
-}
-
 function clearContainer(container) {
     container.innerHTML = ''
 }
@@ -77,38 +39,39 @@ function clearContainer(container) {
 // Define button event listener functions
 function resolveAllBtnClick() { 
     clearContainer(main);
-    const taskTableElements = buildTaskTableElements('All Tasks', false, tasksList.getTasks());
-    main.appendChild(taskTableElements.elements);
+    const taskTable = buildTaskTable('All Tasks', false, tagsList);
+    taskTable.appendTasks(tasksList.getTasks());
+    main.appendChild(taskTable.HTML);
 }
 
 function resolveTodayBtnClick() {
     clearContainer(main);
     const todayTasks = tasksList.getTasks().filter(task => isSameDay(new Date(), task.dueDate));
-    const taskTableElements = buildTaskTableElements('Today\'s Tasks', false, todayTasks);
-    main.appendChild(taskTableElements.elements);
+    const taskTable = buildTaskTable('Today\'s Tasks', false, tagsList);
+    taskTable.appendTasks(todayTasks);
+    main.appendChild(taskTable.HTML);
 }
 
 function resolveUpcomingBtnClick() {
     clearContainer(main);
-    const taskTableElements = buildTaskTableElements('Upcoming Tasks', true, []);
-    main.appendChild(taskTableElements.elements);
+    const taskTable = buildTaskTable('Upcoming Tasks', true, tagsList);
+    main.appendChild(taskTable.HTML);
     const dateInput = document.querySelector('input[type=date]');
     dateInput.addEventListener('change', () => {
+        const startingDate = startOfDay(new Date());
         const upcomingDate = endOfDay(parseISO(dateInput.value));
-        const upcomingInterval = {start: startOfDay(new Date()), end: upcomingDate};
+        const upcomingInterval = {start: startingDate, end: upcomingDate};
         const upcomingTasks = tasksList.getTasks().filter(task => isWithinInterval(task.dueDate, upcomingInterval));
-        const table = main.querySelector('table');
-        main.removeChild(table);
-        const taskTableElements = buildTaskTableElements('Upcoming Tasks', true, upcomingTasks);
-        main.appendChild(taskTableElements.taskTableHtml);
+        taskTable.appendTasks(upcomingTasks);
     })
 }
 
 function resolvePastDueBtnClick() {
     clearContainer(main);
     const pastDueTasks = tasksList.getTasks().filter(task => isPast(task.dueDate));
-    const taskTableElements = buildTaskTableElements('Past Due Tasks', false, pastDueTasks);
-    main.appendChild(taskTableElements.elements);
+    const taskTable = buildTaskTable('Past Due Tasks', false, tagsList);
+    taskTable.appendTasks(pastDueTasks);
+    main.appendChild(taskTable.HTML);
 }
 
 function resolveNewTaskBtnClick() {
@@ -122,8 +85,9 @@ function resolveNewTaskBtnClick() {
 function resolveTagBtnClick(tag) {
     clearContainer(main);
     const taggedTasks = tasksList.getTasks().filter(task => task.hasTag(tag));
-    const taskTableElements = buildTaskTableElements(`${tag.text} Tasks`, false, taggedTasks);
-    main.appendChild(taskTableElements.elements);
+    const taskTable = buildTaskTable(`${tag.text} Tasks`, false, tagsList);
+    taskTable.appendTasks(taggedTasks);
+    main.appendChild(taskTable.HTML);
 }
 
 function buildTagNavListItemHtml(text) {
