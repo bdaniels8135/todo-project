@@ -90,9 +90,7 @@ export function resolveTagBtnClick(tag) {
 
 function resolveNewTaskBtnClick() {
     const newTask = TASKS_LIST.createNewTask();
-    const taskForm = buildTaskForm(newTask, TAGS_LIST);
-    clearContainer(MAIN);
-    MAIN.appendChild(taskForm.HTML);
+    displayTaskForm(newTask);
 }
 
 function resolveTagNavNewTagInput(event) {
