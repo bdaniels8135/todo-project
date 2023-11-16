@@ -15,7 +15,7 @@ export function buildTagsList(defaultTags) {
         }
 
         function getTags() {
-            _sortTagsAlphabetically()
+            _sortTagsAlphabetically();
 
             return [...tags];
         }

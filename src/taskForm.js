@@ -61,6 +61,7 @@ export function buildTaskForm(task, tagsList) {
             INPUTS.shortDesc.value = task.shortDesc;
             task.checklist.forEach(checklistItem => { _appendChecklistItem(checklistItem) });
             task.tags.forEach(tag => { _appendTag(tag) });
+            
         })();
 
         (function _addInputEventListeners() {
@@ -87,10 +88,12 @@ export function buildTaskForm(task, tagsList) {
                 _appendTag(tagToAdd);
                 INPUTS.newTagSelect.value = '';
             });
+
         })();
    
         return {
-            HTML
+            HTML,
         }
+
     })();
 }
