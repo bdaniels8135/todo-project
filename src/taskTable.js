@@ -1,10 +1,12 @@
 import { format } from 'date-fns';
 import { buildTaskTableHtml, buildTaskRowHtml } from './taskTableHtmlBuilders';
 import { buildLabeledDateInputHtml, buildHeaderTextHtml } from './htmlBuilders';
+import { clearContainer, displayTaskForm } from '.';
+
 
 const UPCOMING_DATE_INPUT_LABEL_TEXT = 'Display tasks due between now and:';
 
-export function buildTaskTable(headerText, isUpcoming, tagsList) {
+export function buildTaskTable(headerText, isUpcoming) {
     return (() => {
         const HTML = document.createDocumentFragment();
         
@@ -19,27 +21,18 @@ export function buildTaskTable(headerText, isUpcoming, tagsList) {
         const taskTableHtml = buildTaskTableHtml();
         HTML.appendChild(taskTableHtml);
 
-        function appendTasks(tasksToDisplay) {
-            taskTableHtml.innerHTML = '';
+        function displayTasks(tasksToDisplay) {
+            clearContainer(taskTableHtml);
             tasksToDisplay.forEach(task => {
                 const taskRowHtml = buildTaskRowHtml(task.title, task.shortDesc, task.dueDate);
-                const taskForm = buildTaskForm(task, tagsList);
-                const taskDeleteButton = taskForm.HTML.querySelector('#task-delete-btn');
-                taskDeleteButton.addEventListener('click', () => {
-                    tasksList.deleteTask(task);
-                    resolveAllBtnClick();
-                })
-                taskRowHtml.addEventListener('click', () => {
-                    clearContainer(main);
-                    main.appendChild(taskForm.HTML);
-                })
+                taskRowHtml.addEventListener('click', () => { displayTaskForm(task) });
                 taskTableHtml.appendChild(taskRowHtml);
             })
         }
 
         return {
             HTML,
-            appendTasks,
+            displayTasks,
         }
 
     })();

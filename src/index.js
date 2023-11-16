@@ -1,27 +1,27 @@
 import './style.css';
-import removeIcon from './img/close-circle.svg';
 import { buildPageElementsHtml } from './pageLoadHtmlBuilders';
-import { buildInputHtml, wrapHtmlElements, buildIconHtml, buildTextHtml } from './htmlBuilders';
-import { buildTaskForm } from './taskForm';
-import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } from 'date-fns';
 import { buildTaskList } from './taskList';
 import { buildTagsList } from './tagsList';
 import { buildTaskTable } from './taskTable';
+import { buildTaskForm } from './taskForm';
+import { buildTagsNavList } from './tagsNavList';
+import { buildInputHtml } from './htmlBuilders';
+import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } from 'date-fns';
 
 const DEFAULT_TAG_STRINGS = ['Important'];
 
-const body = document.querySelector('body');
+const BODY = document.querySelector('body');
 const pageHtml = buildPageElementsHtml();
-body.appendChild(pageHtml);
+BODY.appendChild(pageHtml);
 
-const tasksList = buildTaskList();
-const tagsList = buildTagsList(DEFAULT_TAG_STRINGS);
+const TASKS_LIST = buildTaskList();
+const TAGS_LIST = buildTagsList(DEFAULT_TAG_STRINGS);
 
-const tagsNav = document.querySelector('#tags-nav');
-const tagsNavList = tagsNav.querySelector('ul');
-populateTagsNavList();
+const MAIN = document.querySelector('main');
 
-const main = document.querySelector('main');
+const TAGS_NAV = document.querySelector('#tags-nav');
+const TAGS_NAV_LIST = buildTagsNavList(TAGS_NAV, TAGS_LIST);
+TAGS_NAV_LIST.updateTagsNavList();
 
 const BUTTONS = {
     allBtn: document.getElementById('all-btn'),
@@ -32,93 +32,75 @@ const BUTTONS = {
     newTagBtn: document.getElementById('new-tag-btn'),
 }
 
-function clearContainer(container) {
-    container.innerHTML = ''
+export function clearContainer(container) {
+    container.innerHTML = '';
 }
 
-// Define button event listener functions
+export function displayTaskForm(task) {
+    const taskForm = buildTaskForm(task, TAGS_LIST);
+    const taskDeleteButton = taskForm.HTML.querySelector('#task-delete-btn');
+    taskDeleteButton.addEventListener('click', () => {
+        TASKS_LIST.deleteTask(task);
+        resolveAllBtnClick();
+    })
+    clearContainer(MAIN);
+    MAIN.appendChild(taskForm.HTML);
+}
+
+function displayTasksTable(headerText, isUpcoming, tasksToDisplay) {
+    clearContainer(MAIN);
+    const taskTable = buildTaskTable(headerText, isUpcoming);
+    taskTable.displayTasks(tasksToDisplay);
+    MAIN.appendChild(taskTable.HTML);
+
+    return taskTable;
+}
+
 function resolveAllBtnClick() { 
-    clearContainer(main);
-    const taskTable = buildTaskTable('All Tasks', false, tagsList);
-    taskTable.appendTasks(tasksList.getTasks());
-    main.appendChild(taskTable.HTML);
+    const allTasks = TASKS_LIST.getTasks();
+    displayTasksTable('All Tasks', false, allTasks);
 }
 
 function resolveTodayBtnClick() {
-    clearContainer(main);
-    const todayTasks = tasksList.getTasks().filter(task => isSameDay(new Date(), task.dueDate));
-    const taskTable = buildTaskTable('Today\'s Tasks', false, tagsList);
-    taskTable.appendTasks(todayTasks);
-    main.appendChild(taskTable.HTML);
+    const todayTasks = TASKS_LIST.getTasks().filter(task => isSameDay(new Date(), task.dueDate));
+    displayTasksTable('Today\'s Tasks', false, todayTasks);
 }
 
 function resolveUpcomingBtnClick() {
-    clearContainer(main);
-    const taskTable = buildTaskTable('Upcoming Tasks', true, tagsList);
-    main.appendChild(taskTable.HTML);
+    const taskTable = displayTasksTable('Upcoming Tasks', true, []);
     const dateInput = document.querySelector('input[type=date]');
     dateInput.addEventListener('change', () => {
         const startingDate = startOfDay(new Date());
         const upcomingDate = endOfDay(parseISO(dateInput.value));
         const upcomingInterval = {start: startingDate, end: upcomingDate};
-        const upcomingTasks = tasksList.getTasks().filter(task => isWithinInterval(task.dueDate, upcomingInterval));
-        taskTable.appendTasks(upcomingTasks);
+        const upcomingTasks = TASKS_LIST.getTasks().filter(task => isWithinInterval(task.dueDate, upcomingInterval));
+        taskTable.displayTasks(upcomingTasks);
     })
 }
 
 function resolvePastDueBtnClick() {
-    clearContainer(main);
-    const pastDueTasks = tasksList.getTasks().filter(task => isPast(task.dueDate));
-    const taskTable = buildTaskTable('Past Due Tasks', false, tagsList);
-    taskTable.appendTasks(pastDueTasks);
-    main.appendChild(taskTable.HTML);
+    const pastDueTasks = TASKS_LIST.getTasks().filter(task => isPast(task.dueDate));
+    displayTasksTable('Past Due Tasks', false, pastDueTasks);
+}
+
+export function resolveTagBtnClick(tag) {
+    const taggedTasks = TASKS_LIST.getTasks().filter(task => task.hasTag(tag));
+    displayTasksTable(`${tag.text} Tasks`, false, taggedTasks);
 }
 
 function resolveNewTaskBtnClick() {
-    const newTask = tasksList.createNewTask()    
-    const taskForm = buildTaskForm(newTask, tagsList);
-    clearContainer(main);
-    main.appendChild(taskForm.HTML);
-}
-
-// tags functions
-function resolveTagBtnClick(tag) {
-    clearContainer(main);
-    const taggedTasks = tasksList.getTasks().filter(task => task.hasTag(tag));
-    const taskTable = buildTaskTable(`${tag.text} Tasks`, false, tagsList);
-    taskTable.appendTasks(taggedTasks);
-    main.appendChild(taskTable.HTML);
-}
-
-function buildTagNavListItemHtml(text) {
-    const tagNavListItemTextHtml = buildTextHtml(text);
-    const tagNavListItemIconHtml = buildIconHtml(removeIcon);
-    const tagNavListItemHtml = wrapHtmlElements('li', tagNavListItemTextHtml, tagNavListItemIconHtml);
-
-    return tagNavListItemHtml;
-}
-
-function appendTagItem(tag) {
-    const tagNavListItemHtml = buildTagNavListItemHtml(tag.text);
-    tagNavListItemHtml.addEventListener('click', () => { resolveTagBtnClick(tag) });
-    tagsNavList.appendChild(tagNavListItemHtml);
-}
-
-function populateTagsNavList() {
-    tagsList.getTags().forEach(tag => { appendTagItem(tag) });
-}
-
-function updateTagsNavList() {
-    clearContainer(tagsNavList);
-    populateTagsNavList();
+    const newTask = TASKS_LIST.createNewTask();
+    const taskForm = buildTaskForm(newTask, TAGS_LIST);
+    clearContainer(MAIN);
+    MAIN.appendChild(taskForm.HTML);
 }
 
 function resolveTagNavNewTagInput(event) {
     const trimmedInputValue = event.target.value.trim();
-        if (trimmedInputValue) {
-            tagsList.createNewTag(trimmedInputValue);
-        }
-    updateTagsNavList();
+    if (trimmedInputValue) {
+        TAGS_LIST.createNewTag(trimmedInputValue);
+    }
+    TAGS_NAV_LIST.updateTagsNavList();
     BUTTONS.newTagBtn.addEventListener('click', resolveNewTagBtnClick);
 }
 
@@ -128,7 +110,7 @@ function resolveNewTagBtnClick() {
     tagNavNewTagInput.maxLength = 15;
     tagNavNewTagInput.addEventListener('focusout', event => { resolveTagNavNewTagInput(event) });
     tagNavNewTagInput.addEventListener('keypress', event => { if (event.key === 'Enter') resolveTagNavNewTagInput(event) });
-    tagsNavList.appendChild(tagNavNewTagInput);
+    TAGS_NAV_LIST.HTML.appendChild(tagNavNewTagInput);
     tagNavNewTagInput.focus();
 }
 
@@ -139,6 +121,3 @@ BUTTONS.upcomingBtn.addEventListener('click', resolveUpcomingBtnClick);
 BUTTONS.pastDueBtn.addEventListener('click', resolvePastDueBtnClick);
 BUTTONS.newTaskBtn.addEventListener('click', resolveNewTaskBtnClick);
 BUTTONS.newTagBtn.addEventListener('click', resolveNewTagBtnClick);
-
-// Initialize the page
-resolveAllBtnClick();
