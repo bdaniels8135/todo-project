@@ -3,14 +3,16 @@ import todayIcon from './img/calendar-today.svg';
 import upcomingIcon from './img/calendar-search.svg';
 import pastDueIcon from './img/exclamation-thick.svg';
 import plusIcon from './img/plus-thick.svg';
-import { wrapHtmlElements, buildHeaderTextHtml, buildIconHtml, buildTextHtml } from './htmlBuilders';
+import completedIcon from './img/check-bold.svg';
+import { wrapHtmlElements, buildHeaderTextHtml, buildIconHtml, buildTextHtml, buildInputHtml } from './htmlBuilders';
 
-const PAGE_HEADER_TEXT = 'Task-ticle'
+const PAGE_HEADER_TEXT = 'Task-ticle';
 const PAGE_SUBHEADER_TEXT = 'How <em>you</em> TO-DOin\'?';
 const TASKS_NAV_HEADER_TEXT = 'Tasks';
 const NEW_TASK_ICON = plusIcon;
 const TAGS_NAV_HEADER_TEXT = 'Tags';
 const NEW_TAG_ICON = plusIcon;
+const TASKS_NAV_SAVE_BUTTON_TEXT = 'Save All Tasks';
 const TASK_NAV_ITEM_ICON_TEXT_PAIRS = [
     {
         icon: allIcon,
@@ -27,6 +29,10 @@ const TASK_NAV_ITEM_ICON_TEXT_PAIRS = [
     {
         icon: pastDueIcon,
         text: 'Past Due',
+    },
+    {
+        icon: completedIcon,
+        text: 'Completed',
     },
 ];
 
@@ -71,7 +77,9 @@ function buildTasksNavHtml() {
     const newTaskBtnId = 'new-task-btn';
     const tasksNavHeaderHtml = buildNavHeaderHtml(TASKS_NAV_HEADER_TEXT, NEW_TASK_ICON, newTaskBtnId);
     const tasksNavListHtml = buildTasksNavListHtml();
-    const tasksNavHtml = wrapHtmlElements('nav', tasksNavHeaderHtml, tasksNavListHtml);
+    const tasksNavSaveBtn = buildInputHtml('button', 'tasks-save-btn');
+    tasksNavSaveBtn.value = TASKS_NAV_SAVE_BUTTON_TEXT;
+    const tasksNavHtml = wrapHtmlElements('nav', tasksNavHeaderHtml, tasksNavListHtml, tasksNavSaveBtn);
     tasksNavHtml.id = 'task-nav';
 
     return tasksNavHtml;
