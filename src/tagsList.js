@@ -10,8 +10,12 @@ export function buildTagsList(defaultTags) {
             return 0;
         }
 
-        function getTags() {
+        function _sortTagsAlphabetically() {
             tags.sort((firstTag, secondTag) => _compareTagsAlphabetically(firstTag, secondTag));
+        }
+
+        function getTags() {
+            _sortTagsAlphabetically()
 
             return [...tags];
         }
