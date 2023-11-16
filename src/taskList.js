@@ -1,5 +1,4 @@
 import { Task } from './task'
-import { endOfDay } from 'date-fns';
 
 export function buildTaskList() {
     return (() => {
@@ -11,7 +10,7 @@ export function buildTaskList() {
         }
 
         function createNewTask() {
-            const newTask = new Task(endOfDay(new Date()));
+            const newTask = new Task();
             tasks.push(newTask);
 
             return newTask;
