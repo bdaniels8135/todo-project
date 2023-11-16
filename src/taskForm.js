@@ -1,4 +1,4 @@
-import { format, endOfDay, parseISO } from 'date-fns';
+import { format, endOfDay, parseISO, isValid } from 'date-fns';
 import { buildEmptyTaskFormHtml, buildChecklistItemHtml, buildTaskTagListItemHtml } from "./taskFormHtmlBuilders";
 import { buildSelectOption } from './htmlBuilders';
 
@@ -55,7 +55,7 @@ export function buildTaskForm(task, tagsList) {
 
         (function _populateTaskForm() {
             INPUTS.title.value = task.title;
-            const taskDueDateValueString = !isNaN(task.dueDate) ? format(task.dueDate, 'yyyy-MM-dd') : '';
+            const taskDueDateValueString = task.dueDate ? format(task.dueDate, 'yyyy-MM-dd') : null;
             INPUTS.dueDate.value = taskDueDateValueString;
             INPUTS.dueDate.min = format(new Date(), 'yyyy-MM-dd');
             INPUTS.shortDesc.value = task.shortDesc;
@@ -65,7 +65,10 @@ export function buildTaskForm(task, tagsList) {
 
         (function _addInputEventListeners() {
             INPUTS.title.addEventListener('keyup', () => { task.title = INPUTS.title.value });
-            INPUTS.dueDate.addEventListener('change', () => { task.dueDate = endOfDay(parseISO(INPUTS.dueDate.value)) });
+            INPUTS.dueDate.addEventListener('change', () => { 
+                const updatedDateValue = isValid(parseISO(INPUTS.dueDate.value)) ? endOfDay(parseISO(INPUTS.dueDate.value)) : null;
+                task.dueDate = updatedDateValue;
+            })
             INPUTS.shortDesc.addEventListener('keyup', () => { task.shortDesc = INPUTS.shortDesc.value });
             INPUTS.notes.value = task.notes;
             INPUTS.notes.addEventListener('keyup', () => { task.notes = INPUTS.notes.value });

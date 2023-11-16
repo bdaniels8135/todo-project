@@ -15,7 +15,7 @@ export function buildTaskRowHtml(title, shortDescText, dueDate) {
     const titleText = title ? title : NO_TITLE_PLACEHOLDER;
     const titleCellHtml = buildTableCellHtml(titleText, 'title-cell');
     const shortDescCellHtml = buildTableCellHtml(shortDescText, 'short-desc-cell');
-    const dueDateString = !isNaN(dueDate) ? format(dueDate, 'MM/dd/yyyy') : NO_DUE_DATE_PLACEHOLDER;
+    const dueDateString = dueDate ? format(dueDate, 'MM/dd/yyyy') : NO_DUE_DATE_PLACEHOLDER;
     const dueDateCellHtml = buildTableCellHtml(dueDateString, 'due-date-cell');
     const taskRowHtml = wrapHtmlElements('tr', titleCellHtml, shortDescCellHtml, dueDateCellHtml);
 

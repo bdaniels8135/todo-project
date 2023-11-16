@@ -7,7 +7,7 @@ export class Task {
 
     constructor() {
         this.title = '';
-        this.dueDate;
+        this.dueDate = null;
         this.shortDesc = '';
         this.notes = '';
         this.#checklist = [];
@@ -37,5 +37,5 @@ export class Task {
 
     get isCompleted() { return this.#isCompleted }
 
-    toggleIsCompleted() { this.#isCompleted = !this.#isCompleted }
+    toggleCompleted() { this.#isCompleted = !this.#isCompleted }
 }
