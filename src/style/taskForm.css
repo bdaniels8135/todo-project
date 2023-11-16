@@ -27,6 +27,7 @@ main form #task-delete-btn {
     border-radius: .25rem;
     margin-top: 2rem;
     color: black;
+    cursor: pointer;
     background-color: rgb(255, 125, 125);
 }
 
@@ -40,6 +41,7 @@ main form ul {
 
 main form ul img {
     height: 1.3rem;
+    cursor: pointer;
 }
 
 main form .task-tags-list {
@@ -79,6 +81,7 @@ main form .checklist input[type='text'] {
 main form .checklist input[type='checkbox'] {
     height: 1.3rem;
     width: 1.3rem;
+    cursor: pointer;
 }
 
 #title-input {
@@ -119,6 +122,7 @@ form #date-input {
     border-radius: .25rem;
     height: 2rem;
     align-self: center;
+    cursor: pointer;
 }
 
 #new-checklist-item-input {

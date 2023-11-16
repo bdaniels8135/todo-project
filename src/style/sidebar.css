@@ -21,7 +21,7 @@ aside h1 {
 
 aside div img {
     height: 2rem;
-    cursor: default;
+    cursor: pointer;
 }
 
 aside ul {
@@ -36,7 +36,7 @@ aside li {
     padding-left: 1rem;
     display: flex;
     gap: .5rem;
-    cursor: default;
+    cursor: pointer;
     align-items: center;
 }
 
