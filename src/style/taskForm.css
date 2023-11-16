@@ -1,0 +1,129 @@
+main form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+main div {
+    display: flex;
+    gap: 1rem;
+}
+
+main form .checklist-container {
+    flex-direction: column;
+}
+
+main label {
+    font-size: 1.3rem;
+    align-self: center;
+    white-space: nowrap;
+}
+
+main form #task-delete-btn {
+    font-size: 1.3rem;
+    font-weight: 650;
+    align-self: center;
+    padding: .25rem .5rem;
+    border-radius: .25rem;
+    margin-top: 2rem;
+    background-color: rgb(255, 125, 125);
+}
+
+main form ul {
+    font-size: 1.3rem;
+    list-style: none;
+    display: flex;
+    gap: .5rem;
+    flex: 1;
+}
+
+main form ul img {
+    height: 1.3rem;
+}
+
+main form .task-tags-list {
+    flex-wrap: wrap;
+}
+
+main form .task-tags-list li {
+    display: flex;
+    gap: .25rem;
+    border: 1px solid grey;
+    background-color: rgb(200, 200, 200);
+    padding: .25rem;
+    align-items: center;
+    border-radius: .25rem;
+}
+
+main form .checklist {
+    flex-direction: column;
+}
+
+main form .checklist li {
+    display: flex;
+    gap: 1rem;
+    padding: .25rem;
+    align-items: center;
+    flex: 1;
+}
+
+main form .checklist input[type='text'] {
+    font-size: 1.3rem;
+    padding: .5rem;
+    border: none;
+    flex: 1;
+    border-bottom: 2px solid grey;
+}
+
+main form .checklist input[type='checkbox'] {
+    height: 1.3rem;
+    width: 1.3rem;
+}
+
+#title-input {
+    font-size: 1.8rem;
+    flex: 1;
+    font-weight: 600;
+    padding: .5rem;
+    border: none;
+    border-bottom: 2px solid grey;
+}
+
+#short-desc-input {
+    font-size: 1.3rem;
+    flex: 1;
+    padding: .5rem;
+    border: none;
+    border-bottom: 2px solid grey;
+}
+#notes-input {
+    font-size: 1.3rem;
+    flex: 1;
+    padding: .5rem;
+    border: 2px solid grey;
+    resize: none;
+    border-radius: .25rem;
+}
+
+form #date-input {
+    border: 2px solid grey;
+    border-radius: .25rem;
+    align-self: center;
+}
+
+#new-task-tag-select {
+    font-size: 1rem;
+    border: 2px solid grey;
+    background-color: white;
+    border-radius: .25rem;
+    height: 2rem;
+    align-self: center;
+}
+
+#new-checklist-item-input {
+    border: none;
+    border-bottom: 2px solid grey;
+    margin: -.5rem 2.5rem;
+    font-size: 1.3rem;
+    padding: .5rem;
+}

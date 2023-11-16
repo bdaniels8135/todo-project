@@ -1,4 +1,9 @@
-import './style/style.css';
+import './style/index.css';
+import './style/header.css';
+import './style/sidebar.css';
+import './style/taskTable.css';
+import './style/taskForm.css';
+import './style/confirmationModal.css';
 import { buildPageElementsHtml } from './pageLoadHtmlBuilders';
 import { buildTaskList } from './taskList';
 import { buildTagsList } from './tagsList';
