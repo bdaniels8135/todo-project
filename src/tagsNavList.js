@@ -6,16 +6,20 @@ export function buildTagsNavList(tagsNav, tagsList) {
     return (() => {
         const HTML = tagsNav.querySelector('ul');
 
-        function _buildTagNavListItemHtml(text) {
-            const tagNavListItemTextHtml = buildTextHtml(text);
+        function _buildTagNavListItemHtml(tag) {
+            const tagNavListItemTextHtml = buildTextHtml(tag.text);
             const tagNavListItemIconHtml = buildIconHtml(removeIcon);
+            tagNavListItemIconHtml.addEventListener('click', () => {
+                tagsList.deleteTag(tag);
+                updateTagsNavList();
+            })
             const tagNavListItemHtml = wrapHtmlElements('li', tagNavListItemTextHtml, tagNavListItemIconHtml);
         
             return tagNavListItemHtml;
         }
         
         function _appendTagItem(tag) {
-            const tagNavListItemHtml = _buildTagNavListItemHtml(tag.text);
+            const tagNavListItemHtml = _buildTagNavListItemHtml(tag);
             tagNavListItemHtml.addEventListener('click', () => { resolveTagBtnClick(tag) });
             HTML.appendChild(tagNavListItemHtml);
         }
