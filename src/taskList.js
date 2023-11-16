@@ -22,9 +22,13 @@ export function buildTaskList() {
             return 0;
         }
 
+        function _sortTasksByDate() {
+            tasks.sort((firstTask, secondTask) => _compareTasksByDate(firstTask,secondTask))
+        }
+
         function getTasks() {
-            tasks.sort((firstTask, secondTask) => _compareTasksByDate(firstTask,secondTask));
-            
+            _sortTasksByDate()
+
             return [...tasks];
         }
 
