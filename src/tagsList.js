@@ -13,7 +13,7 @@ export function buildTagsList(defaultTags) {
         function getTags() {
             tags.sort((firstTag, secondTag) => _compareTagsAlphabetically(firstTag, secondTag));
 
-            return tags;
+            return [...tags];
         }
 
         function createNewTag(text) {
