@@ -1,5 +1,5 @@
 import removeIcon from './img/close-circle.svg';
-import { clearContainer, resolveTagBtnClick } from '.';
+import { clearContainer, resolveTagBtnClick, removeTag } from '.';
 import { wrapHtmlElements, buildIconHtml, buildTextHtml } from './htmlBuilders';
 
 export function buildTagsNavList(tagsNav, tagsList) {
@@ -9,10 +9,7 @@ export function buildTagsNavList(tagsNav, tagsList) {
         function _buildTagNavListItemHtml(tag) {
             const tagNavListItemTextHtml = buildTextHtml(tag.text);
             const tagNavListItemIconHtml = buildIconHtml(removeIcon);
-            tagNavListItemIconHtml.addEventListener('click', () => {
-                tagsList.deleteTag(tag);
-                updateTagsNavList();
-            })
+            tagNavListItemIconHtml.addEventListener('click', () => { removeTag(tag) })
             const tagNavListItemHtml = wrapHtmlElements('li', tagNavListItemTextHtml, tagNavListItemIconHtml);
         
             return tagNavListItemHtml;
@@ -20,17 +17,18 @@ export function buildTagsNavList(tagsNav, tagsList) {
         
         function _appendTagItem(tag) {
             const tagNavListItemHtml = _buildTagNavListItemHtml(tag);
-            tagNavListItemHtml.addEventListener('click', () => { resolveTagBtnClick(tag) });
+            const tagNavListItemTextHtml = tagNavListItemHtml.querySelector('p');
+            tagNavListItemTextHtml.addEventListener('click', () => { resolveTagBtnClick(tag) });
             HTML.appendChild(tagNavListItemHtml);
         }
         
-        function populateTagsNavList() {
+        function _populateTagsNavList() {
             tagsList.getTags().forEach(tag => { _appendTagItem(tag) });
         }
         
         function updateTagsNavList() {
             clearContainer(HTML);
-            populateTagsNavList();
+            _populateTagsNavList();
         }
                 
         return {

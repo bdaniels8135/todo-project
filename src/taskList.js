@@ -32,10 +32,15 @@ export function buildTaskList() {
             return [...tasks];
         }
 
+        function scrubTagFromAllTasks(tagToScrub) {
+            for (let task of tasks) if (task.hasTag(tagToScrub)) task.removeTag(tagToScrub);
+        }
+
         return {
             deleteTask,
             createNewTask,
             getTasks,
+            scrubTagFromAllTasks,
         }
 
     })();

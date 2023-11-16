@@ -112,10 +112,17 @@ function resolveNewTagBtnClick() {
     tagNavNewTagInput.focus();
 }
 
-// Add button event listeners
+export function removeTag(tag) {
+    TAGS_LIST.deleteTag(tag);
+    TAGS_NAV_LIST.updateTagsNavList();
+    TASKS_LIST.scrubTagFromAllTasks(tag);
+}
+
 BUTTONS.allBtn.addEventListener('click', resolveAllBtnClick);
 BUTTONS.todayBtn.addEventListener('click', resolveTodayBtnClick);
 BUTTONS.upcomingBtn.addEventListener('click', resolveUpcomingBtnClick);
 BUTTONS.pastDueBtn.addEventListener('click', resolvePastDueBtnClick);
 BUTTONS.newTaskBtn.addEventListener('click', resolveNewTaskBtnClick);
 BUTTONS.newTagBtn.addEventListener('click', resolveNewTagBtnClick);
+
+resolveAllBtnClick();
