@@ -7,6 +7,7 @@ import { buildTaskForm } from './taskForm';
 import { buildTagsNavList } from './tagsNavList';
 import { buildInputHtml } from './htmlBuilders';
 import { isSameDay, isPast, endOfDay, isWithinInterval, startOfDay, parseISO } from 'date-fns';
+import { buildDeleteConfirmationModalHtml } from './deleteConfirmationModal';
 
 const DEFAULT_TAG_STRINGS = ['Important'];
 
@@ -32,17 +33,32 @@ const BUTTONS = {
     newTagBtn: document.getElementById('new-tag-btn'),
 }
 
+const TASK_DELETE_MODAL_CONFIRMATION_MESSAGE = 'Are you sure you want to permanently delete this task?';
+
 export function clearContainer(container) {
     container.innerHTML = '';
 }
 
+export function displayDeleteConfirmationModal(objectDesc, object, deleteFn) {
+    const deleteConfirmationModalHtml = buildDeleteConfirmationModalHtml(objectDesc);
+    const deleteConfirmationModalDeleteBtn = deleteConfirmationModalHtml.querySelector('#modal-delete-btn');
+    deleteConfirmationModalDeleteBtn.addEventListener('click', () => {
+        deleteFn(object);
+        deleteConfirmationModalHtml.close();
+    })
+    const deleteConfirmationModalCancelBtn = deleteConfirmationModalHtml.querySelector('#modal-cancel-btn');
+    deleteConfirmationModalCancelBtn.addEventListener('click', () => {
+        deleteConfirmationModalHtml.close();
+    })
+    MAIN.appendChild(deleteConfirmationModalHtml)
+    deleteConfirmationModalHtml.showModal();
+}
+
+
 export function displayTaskForm(task) {
     const taskForm = buildTaskForm(task, TAGS_LIST);
     const taskDeleteButton = taskForm.HTML.querySelector('#task-delete-btn');
-    taskDeleteButton.addEventListener('click', () => {
-        TASKS_LIST.deleteTask(task);
-        resolveAllBtnClick();
-    })
+    taskDeleteButton.addEventListener('click', () => { displayDeleteConfirmationModal(TASK_DELETE_MODAL_CONFIRMATION_MESSAGE, task, removeTask) });
     clearContainer(MAIN);
     MAIN.appendChild(taskForm.HTML);
 }
@@ -95,9 +111,7 @@ function resolveNewTaskBtnClick() {
 
 function resolveTagNavNewTagInput(event) {
     const trimmedInputValue = event.target.value.trim();
-    if (trimmedInputValue) {
-        TAGS_LIST.createNewTag(trimmedInputValue);
-    }
+    if (trimmedInputValue) TAGS_LIST.createNewTag(trimmedInputValue);
     TAGS_NAV_LIST.updateTagsNavList();
     BUTTONS.newTagBtn.addEventListener('click', resolveNewTagBtnClick);
 }
@@ -110,6 +124,11 @@ function resolveNewTagBtnClick() {
     tagNavNewTagInput.addEventListener('keypress', event => { if (event.key === 'Enter') resolveTagNavNewTagInput(event) });
     TAGS_NAV_LIST.HTML.appendChild(tagNavNewTagInput);
     tagNavNewTagInput.focus();
+}
+
+function removeTask(task) {
+    TASKS_LIST.deleteTask(task);
+    resolveAllBtnClick();
 }
 
 export function removeTag(tag) {

@@ -1,6 +1,8 @@
 import removeIcon from './img/close-circle.svg';
-import { clearContainer, resolveTagBtnClick, removeTag } from '.';
+import { clearContainer, resolveTagBtnClick, removeTag, displayDeleteConfirmationModal} from '.';
 import { wrapHtmlElements, buildIconHtml, buildTextHtml } from './htmlBuilders';
+
+
 
 export function buildTagsNavList(tagsNav, tagsList) {
     return (() => {
@@ -9,7 +11,8 @@ export function buildTagsNavList(tagsNav, tagsList) {
         function _buildTagNavListItemHtml(tag) {
             const tagNavListItemTextHtml = buildTextHtml(tag.text);
             const tagNavListItemIconHtml = buildIconHtml(removeIcon);
-            tagNavListItemIconHtml.addEventListener('click', () => { removeTag(tag) })
+            const TAG_DELETE_MODAL_CONFIRMATION_MESSAGE = `Are you sure you want to permanently delete the "${tag.text}" tag and remove it from all tasks?`;
+            tagNavListItemIconHtml.addEventListener('click', () => { displayDeleteConfirmationModal(TAG_DELETE_MODAL_CONFIRMATION_MESSAGE, tag, removeTag) });
             const tagNavListItemHtml = wrapHtmlElements('li', tagNavListItemTextHtml, tagNavListItemIconHtml);
         
             return tagNavListItemHtml;
