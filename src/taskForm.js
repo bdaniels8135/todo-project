@@ -45,7 +45,7 @@ export function buildTaskForm(task, tagsList) {
     
         function _updateSelectableTags() {
             while (INPUTS.newTagSelect.childElementCount > 1) INPUTS.newTagSelect.removeChild(INPUTS.newTagSelect.lastChild);
-            tagsList.forEach(tag => {
+            tagsList.getTags().forEach(tag => {
                 if (!task.tags.includes(tag)) {
                     const tagInputOptionHtml = buildSelectOption(tag.text, tag.text);
                     INPUTS.newTagSelect.appendChild(tagInputOptionHtml);
@@ -79,7 +79,7 @@ export function buildTaskForm(task, tagsList) {
             })
             INPUTS.newTagSelect.addEventListener('mousedown', () => { _updateSelectableTags() });
             INPUTS.newTagSelect.addEventListener('change', () => {
-                const tagToAdd = tagsList.find(tag => tag.text === INPUTS.newTagSelect.value);
+                const tagToAdd = tagsList.getTags().find(tag => tag.text === INPUTS.newTagSelect.value);
                 task.addTag(tagToAdd);
                 _appendTag(tagToAdd);
                 INPUTS.newTagSelect.value = '';

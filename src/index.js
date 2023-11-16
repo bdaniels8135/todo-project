@@ -49,7 +49,7 @@ function buildTaskTableElements(headerText, isUpcoming, tasksToDisplay) {
         const taskTableHtml = buildTaskTableHtml();
         tasksToDisplay.forEach(task => {
             const taskRowHtml = buildTaskRowHtml(task.title, task.shortDesc, task.dueDate);
-            const taskForm = buildTaskForm(task, tagsList.getTags());
+            const taskForm = buildTaskForm(task, tagsList);
             const taskDeleteButton = taskForm.HTML.querySelector('#task-delete-btn');
             taskDeleteButton.addEventListener('click', () => {
                 tasksList.deleteTask(task);
@@ -113,7 +113,7 @@ function resolvePastDueBtnClick() {
 
 function resolveNewTaskBtnClick() {
     const newTask = tasksList.createNewTask()    
-    const taskForm = buildTaskForm(newTask, tagsList.getTags());
+    const taskForm = buildTaskForm(newTask, tagsList);
     clearContainer(main);
     main.appendChild(taskForm.HTML);
 }
@@ -129,7 +129,7 @@ function resolveTagBtnClick(tag) {
 function buildTagNavListItemHtml(text) {
     const tagNavListItemTextHtml = buildTextHtml(text);
     const tagNavListItemIconHtml = buildIconHtml(removeIcon);
-    const tagNavListItemHtml = wrapHtmlElements('li', tagNavListItemTextHtml, tagNavListItemIconHtml)
+    const tagNavListItemHtml = wrapHtmlElements('li', tagNavListItemTextHtml, tagNavListItemIconHtml);
 
     return tagNavListItemHtml;
 }
@@ -144,7 +144,6 @@ function populateTagsNavList() {
     tagsList.getTags().forEach(tag => { appendTagItem(tag) });
 }
 
-
 function updateTagsNavList() {
     clearContainer(tagsNavList);
     populateTagsNavList();
@@ -154,8 +153,8 @@ function resolveTagNavNewTagInput(event) {
     const trimmedInputValue = event.target.value.trim();
         if (trimmedInputValue) {
             tagsList.createNewTag(trimmedInputValue);
-            updateTagsNavList()
         }
+    updateTagsNavList();
     BUTTONS.newTagBtn.addEventListener('click', resolveNewTagBtnClick);
 }
 
@@ -163,8 +162,8 @@ function resolveNewTagBtnClick() {
     BUTTONS.newTagBtn.removeEventListener('click', resolveNewTagBtnClick);
     const tagNavNewTagInput = buildInputHtml('text');
     tagNavNewTagInput.maxLength = 15;
-    tagNavNewTagInput.addEventListener('focusout', event => { resolveTagNavNewTagInput(event) })
-    tagNavNewTagInput.addEventListener('keypress', event => { if (event.key === 'Enter') resolveTagNavNewTagInput(event) })
+    tagNavNewTagInput.addEventListener('focusout', event => { resolveTagNavNewTagInput(event) });
+    tagNavNewTagInput.addEventListener('keypress', event => { if (event.key === 'Enter') resolveTagNavNewTagInput(event) });
     tagsNavList.appendChild(tagNavNewTagInput);
     tagNavNewTagInput.focus();
 }
