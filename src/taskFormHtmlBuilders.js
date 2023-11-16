@@ -1,5 +1,5 @@
 import removeIcon from './img/close-circle.svg';
-import { wrapHtmlElements, buildInputHtml, buildSelectOption, buildLabeledDateInputHtml, buildIconHtml} from './htmlBuilders'
+import { wrapHtmlElements, buildInputHtml, buildSelectOption, buildLabeledDateInputHtml, buildIconHtml, buildTextHtml} from './htmlBuilders'
 
 const TITLE_MAX_LENGTH = 30;
 const SHORT_DESC_MAX_LENGTH = 55;
@@ -119,8 +119,7 @@ export function buildChecklistItemHtml(text, isChecked) {
 }
 
 export function buildTaskTagListItemHtml(tagText) {
-    const itemTextHtml = document.createElement('p');
-    itemTextHtml.innerText = tagText;
+    const itemTextHtml = buildTextHtml(tagText);
     const itemDeleteIconHtml = buildIconHtml(TASK_TAG_LIST_ITEM_DELETE_ICON);
     const taskTagListItemHtml = wrapHtmlElements('li', itemTextHtml, itemDeleteIconHtml);
 
