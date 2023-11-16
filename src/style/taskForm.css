@@ -26,6 +26,7 @@ main form #task-delete-btn {
     padding: .25rem .5rem;
     border-radius: .25rem;
     margin-top: 2rem;
+    color: black;
     background-color: rgb(255, 125, 125);
 }
 
