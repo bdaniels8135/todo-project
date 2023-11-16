@@ -14,7 +14,7 @@ main input[type='date'] {
 
 main .task-table {
     border-width: 0;
-    border-spacing: 0;
+    border-spacing: 0 .5rem;
     table-layout: fixed;
     width: 100%;
 }
