@@ -15,7 +15,7 @@ export class Task {
         this.#isCompleted = false;
     }
 
-    get checklist() { return this.#checklist }
+    get checklist() { return [...this.#checklist] }
 
     createChecklistItem(newItemText) { this.#checklist.push(new ChecklistItem(newItemText)) }
 
@@ -24,7 +24,7 @@ export class Task {
         if (deleteIndex > -1) this.#checklist.splice(deleteIndex, 1);
     }
 
-    get tags() { return this.#tags }
+    get tags() { return [...this.#tags] }
 
     addTag(tagToAdd) { this.#tags.push(tagToAdd) }
 
