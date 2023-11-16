@@ -3,106 +3,104 @@ import todayIcon from './img/calendar-today.svg';
 import upcomingIcon from './img/calendar-search.svg';
 import pastDueIcon from './img/exclamation-thick.svg';
 import plusIcon from './img/plus-thick.svg';
+import { wrapHtmlElements, buildHeaderTextHtml, buildIconHtml, buildTextHtml } from './htmlBuilders';
 
-function buildPageHeaderHtml(){
-    const header = document.createElement('header');
-    const headerText = document.createElement('h1');
-    headerText.innerText = 'Task-ticle';
-    header.appendChild(headerText);
-    const subheaderText = document.createElement('h2');
-    subheaderText.innerHTML = 'How <em>you</em> TO-DOin\'?';
-    header.appendChild(subheaderText);
-    
-    return header;
+const PAGE_HEADER_TEXT = 'Task-ticle'
+const PAGE_SUBHEADER_TEXT = 'How <em>you</em> TO-DOin\'?';
+const TASKS_NAV_HEADER_TEXT = 'Tasks';
+const NEW_TASK_ICON = plusIcon;
+const TAGS_NAV_HEADER_TEXT = 'Tags';
+const NEW_TAG_ICON = plusIcon;
+const TASK_NAV_ITEM_ICON_TEXT_PAIRS = [
+    {
+        icon: allIcon,
+        text: 'All',
+    },
+    {
+        icon: todayIcon,
+        text: 'Today',
+    },
+    {
+        icon: upcomingIcon,
+        text: 'Upcoming',
+    },
+    {
+        icon: pastDueIcon,
+        text: 'Past Due',
+    },
+];
+
+function buildPageHeaderHtml(){   
+    const headerTextHtml = buildHeaderTextHtml(PAGE_HEADER_TEXT, 1); 
+    const subheaderTextHtml = buildHeaderTextHtml(PAGE_SUBHEADER_TEXT, 2);
+    const pageHeaderHtml = wrapHtmlElements('header', headerTextHtml, subheaderTextHtml);
+
+    return pageHeaderHtml;
 }
 
-function buildTaskNavHtml() {
-    const taskNav = document.createElement('ul');
-    taskNav.id = 'task-nav';
+function buildNavHeaderHtml(navHeaderText, newItemIcon, btnId) {
+    const navHeaderTextHtml = buildHeaderTextHtml(navHeaderText, 1);
+    const newItemIconHtml = buildIconHtml(newItemIcon);
+    newItemIconHtml.id = btnId;
+    const navHeaderHtml = wrapHtmlElements('div', navHeaderTextHtml, newItemIconHtml);
+    
+    return navHeaderHtml;
+}
 
-    const taskNavHeaderContainer = document.createElement('div');
-    taskNav.appendChild(taskNavHeaderContainer);
+function buildTasksNavListItemHtml(icon, text) {
+    const tasksNavItemIcon = buildIconHtml(icon);
+    const tasksNavItemText = buildTextHtml(text);
+    const tasksNavListItemHtml = wrapHtmlElements('li', tasksNavItemIcon, tasksNavItemText);
 
-    const taskNavHeaderText = document.createElement('h1');
-    taskNavHeaderText.innerText = 'Tasks';
-    taskNavHeaderContainer.appendChild(taskNavHeaderText);
+    return tasksNavListItemHtml;
+}
 
-    const newTaskIcon = document.createElement('img');
-    newTaskIcon.src = plusIcon;
-    newTaskIcon.id = 'new-task-btn';
-    taskNavHeaderContainer.appendChild(newTaskIcon);
-
-    const taskLabelIconPairs = [
-        {
-            label: 'All',
-            icon: allIcon,
-        },
-        {
-            label: 'Today',
-            icon: todayIcon,
-        },
-        {
-            label: 'Upcoming',
-            icon: upcomingIcon,
-        },
-        {
-            label: 'Past Due',
-            icon: pastDueIcon,
-        },
-    ];
-
-    for (let pair of taskLabelIconPairs) {
-        const newItem = document.createElement('li');
-        newItem.id = `${pair.label.toLowerCase().replace(' ', '-')}-btn`;
-        taskNav.appendChild(newItem);
-
-        const newItemIcon = document.createElement('img');
-        newItemIcon.src = pair.icon;
-        newItem.appendChild(newItemIcon);
-        
-        const newItemText = document.createElement('p');
-        newItemText.innerText = pair.label;
-        newItem.appendChild(newItemText);
+function buildTasksNavListHtml() {
+    const tasksNavListItems = []; 
+    for (let pair of TASK_NAV_ITEM_ICON_TEXT_PAIRS) {
+        const tasksNavListItemHtml = buildTasksNavListItemHtml(pair.icon, pair.text);
+        tasksNavListItemHtml.id = `${pair.text.toLowerCase().replace(' ', '-')}-btn`;
+        tasksNavListItems.push(tasksNavListItemHtml);
     }
+    const tasksNavListHtml = wrapHtmlElements('ul', ...tasksNavListItems);
 
-    return taskNav;
+    return tasksNavListHtml;
+}
+
+function buildTasksNavHtml() {
+    const newTaskBtnId = 'new-task-btn';
+    const tasksNavHeaderHtml = buildNavHeaderHtml(TASKS_NAV_HEADER_TEXT, NEW_TASK_ICON, newTaskBtnId);
+    const tasksNavListHtml = buildTasksNavListHtml();
+    const tasksNavHtml = wrapHtmlElements('nav', tasksNavHeaderHtml, tasksNavListHtml);
+    tasksNavHtml.id = 'task-nav';
+
+    return tasksNavHtml;
 }
 
 function buildTagsNavHtml() {
-    const tagsNav = document.createElement('ul');
-    tagsNav.id = 'tags-nav';
+    const newTagBtnId = 'new-tag-btn';
+    const tagsNavHeaderHtml = buildNavHeaderHtml(TAGS_NAV_HEADER_TEXT, NEW_TAG_ICON, newTagBtnId);
+    const tagsNavListHtml = document.createElement('ul');
+    const tagsNavHtml = wrapHtmlElements('nav', tagsNavHeaderHtml, tagsNavListHtml);
+    tagsNavHtml.id = 'tags-nav';
 
-    const tagsNavHeaderContainer = document.createElement('div');
-    tagsNav.appendChild(tagsNavHeaderContainer);
-
-    const tagsNavHeaderText = document.createElement('h1');
-    tagsNavHeaderText.innerText = 'Tags';
-    tagsNavHeaderContainer.appendChild(tagsNavHeaderText);
-
-    const newTagIcon = document.createElement('img');
-    newTagIcon.src = plusIcon;
-    newTagIcon.id = 'new-tag-btn';
-    tagsNavHeaderContainer.appendChild(newTagIcon);
-
-    return tagsNav;
+    return tagsNavHtml;
 }
 
 function buildSidebarHtml() {
-    const sidebar = document.createElement('aside');
-    sidebar.appendChild(buildTaskNavHtml());
-    sidebar.appendChild(buildTagsNavHtml());
+    const tasksNavHtml = buildTasksNavHtml();
+    const tagsNavHtml = buildTagsNavHtml();
+    const sidebarHtml = wrapHtmlElements('aside', tasksNavHtml, tagsNavHtml);
 
-    return sidebar;
+    return sidebarHtml;
 }
 
-export function buildPageHtml() {
-    const fragment = document.createDocumentFragment();
-    const pageHeader = buildPageHeaderHtml();
-    fragment.appendChild(pageHeader);
-    const sidebar = buildSidebarHtml();
-    fragment.appendChild(sidebar);
-    const main = document.createElement('main');
-    fragment.appendChild(main);
+export function buildPageElementsHtml() {
+    const fragmentHtml = document.createDocumentFragment();
+    const pageHeaderHtml = buildPageHeaderHtml();
+    const sidebarHtml = buildSidebarHtml();
+    const mainHtml = document.createElement('main');
+    fragmentHtml.append(pageHeaderHtml, sidebarHtml, mainHtml);
 
-    return fragment;
+    return fragmentHtml;
 }

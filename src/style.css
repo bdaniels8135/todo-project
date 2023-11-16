@@ -173,7 +173,7 @@ main label {
     white-space: nowrap;
 }
 
-main form button {
+main form #task-delete-btn {
     font-size: 1.3rem;
     font-weight: 650;
     align-self: center;
@@ -195,11 +195,11 @@ main form ul img {
     height: 1.3rem;
 }
 
-main form .tags-list {
+main form .task-tags-list {
     flex-wrap: wrap;
 }
 
-main form .tags-list li {
+main form .task-tags-list li {
     display: flex;
     gap: .25rem;
     border: 1px solid grey;
@@ -265,7 +265,7 @@ form #date-input {
     align-self: center;
 }
 
-#new-tag-input {
+#new-task-tag-select {
     font-size: 1rem;
     border: 2px solid grey;
     background-color: white;

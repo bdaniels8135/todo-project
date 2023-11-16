@@ -1,87 +1,98 @@
-import { format, endOfDay, parseISO } from 'date-fns';
-import { buildEmptyTaskFormHtml, buildChecklistItemHtml, buildTagListItemHtml, buildNewTagInputOptionHtml } from "./taskFormHtmlBuilders";
+import { format, endOfDay, parseISO, isValid } from 'date-fns';
+import { buildEmptyTaskFormHtml, buildChecklistItemHtml, buildTaskTagListItemHtml } from "./taskFormHtmlBuilders";
+import { buildSelectOption } from './htmlBuilders';
 
 export function buildTaskForm(task, tagsList) {
     return (() => {
-        const html = buildEmptyTaskFormHtml();
+        const HTML = buildEmptyTaskFormHtml();
         
-        const CHECKLIST = html.querySelector('.checklist');
-        const TAGS_LIST = html.querySelector('.tags-list');
+        const CHECKLIST_HTML = HTML.querySelector('.checklist');
+        const TAGS_LIST_HTML = HTML.querySelector('.task-tags-list');
         const INPUTS = {
-            title: html.querySelector('#title-input'),
-            dueDate : html.querySelector('#date-input'),
-            shortDesc: html.querySelector('#short-desc-input'),
-            notes: html.querySelector('#notes-input'),
-            newChecklistItem: html.querySelector('#new-checklist-item-input'),
-            newTagInput: html.querySelector('#new-tag-input'),
-        }
-       
-        const _appendNewChecklistItem = checklistItemToAppend => {
-            const newChecklistItemText = checklistItemToAppend.text;
-            const newChecklistItemIsChecked = checklistItemToAppend.isChecked;
-            const newChecklistItemHtml = buildChecklistItemHtml(newChecklistItemText, newChecklistItemIsChecked);
-            CHECKLIST.appendChild(newChecklistItemHtml);
-            const newChecklistItemCheckbox = newChecklistItemHtml.querySelector('input[type=checkbox]');
-            newChecklistItemCheckbox.addEventListener('change', () => checklistItemToAppend.toggleCheck());
-            const newChecklistItemTextInput = newChecklistItemHtml.querySelector('input[type=text]');
-            newChecklistItemTextInput.addEventListener('keyup', () => checklistItemToAppend.text = newChecklistItemTextInput.value);
-            const removeBtn = newChecklistItemHtml.querySelector('img');
-            removeBtn.addEventListener('click', () => {
-                CHECKLIST.removeChild(newChecklistItemHtml);
-                task.deleteChecklistItem(checklistItemToAppend);
-            });
+            title: HTML.querySelector('#title-input'),
+            dueDate : HTML.querySelector('#date-input'),
+            shortDesc: HTML.querySelector('#short-desc-input'),
+            notes: HTML.querySelector('#notes-input'),
+            newChecklistItem: HTML.querySelector('#new-checklist-item-input'),
+            newTagSelect: HTML.querySelector('#new-task-tag-select'),
         }
 
-        const _appendNewTag = tagToAppend => {
-            const newTagItemHtml = buildTagListItemHtml(tagToAppend);
-            const removeBtn = newTagItemHtml.querySelector('img');
-            TAGS_LIST.appendChild(newTagItemHtml);
+        function _appendChecklistItem(checklistItemToAppend) {
+            const checklistItemText = checklistItemToAppend.text;
+            const checklistItemIsChecked = checklistItemToAppend.isChecked;
+            const checklistItemHtml = buildChecklistItemHtml(checklistItemText, checklistItemIsChecked);
+            const checklistItemCheckbox = checklistItemHtml.querySelector('input[type=checkbox]');
+            checklistItemCheckbox.addEventListener('change', () => { checklistItemToAppend.toggleCheck() });
+            const checklistItemTextInput = checklistItemHtml.querySelector('input[type=text]');
+            checklistItemTextInput.addEventListener('keyup', () => { checklistItemToAppend.text = checklistItemTextInput.value });
+            const removeBtn = checklistItemHtml.querySelector('img');
             removeBtn.addEventListener('click', () => {
-                TAGS_LIST.removeChild(newTagItemHtml);
+                CHECKLIST_HTML.removeChild(checklistItemHtml);
+                task.deleteChecklistItem(checklistItemToAppend);
+            });
+            CHECKLIST_HTML.appendChild(checklistItemHtml);
+        }
+
+        function _appendTag(tagToAppend) {
+            const tagItemHtml = buildTaskTagListItemHtml(tagToAppend.text);
+            const removeBtn = tagItemHtml.querySelector('img');
+            removeBtn.addEventListener('click', () => {
+                TAGS_LIST_HTML.removeChild(tagItemHtml);
                 task.removeTag(tagToAppend);
             })
+            TAGS_LIST_HTML.appendChild(tagItemHtml);
         }
     
-        const _updateAvailableNewTags = () => {
-            while (INPUTS.newTagInput.childElementCount > 1) INPUTS.newTagInput.removeChild(INPUTS.newTagInput.lastChild);
-            tagsList.forEach(tag => {
+        function _updateSelectableTags() {
+            while (INPUTS.newTagSelect.childElementCount > 1) INPUTS.newTagSelect.removeChild(INPUTS.newTagSelect.lastChild);
+            tagsList.getTags().forEach(tag => {
                 if (!task.tags.includes(tag)) {
-                    const newTagInputOptionHtml = buildNewTagInputOptionHtml(tag);
-                    INPUTS.newTagInput.appendChild(newTagInputOptionHtml);
+                    const tagInputOptionHtml = buildSelectOption(tag.text, tag.text);
+                    INPUTS.newTagSelect.appendChild(tagInputOptionHtml);
                 }
             })
         }
 
-        INPUTS.dueDate.value = format(task.dueDate, 'yyyy-MM-dd');
-        INPUTS.dueDate.min = format(new Date(), 'yyyy-MM-dd');
-        INPUTS.title.value = task.title;
-        INPUTS.shortDesc.value = task.shortDesc;
-        INPUTS.notes.value = task.notes;
-        task.checklist.forEach(checklistItem => _appendNewChecklistItem(checklistItem));
-        task.tags.forEach(tag => _appendNewTag(tag));
-        INPUTS.dueDate.addEventListener('change', () => task.dueDate = endOfDay(parseISO(INPUTS.dueDate.value)));
-        INPUTS.title.addEventListener('keyup', () => task.title = INPUTS.title.value);
-        INPUTS.shortDesc.addEventListener('keyup', () => task.shortDesc = INPUTS.shortDesc.value);
-        INPUTS.notes.addEventListener('keyup', () => task.notes = INPUTS.notes.value);
-        INPUTS.newChecklistItem.addEventListener('focus', () => {
-            task.createChecklistItem('');
-            const newChecklistItem = task.checklist.at(-1);
-            _appendNewChecklistItem(newChecklistItem);
-            const newChecklistItemHtml = CHECKLIST.lastElementChild;
-            const newChecklistItemTextInput = newChecklistItemHtml.querySelector('input[type=text]');
-            newChecklistItemTextInput.focus();
-        })
-        INPUTS.newTagInput.addEventListener('mousedown', () => _updateAvailableNewTags());
-        INPUTS.newTagInput.addEventListener('change', () => {
-            const tagToAdd = tagsList.find(tag => tag.text === INPUTS.newTagInput.value);
-            console.log(tagToAdd);
-            task.addTag(tagToAdd);
-            _appendNewTag(tagToAdd);
-            INPUTS.newTagInput.value = '';
-        });
-    
+        (function _populateTaskForm() {
+            INPUTS.title.value = task.title;
+            const taskDueDateValueString = task.dueDate ? format(task.dueDate, 'yyyy-MM-dd') : null;
+            INPUTS.dueDate.value = taskDueDateValueString;
+            INPUTS.dueDate.min = format(new Date(), 'yyyy-MM-dd');
+            INPUTS.shortDesc.value = task.shortDesc;
+            task.checklist.forEach(checklistItem => { _appendChecklistItem(checklistItem) });
+            task.tags.forEach(tag => { _appendTag(tag) });
+            
+        })();
+
+        (function _addInputEventListeners() {
+            INPUTS.title.addEventListener('keyup', () => { task.title = INPUTS.title.value });
+            INPUTS.dueDate.addEventListener('change', () => { 
+                const updatedDateValue = isValid(parseISO(INPUTS.dueDate.value)) ? endOfDay(parseISO(INPUTS.dueDate.value)) : null;
+                task.dueDate = updatedDateValue;
+            })
+            INPUTS.shortDesc.addEventListener('keyup', () => { task.shortDesc = INPUTS.shortDesc.value });
+            INPUTS.notes.value = task.notes;
+            INPUTS.notes.addEventListener('keyup', () => { task.notes = INPUTS.notes.value });
+            INPUTS.newChecklistItem.addEventListener('focus', () => {
+                task.createChecklistItem('');
+                const newChecklistItem = task.checklist.at(-1);
+                _appendChecklistItem(newChecklistItem);
+                const newChecklistItemHtml = CHECKLIST_HTML.lastElementChild;
+                const newChecklistItemTextInput = newChecklistItemHtml.querySelector('input[type=text]');
+                newChecklistItemTextInput.focus();
+            })
+            INPUTS.newTagSelect.addEventListener('mousedown', () => { _updateSelectableTags() });
+            INPUTS.newTagSelect.addEventListener('change', () => {
+                const tagToAdd = tagsList.getTags().find(tag => tag.text === INPUTS.newTagSelect.value);
+                task.addTag(tagToAdd);
+                _appendTag(tagToAdd);
+                INPUTS.newTagSelect.value = '';
+            });
+
+        })();
+   
         return {
-            html
+            HTML,
         }
 
     })();

@@ -3,14 +3,16 @@ import { ChecklistItem } from './checklistItem';
 export class Task {
     #checklist;
     #tags;
+    #isCompleted;
 
-    constructor(dueDate) {
+    constructor() {
         this.title = '';
-        this.dueDate = dueDate;
+        this.dueDate = null;
         this.shortDesc = '';
         this.notes = '';
         this.#checklist = [];
         this.#tags = [];
+        this.#isCompleted = false;
     }
 
     get checklist() { return this.#checklist }
@@ -32,4 +34,8 @@ export class Task {
     }
 
     hasTag(tagToCheck) { return this.#tags.some(tag => tag === tagToCheck) }
+
+    get isCompleted() { return this.#isCompleted }
+
+    toggleCompleted() { this.#isCompleted = !this.#isCompleted }
 }

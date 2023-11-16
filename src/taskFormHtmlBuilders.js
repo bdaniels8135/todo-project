@@ -1,153 +1,127 @@
 import removeIcon from './img/close-circle.svg';
-import { packageHtmlElements, buildLabeledDateInputHtml} from './htmlBuilders'
+import { wrapHtmlElements, buildInputHtml, buildSelectOption, buildLabeledDateInputHtml, buildIconHtml, buildTextHtml} from './htmlBuilders'
 
 const TITLE_MAX_LENGTH = 30;
 const SHORT_DESC_MAX_LENGTH = 55;
 const CHECKLIST_ITEM_MAX_LENGTH = 60;
-
+const TITLE_INPUT_PLACEHOLDER = 'Add a title';
+const SHORT_DESC_PLACEHOLDER = 'Add a short description';
+const NOTES_PLACEHOLDER = 'Add additional notes';
+const NEW_CHECKLIST_ITEM_INPUT_PLACEHOLDER = 'Add a checklist item';
+const TASK_TAG_SELECT_DEFAULT_OPTION_TEXT = '--Add a tag--';
+const DUE_DATE_INPUT_LABEL_TEXT = 'Due Date:';
+const TASK_DELETE_BTN_TEXT = 'Delete Task'
+const CHECKLIST_ITEM_TEXT_INPUT_PLACEHOLDER = 'Enter checklist item description';
+const CHECKLIST_ITEM_DELETE_ICON = removeIcon;
+const TASK_TAG_LIST_ITEM_DELETE_ICON = removeIcon;
 
 function buildTitleInputHtml() {
-    const titleInput = document.createElement('input');
-    titleInput.id = 'title-input';
-    titleInput.type = 'text';
-    titleInput.maxLength = TITLE_MAX_LENGTH;
-    titleInput.placeholder = 'Add a title';
+    const titleInputHtml = buildInputHtml('text', 'title-input');
+    titleInputHtml.maxLength = TITLE_MAX_LENGTH;
+    titleInputHtml.placeholder = TITLE_INPUT_PLACEHOLDER;
 
-    return titleInput;
+    return titleInputHtml;
 }
 
 function buildShortDescInputHtml() {
-    const shortDescInput = document.createElement('input');
-    shortDescInput.id = 'short-desc-input';
-    shortDescInput.type = 'text';
-    shortDescInput.maxLength = SHORT_DESC_MAX_LENGTH;
-    shortDescInput.placeholder = 'Add a short description';
+    const shortDescInputHtml = buildInputHtml('text', 'short-desc-input');
+    shortDescInputHtml.maxLength = SHORT_DESC_MAX_LENGTH;
+    shortDescInputHtml.placeholder = SHORT_DESC_PLACEHOLDER;
 
-    return shortDescInput;
+    return shortDescInputHtml;
 }
 
 function buildNotesInputHtml() {
-    const notesInput = document.createElement('textarea');
-    notesInput.setAttribute('oninput', 'this.style.height = ""; this.style.height = this.scrollHeight + 5 + "px"');
-    notesInput.id = 'notes-input';
-    notesInput.placeholder = 'Add additional notes';
+    const notesInputHtml = buildInputHtml('textarea', 'notes-input');
+    notesInputHtml.setAttribute('oninput', 'this.style.height = ""; this.style.height = this.scrollHeight + 5 + "px"');
+    notesInputHtml.placeholder = NOTES_PLACEHOLDER;
 
-    return notesInput;
+    return notesInputHtml;
 }
 
 function buildChecklistHtml() {
-    const checklist = document.createElement('ul');
-    checklist.classList.add('checklist');
+    const checklistHtml = document.createElement('ul');
+    checklistHtml.classList.add('checklist');
 
-    return checklist;
+    return checklistHtml;
 }
 
 function buildNewChecklistItemInputHtml() {
-    const newChecklistItemInput = document.createElement('input');
-    newChecklistItemInput.type = 'text';
-    newChecklistItemInput.id = 'new-checklist-item-input';
-    newChecklistItemInput.placeholder = 'Add a checklist item';
+    const newChecklistItemInputHtml = buildInputHtml('text', 'new-checklist-item-input');
+    newChecklistItemInputHtml.placeholder = NEW_CHECKLIST_ITEM_INPUT_PLACEHOLDER;
 
-    return newChecklistItemInput;
+    return newChecklistItemInputHtml;
 }
 
 function buildTaskTagsListHtml() {
-    const taskTagsList = document.createElement('ul');
-    taskTagsList.classList.add('tags-list');
+    const taskTagsListHtml = document.createElement('ul');
+    taskTagsListHtml.classList.add('task-tags-list');
     
-    return taskTagsList;
+    return taskTagsListHtml;
 }
 
-function buildNewTagInputHtml() {
-    const newTagInput = document.createElement('select');
-    newTagInput.id = 'new-tag-input';
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.innerText = '--Add a tag--';
-    newTagInput.appendChild(defaultOption);
+function buildNewTaskTagSelectHtml() {
+    const newTaskTagSelectHtml = document.createElement('select');
+    newTaskTagSelectHtml.id = 'new-task-tag-select';
+    const newTaskTagInputDefaultOption = buildSelectOption(TASK_TAG_SELECT_DEFAULT_OPTION_TEXT, '');
+    newTaskTagSelectHtml.appendChild(newTaskTagInputDefaultOption);
 
-    return newTagInput;
+    return newTaskTagSelectHtml;
 }
 
-function buildTaskDeleteBtn() {
-    const taskDeleteBtn = document.createElement('button');
-    taskDeleteBtn.type = 'button';
-    taskDeleteBtn.innerText = 'Delete Task';
+function buildTaskDeleteBtnHtml() {
+    const taskDeleteBtnHtml = buildInputHtml('button', 'task-delete-btn');
+    taskDeleteBtnHtml.value = TASK_DELETE_BTN_TEXT;
 
-    return taskDeleteBtn;
+    return taskDeleteBtnHtml;
 }
 
 export function buildEmptyTaskFormHtml() {
-    const form = document.createElement('form');
-    
-    const titleInput = buildTitleInputHtml();
-    const dueDateInput = buildLabeledDateInputHtml('Due Date:');
-    const titleDate = packageHtmlElements(titleInput, dueDateInput);
-    form.appendChild(titleDate);
-    
-    const shortDescInput = buildShortDescInputHtml();
-    const shortDesc = packageHtmlElements(shortDescInput);
-    form.appendChild(shortDesc);
-    
-    const taskTagsList = buildTaskTagsListHtml();
-    const newTagInput = buildNewTagInputHtml();
-    const taskTagsListWithInput = packageHtmlElements(taskTagsList, newTagInput);
-    form.appendChild(taskTagsListWithInput);
+    const wrapperType = 'div';
 
-    const notesInput = buildNotesInputHtml();
-    const notes = packageHtmlElements(notesInput);
-    form.appendChild(notes);
-    
-    const checklist = buildChecklistHtml();
-    const checklistItemInput = buildNewChecklistItemInputHtml();
-    const checklistWithInput = packageHtmlElements(checklist, checklistItemInput);
-    checklistWithInput.classList.add('checklist-container');
-    form.appendChild(checklistWithInput);
+    const titleInputHtml = buildTitleInputHtml();
+    const labeledDueDateInputHtml = buildLabeledDateInputHtml(DUE_DATE_INPUT_LABEL_TEXT);
+    const titleDateHtml = wrapHtmlElements(wrapperType, titleInputHtml, labeledDueDateInputHtml);
 
-    const taskDeleteBtn = buildTaskDeleteBtn();
-    taskDeleteBtn.id = 'task-delete-btn';
-    form.appendChild(taskDeleteBtn);
+    const shortDescInputHtml = buildShortDescInputHtml();
+    const shortDescHtml = wrapHtmlElements(wrapperType, shortDescInputHtml);
     
-    return form;
+    const taskTagsListHtml = buildTaskTagsListHtml();
+    const newTaskTagSelectHtml = buildNewTaskTagSelectHtml();
+    const taskTagsListWithSelectHtml = wrapHtmlElements(wrapperType, taskTagsListHtml, newTaskTagSelectHtml);
+
+    const notesInputHtml = buildNotesInputHtml();
+    const notesHtml = wrapHtmlElements(wrapperType, notesInputHtml);
+    
+    const checklistHtml = buildChecklistHtml();
+    const newChecklistItemInputHtml = buildNewChecklistItemInputHtml();
+    const checklistWithInputHtml = wrapHtmlElements(wrapperType, checklistHtml, newChecklistItemInputHtml);
+    checklistWithInputHtml.classList.add('checklist-container');
+
+    const taskDeleteBtnHtml = buildTaskDeleteBtnHtml();
+
+    const formHtml = wrapHtmlElements('form', titleDateHtml, shortDescHtml, taskTagsListWithSelectHtml, notesHtml, checklistWithInputHtml, taskDeleteBtnHtml);
+
+    return formHtml;
 }
 
 export function buildChecklistItemHtml(text, isChecked) {
-    const newChecklistItem = document.createElement('li');
-    const newItemCheckBox = document.createElement('input');
-    newItemCheckBox.type = 'checkbox';
-    if (isChecked) newItemCheckBox.setAttribute('checked', '');
-    newChecklistItem.appendChild(newItemCheckBox);
+    const itemCheckBoxHtml = buildInputHtml('checkbox');
+    if (isChecked) itemCheckBoxHtml.setAttribute('checked', '');
+    const itemTextInputHtml = buildInputHtml('text');
+    itemTextInputHtml.maxLength = CHECKLIST_ITEM_MAX_LENGTH;
+    itemTextInputHtml.value = text;
+    itemTextInputHtml.placeholder = CHECKLIST_ITEM_TEXT_INPUT_PLACEHOLDER;
+    const itemDeleteIconHtml = buildIconHtml(CHECKLIST_ITEM_DELETE_ICON);
+    const newChecklistItemHtml = wrapHtmlElements('li', itemCheckBoxHtml, itemTextInputHtml, itemDeleteIconHtml);
 
-    const newItemTextInput = document.createElement('input');
-    newItemTextInput.type = 'text';
-    newItemTextInput.maxLength = CHECKLIST_ITEM_MAX_LENGTH;
-    newItemTextInput.value = text;
-    newItemTextInput.placeholder = 'Enter checklist item description';
-    newChecklistItem.appendChild(newItemTextInput);
-
-    const newItemIcon = document.createElement('img');
-    newItemIcon.src = removeIcon;
-    newChecklistItem.appendChild(newItemIcon);
-
-    return newChecklistItem;
+    return newChecklistItemHtml;
 }
 
-export function buildTagListItemHtml(tag) {
-    const newTagItem = document.createElement('li');
-    const newItemText = document.createElement('p');
-    newItemText.innerText = tag.text;
-    newTagItem.appendChild(newItemText);
-    const newItemIcon = document.createElement('img');
-    newItemIcon.src = removeIcon;
-    newTagItem.appendChild(newItemIcon);
+export function buildTaskTagListItemHtml(tagText) {
+    const itemTextHtml = buildTextHtml(tagText);
+    const itemDeleteIconHtml = buildIconHtml(TASK_TAG_LIST_ITEM_DELETE_ICON);
+    const taskTagListItemHtml = wrapHtmlElements('li', itemTextHtml, itemDeleteIconHtml);
 
-    return newTagItem;
-}
-
-export function buildNewTagInputOptionHtml(tag) {
-    const newOption = document.createElement('option');
-    newOption.value = tag.text;
-    newOption.innerText = tag.text;
-
-    return newOption;
+    return taskTagListItemHtml;
 }
