@@ -26,7 +26,7 @@ export function buildTaskList() {
         function getTasks() {
             tasks.sort((firstTask, secondTask) => _compareTasksByDate(firstTask,secondTask));
             
-            return tasks;
+            return [...tasks];
         }
 
         return {
