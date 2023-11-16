@@ -20,11 +20,16 @@ export function buildTagsList(defaultTags) {
             return [...tags];
         }
 
+        function saveTagsInLocalStorage() {
+            window.localStorage.setItem(`tags`, JSON.stringify(tags));
+        }
+
         function createNewTag(text) {
             const tagAlreadyExists = tags.some(tag => tag.text === text);
             if (!tagAlreadyExists) {
                 const newTag = new Tag(text);
                 tags.push(newTag);
+                saveTagsInLocalStorage();
                 return newTag;
             }           
         }
@@ -32,7 +37,13 @@ export function buildTagsList(defaultTags) {
         function deleteTag(tag) {
             const deleteIndex = tags.indexOf(tag);
             tags.splice(deleteIndex, 1);
+            saveTagsInLocalStorage();
         }
+
+        (function retrieveTagsFromLocalStorage() {
+            const jsonTags = JSON.parse(window.localStorage.getItem('tags'));
+            for (let item of jsonTags) defaultTags.push(item.text);
+        })();
 
         for (let tagText of defaultTags) createNewTag(tagText);
 
@@ -40,6 +51,7 @@ export function buildTagsList(defaultTags) {
             getTags,
             createNewTag,
             deleteTag,
+            saveTagsInLocalStorage,
         }
 
     })();
