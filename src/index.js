@@ -1,4 +1,4 @@
-import './style.css';
+import './style/style.css';
 import { buildPageElementsHtml } from './pageLoadHtmlBuilders';
 import { buildTaskList } from './taskList';
 import { buildTagsList } from './tagsList';
