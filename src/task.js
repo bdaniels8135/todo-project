@@ -16,7 +16,11 @@ export class Task {
 
     get checklist() { return [...this.#checklist] }
 
-    createChecklistItem(newItemText) { this.#checklist.push(new ChecklistItem(newItemText)) }
+    createChecklistItem(newItemText) { 
+        const newChecklistItem = new ChecklistItem(newItemText);
+        this.#checklist.push(newChecklistItem);
+        return newChecklistItem;
+    }
 
     deleteChecklistItem(itemToDelete) {
         const deleteIndex = this.#checklist.indexOf(itemToDelete);
