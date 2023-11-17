@@ -34,6 +34,8 @@ const BUTTONS = {
     todayBtn: document.getElementById('today-btn'),
     upcomingBtn: document.getElementById('upcoming-btn'),
     pastDueBtn: document.getElementById('past-due-btn'),
+    completedBtn: document.getElementById('completed-btn'),
+    saveTasksBtn: document.getElementById('tasks-save-btn'),
     newTaskBtn: document.getElementById('new-task-btn'),
     newTagBtn: document.getElementById('new-tag-btn'),
 }
@@ -58,7 +60,6 @@ export function displayDeleteConfirmationModal(objectDesc, object, deleteFn) {
     MAIN.appendChild(deleteConfirmationModalHtml)
     deleteConfirmationModalHtml.showModal();
 }
-
 
 export function displayTaskForm(task) {
     const taskForm = buildTaskForm(task, TAGS_LIST);
@@ -142,11 +143,33 @@ export function removeTag(tag) {
     TASKS_LIST.scrubTagFromAllTasks(tag);
 }
 
+function resolveCompletedBtnClick() {
+    const completedTasks = TASKS_LIST.getTasks().filter(task => task.isCompleted);
+    displayTasksTable('Completed Tasks', false, completedTasks);
+}
+
+function resolveSaveTasksBtnClick() {
+    const jsonTasksList = [];
+    for (let task of TASKS_LIST.getTasks()) {
+        const jsonTask = JSON.stringify(task);
+        const jsonTaskTags = JSON.stringify(task.tags);
+        const jsonChecklist = JSON.stringify(task.checklist);
+        const fullJsonTask = jsonTask.slice(0,-1).concat(',"checklist":', jsonChecklist, ',"tags":', jsonTaskTags, '}');
+        jsonTasksList.push(fullJsonTask);
+        jsonTasksList.push(',');
+    }
+    jsonTasksList.pop();
+    const jsonTasks = '['.concat(...jsonTasksList, ']');
+    window.localStorage.setItem('tasks', jsonTasks);
+}
+
 BUTTONS.allBtn.addEventListener('click', resolveAllBtnClick);
 BUTTONS.todayBtn.addEventListener('click', resolveTodayBtnClick);
 BUTTONS.upcomingBtn.addEventListener('click', resolveUpcomingBtnClick);
 BUTTONS.pastDueBtn.addEventListener('click', resolvePastDueBtnClick);
 BUTTONS.newTaskBtn.addEventListener('click', resolveNewTaskBtnClick);
 BUTTONS.newTagBtn.addEventListener('click', resolveNewTagBtnClick);
+BUTTONS.completedBtn.addEventListener('click', resolveCompletedBtnClick);
+BUTTONS.saveTasksBtn.addEventListener('click', resolveSaveTasksBtnClick);
 
 resolveAllBtnClick();
