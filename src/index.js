@@ -163,6 +163,34 @@ function resolveSaveTasksBtnClick() {
     window.localStorage.setItem('tasks', jsonTasks);
 }
 
+function createTaskFromJson(jsonTask) {
+    const newTask = TASKS_LIST.createNewTask();
+    newTask.title = jsonTask.title;
+    newTask.dueDate = new Date(jsonTask.dueDate);
+    newTask.shortDesc = jsonTask.shortDesc;
+    newTask.notes = jsonTask.notes;
+    newTask.isCompleted = jsonTask.isCompleted;
+    for (let item of jsonTask.checklist) {
+        const newChecklistItem = newTask.createChecklistItem(item.text);
+        if (item.isChecked) newChecklistItem.toggleCheck();
+    }
+    for (let item of jsonTask.tags) {
+        const taskTag = TAGS_LIST.getTags().find(tag => tag.text === item.text);
+        newTask.addTag(taskTag);
+    }
+}
+
+(function loadTasksFromLocalStorage() {
+    const jsonTasksList = JSON.parse(window.localStorage.getItem('tasks'));
+    console.log(jsonTasksList)
+    for (let jsonTask of jsonTasksList) {
+        console.log(jsonTask);
+        createTaskFromJson(jsonTask);
+    }
+})();
+
+
+
 BUTTONS.allBtn.addEventListener('click', resolveAllBtnClick);
 BUTTONS.todayBtn.addEventListener('click', resolveTodayBtnClick);
 BUTTONS.upcomingBtn.addEventListener('click', resolveUpcomingBtnClick);
