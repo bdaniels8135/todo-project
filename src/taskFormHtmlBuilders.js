@@ -69,6 +69,12 @@ function buildNewTaskTagSelectHtml() {
     return newTaskTagSelectHtml;
 }
 
+function buildTaskCompletedToggleBtnHtml() {
+    const taskCompletedToggleBtnHtml = buildInputHtml('button', 'task-completed-toggle-btn');
+
+    return taskCompletedToggleBtnHtml;
+}
+
 function buildTaskDeleteBtnHtml() {
     const taskDeleteBtnHtml = buildInputHtml('button', 'task-delete-btn');
     taskDeleteBtnHtml.value = TASK_DELETE_BTN_TEXT;
@@ -98,9 +104,12 @@ export function buildEmptyTaskFormHtml() {
     const checklistWithInputHtml = wrapHtmlElements(wrapperType, checklistHtml, newChecklistItemInputHtml);
     checklistWithInputHtml.classList.add('checklist-container');
 
+    const taskCompletedToggleBtnHtml = buildTaskCompletedToggleBtnHtml();
     const taskDeleteBtnHtml = buildTaskDeleteBtnHtml();
+    const taskFormButtons = wrapHtmlElements('div', taskCompletedToggleBtnHtml, taskDeleteBtnHtml)
+    taskFormButtons.id = 'task-form-btns';
 
-    const formHtml = wrapHtmlElements('form', titleDateHtml, shortDescHtml, taskTagsListWithSelectHtml, notesHtml, checklistWithInputHtml, taskDeleteBtnHtml);
+    const formHtml = wrapHtmlElements('form', titleDateHtml, shortDescHtml, taskTagsListWithSelectHtml, notesHtml, checklistWithInputHtml, taskFormButtons);
 
     return formHtml;
 }

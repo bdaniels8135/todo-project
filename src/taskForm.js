@@ -2,6 +2,9 @@ import { format, endOfDay, parseISO, isValid } from 'date-fns';
 import { buildEmptyTaskFormHtml, buildChecklistItemHtml, buildTaskTagListItemHtml } from "./taskFormHtmlBuilders";
 import { buildSelectOption } from './htmlBuilders';
 
+const TASK_COMPLETED_TOGGLE_BTN_VALUE = 'Mark Not Completed';
+const TASK_NOT_COMPLETED_TOGGLE_BTN_VALUE = 'Mark Completed';
+
 export function buildTaskForm(task, tagsList) {
     return (() => {
         const HTML = buildEmptyTaskFormHtml();
@@ -15,6 +18,7 @@ export function buildTaskForm(task, tagsList) {
             notes: HTML.querySelector('#notes-input'),
             newChecklistItem: HTML.querySelector('#new-checklist-item-input'),
             newTagSelect: HTML.querySelector('#new-task-tag-select'),
+            taskCompletedToggleBtn: HTML.querySelector('#task-completed-toggle-btn'),
         }
 
         function _appendChecklistItem(checklistItemToAppend) {
@@ -88,6 +92,11 @@ export function buildTaskForm(task, tagsList) {
                 _appendTag(tagToAdd);
                 INPUTS.newTagSelect.value = '';
             });
+            INPUTS.taskCompletedToggleBtn.value = task.isCompleted ? TASK_COMPLETED_TOGGLE_BTN_VALUE : TASK_NOT_COMPLETED_TOGGLE_BTN_VALUE;
+            INPUTS.taskCompletedToggleBtn.addEventListener('click', () => {
+                task.toggleCompleted();
+                INPUTS.taskCompletedToggleBtn.value = task.isCompleted ? TASK_COMPLETED_TOGGLE_BTN_VALUE : TASK_NOT_COMPLETED_TOGGLE_BTN_VALUE;
+            })
 
         })();
    
