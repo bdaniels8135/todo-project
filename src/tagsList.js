@@ -42,7 +42,7 @@ export function buildTagsList(defaultTags) {
 
         (function _retrieveTagsFromLocalStorage() {
             const tagsFromStorage = JSON.parse(window.localStorage.getItem('tags'));
-            for (let item of tagsFromStorage) defaultTags.push(item.text);
+            if (tagsFromStorage) for (let item of tagsFromStorage) defaultTags.push(item.text);
         })();
 
         for (let tagText of defaultTags) createNewTag(tagText);

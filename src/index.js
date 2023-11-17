@@ -182,7 +182,7 @@ function createTaskFromJson(jsonTask) {
 
 (function loadTasksFromLocalStorage() {
     const jsonTasksList = JSON.parse(window.localStorage.getItem('tasks'));
-    for (let jsonTask of jsonTasksList) createTaskFromJson(jsonTask);
+    if (jsonTasksList) for (let jsonTask of jsonTasksList) createTaskFromJson(jsonTask);
 })();
 
 BUTTONS.allBtn.addEventListener('click', resolveAllBtnClick);
