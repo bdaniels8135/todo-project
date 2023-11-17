@@ -43,3 +43,11 @@ main .task-table td {
     cursor: pointer;
     font-size: 1.3rem;
 }
+
+main .task-table .completed-task-row::before {
+    content: '\2713';
+    position: relative;
+    right: 1.75rem;
+    font-size: 2rem;
+    font-weight: 650;
+}

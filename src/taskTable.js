@@ -25,6 +25,7 @@ export function buildTaskTable(headerText, isUpcoming) {
             clearContainer(taskTableHtml);
             tasksToDisplay.forEach(task => {
                 const taskRowHtml = buildTaskRowHtml(task.title, task.shortDesc, task.dueDate);
+                if (task.isCompleted) taskRowHtml.classList.add('completed-task-row');
                 taskRowHtml.addEventListener('click', () => { displayTaskForm(task) });
                 taskTableHtml.appendChild(taskRowHtml);
             })
