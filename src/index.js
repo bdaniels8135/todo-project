@@ -79,12 +79,12 @@ function displayTasksTable(headerText, isUpcoming, tasksToDisplay) {
 }
 
 function resolveAllBtnClick() { 
-    const allTasks = TASKS_LIST.getTasks();
+    const allTasks = TASKS_LIST.getTasks().filter(task => task.isCompleted === false);
     displayTasksTable('All Tasks', false, allTasks);
 }
 
 function resolveTodayBtnClick() {
-    const todayTasks = TASKS_LIST.getTasks().filter(task => isSameDay(new Date(), task.dueDate));
+    const todayTasks = TASKS_LIST.getTasks().filter(task => isSameDay(new Date(), task.dueDate) && task.isCompleted === false);
     displayTasksTable('Today\'s Tasks', false, todayTasks);
 }
 
@@ -95,13 +95,13 @@ function resolveUpcomingBtnClick() {
         const startingDate = startOfDay(new Date());
         const upcomingDate = endOfDay(parseISO(dateInput.value));
         const upcomingInterval = {start: startingDate, end: upcomingDate};
-        const upcomingTasks = TASKS_LIST.getTasks().filter(task => isWithinInterval(task.dueDate, upcomingInterval));
+        const upcomingTasks = TASKS_LIST.getTasks().filter(task => isWithinInterval(task.dueDate, upcomingInterval) && task.isCompleted === false);
         taskTable.displayTasks(upcomingTasks);
     })
 }
 
 function resolvePastDueBtnClick() {
-    const pastDueTasks = TASKS_LIST.getTasks().filter(task => isPast(task.dueDate));
+    const pastDueTasks = TASKS_LIST.getTasks().filter(task => isPast(task.dueDate) && task.isCompleted === false);
     displayTasksTable('Past Due Tasks', false, pastDueTasks);
 }
 
