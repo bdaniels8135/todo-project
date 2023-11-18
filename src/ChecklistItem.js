@@ -4,5 +4,7 @@ export default class ChecklistItem {
     this.isChecked = false;
   }
 
-  toggleCheck() { this.isChecked = !this.isChecked; }
+  toggleCheck() {
+    this.isChecked = !this.isChecked;
+  }
 }

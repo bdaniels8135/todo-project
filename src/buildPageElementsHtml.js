@@ -1,51 +1,55 @@
-import allIcon from './img/inbox.svg';
-import todayIcon from './img/calendar-today.svg';
-import upcomingIcon from './img/calendar-search.svg';
-import pastDueIcon from './img/exclamation-thick.svg';
-import plusIcon from './img/plus-thick.svg';
-import completedIcon from './img/check-bold.svg';
+import allIcon from "./img/inbox.svg";
+import todayIcon from "./img/calendar-today.svg";
+import upcomingIcon from "./img/calendar-search.svg";
+import pastDueIcon from "./img/exclamation-thick.svg";
+import plusIcon from "./img/plus-thick.svg";
+import completedIcon from "./img/check-bold.svg";
 import {
   wrapHtmlElements,
   buildHeaderTextHtml,
   buildIconHtml,
   buildTextHtml,
   buildInputHtml,
-} from './htmlBuilders';
+} from "./htmlBuilders";
 
-const PAGE_HEADER_TEXT = 'Task-ticle';
-const PAGE_SUBHEADER_TEXT = 'How <em>you</em> TO-DOin\'?';
-const TASKS_NAV_HEADER_TEXT = 'Tasks';
+const PAGE_HEADER_TEXT = "Task-ticle";
+const PAGE_SUBHEADER_TEXT = "How <em>you</em> TO-DOin'?";
+const TASKS_NAV_HEADER_TEXT = "Tasks";
 const NEW_TASK_ICON = plusIcon;
-const TAGS_NAV_HEADER_TEXT = 'Tags';
+const TAGS_NAV_HEADER_TEXT = "Tags";
 const NEW_TAG_ICON = plusIcon;
-const TASKS_NAV_SAVE_BUTTON_TEXT = 'Save All Tasks';
+const TASKS_NAV_SAVE_BUTTON_TEXT = "Save All Tasks";
 const TASK_NAV_ITEM_ICON_TEXT_PAIRS = [
   {
     icon: allIcon,
-    text: 'All',
+    text: "All",
   },
   {
     icon: todayIcon,
-    text: 'Today',
+    text: "Today",
   },
   {
     icon: upcomingIcon,
-    text: 'Upcoming',
+    text: "Upcoming",
   },
   {
     icon: pastDueIcon,
-    text: 'Past Due',
+    text: "Past Due",
   },
   {
     icon: completedIcon,
-    text: 'Completed',
+    text: "Completed",
   },
 ];
 
 function buildPageHeaderHtml() {
   const headerTextHtml = buildHeaderTextHtml(PAGE_HEADER_TEXT, 1);
   const subheaderTextHtml = buildHeaderTextHtml(PAGE_SUBHEADER_TEXT, 2);
-  const pageHeaderHtml = wrapHtmlElements('header', headerTextHtml, subheaderTextHtml);
+  const pageHeaderHtml = wrapHtmlElements(
+    "header",
+    headerTextHtml,
+    subheaderTextHtml,
+  );
   return pageHeaderHtml;
 }
 
@@ -53,52 +57,82 @@ function buildNavHeaderHtml(navHeaderText, newItemIcon, btnId) {
   const navHeaderTextHtml = buildHeaderTextHtml(navHeaderText, 1);
   const newItemIconHtml = buildIconHtml(newItemIcon);
   newItemIconHtml.id = btnId;
-  const navHeaderHtml = wrapHtmlElements('div', navHeaderTextHtml, newItemIconHtml);
+  const navHeaderHtml = wrapHtmlElements(
+    "div",
+    navHeaderTextHtml,
+    newItemIconHtml,
+  );
   return navHeaderHtml;
 }
 
 function buildTasksNavListItemHtml(icon, text) {
   const tasksNavItemIcon = buildIconHtml(icon);
   const tasksNavItemText = buildTextHtml(text);
-  const tasksNavListItemHtml = wrapHtmlElements('li', tasksNavItemIcon, tasksNavItemText);
+  const tasksNavListItemHtml = wrapHtmlElements(
+    "li",
+    tasksNavItemIcon,
+    tasksNavItemText,
+  );
   return tasksNavListItemHtml;
 }
 
 function buildTasksNavListHtml() {
   const tasksNavListItems = [];
   TASK_NAV_ITEM_ICON_TEXT_PAIRS.forEach((pair) => {
-    const tasksNavListItemHtml = buildTasksNavListItemHtml(pair.icon, pair.text);
-    tasksNavListItemHtml.id = `${pair.text.toLowerCase().replace(' ', '-')}-btn`;
+    const tasksNavListItemHtml = buildTasksNavListItemHtml(
+      pair.icon,
+      pair.text,
+    );
+    tasksNavListItemHtml.id = `${pair.text
+      .toLowerCase()
+      .replace(" ", "-")}-btn`;
     tasksNavListItems.push(tasksNavListItemHtml);
   });
-  const tasksNavListHtml = wrapHtmlElements('ul', ...tasksNavListItems);
+  const tasksNavListHtml = wrapHtmlElements("ul", ...tasksNavListItems);
   return tasksNavListHtml;
 }
 
 function buildTasksNavHtml() {
-  const newTaskBtnId = 'new-task-btn';
-  const tasksNavHeaderHtml = buildNavHeaderHtml(TASKS_NAV_HEADER_TEXT, NEW_TASK_ICON, newTaskBtnId);
+  const newTaskBtnId = "new-task-btn";
+  const tasksNavHeaderHtml = buildNavHeaderHtml(
+    TASKS_NAV_HEADER_TEXT,
+    NEW_TASK_ICON,
+    newTaskBtnId,
+  );
   const tasksNavListHtml = buildTasksNavListHtml();
-  const tasksNavSaveBtn = buildInputHtml('button', 'tasks-save-btn');
+  const tasksNavSaveBtn = buildInputHtml("button", "tasks-save-btn");
   tasksNavSaveBtn.value = TASKS_NAV_SAVE_BUTTON_TEXT;
-  const tasksNavHtml = wrapHtmlElements('nav', tasksNavHeaderHtml, tasksNavListHtml, tasksNavSaveBtn);
-  tasksNavHtml.id = 'task-nav';
+  const tasksNavHtml = wrapHtmlElements(
+    "nav",
+    tasksNavHeaderHtml,
+    tasksNavListHtml,
+    tasksNavSaveBtn,
+  );
+  tasksNavHtml.id = "task-nav";
   return tasksNavHtml;
 }
 
 function buildTagsNavHtml() {
-  const newTagBtnId = 'new-tag-btn';
-  const tagsNavHeaderHtml = buildNavHeaderHtml(TAGS_NAV_HEADER_TEXT, NEW_TAG_ICON, newTagBtnId);
-  const tagsNavListHtml = document.createElement('ul');
-  const tagsNavHtml = wrapHtmlElements('nav', tagsNavHeaderHtml, tagsNavListHtml);
-  tagsNavHtml.id = 'tags-nav';
+  const newTagBtnId = "new-tag-btn";
+  const tagsNavHeaderHtml = buildNavHeaderHtml(
+    TAGS_NAV_HEADER_TEXT,
+    NEW_TAG_ICON,
+    newTagBtnId,
+  );
+  const tagsNavListHtml = document.createElement("ul");
+  const tagsNavHtml = wrapHtmlElements(
+    "nav",
+    tagsNavHeaderHtml,
+    tagsNavListHtml,
+  );
+  tagsNavHtml.id = "tags-nav";
   return tagsNavHtml;
 }
 
 function buildSidebarHtml() {
   const tasksNavHtml = buildTasksNavHtml();
   const tagsNavHtml = buildTagsNavHtml();
-  const sidebarHtml = wrapHtmlElements('aside', tasksNavHtml, tagsNavHtml);
+  const sidebarHtml = wrapHtmlElements("aside", tasksNavHtml, tagsNavHtml);
   return sidebarHtml;
 }
 
@@ -106,7 +140,7 @@ export default function buildPageElementsHtml() {
   const fragmentHtml = document.createDocumentFragment();
   const pageHeaderHtml = buildPageHeaderHtml();
   const sidebarHtml = buildSidebarHtml();
-  const mainHtml = document.createElement('main');
+  const mainHtml = document.createElement("main");
   fragmentHtml.append(pageHeaderHtml, sidebarHtml, mainHtml);
   return fragmentHtml;
 }

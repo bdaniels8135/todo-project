@@ -1,4 +1,4 @@
-import Tag from './Tag';
+import Tag from "./Tag";
 
 export default function buildTagsList(defaultTags) {
   return (() => {
@@ -11,7 +11,9 @@ export default function buildTagsList(defaultTags) {
     }
 
     function sortTagsAlphabetically() {
-      tags.sort((firstTag, secondTag) => compareTagsAlphabetically(firstTag, secondTag));
+      tags.sort((firstTag, secondTag) =>
+        compareTagsAlphabetically(firstTag, secondTag),
+      );
     }
 
     function getTags() {
@@ -20,7 +22,7 @@ export default function buildTagsList(defaultTags) {
     }
 
     function saveTagsInLocalStorage() {
-      window.localStorage.setItem('tags', JSON.stringify(tags));
+      window.localStorage.setItem("tags", JSON.stringify(tags));
     }
 
     function createNewTag(text) {
@@ -41,11 +43,16 @@ export default function buildTagsList(defaultTags) {
     }
 
     (function retrieveTagsFromLocalStorage() {
-      const tagsFromStorage = JSON.parse(window.localStorage.getItem('tags'));
-      if (tagsFromStorage) tagsFromStorage.forEach((item) => { defaultTags.push(item.text); });
-    }());
+      const tagsFromStorage = JSON.parse(window.localStorage.getItem("tags"));
+      if (tagsFromStorage)
+        tagsFromStorage.forEach((item) => {
+          defaultTags.push(item.text);
+        });
+    })();
 
-    defaultTags.forEach((tagText) => { createNewTag(tagText); });
+    defaultTags.forEach((tagText) => {
+      createNewTag(tagText);
+    });
 
     return {
       getTags,

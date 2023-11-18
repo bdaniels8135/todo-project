@@ -1,4 +1,4 @@
-import Task from './Task';
+import Task from "./Task";
 
 export default function buildTaskList() {
   return (() => {
@@ -23,17 +23,20 @@ export default function buildTaskList() {
     }
 
     function sortTasksByDate() {
-      tasks.sort((firstTask, secondTask) => compareTasksByDate(firstTask, secondTask));
+      tasks.sort((firstTask, secondTask) =>
+        compareTasksByDate(firstTask, secondTask),
+      );
     }
 
     function getTasks() {
       sortTasksByDate();
-
       return [...tasks];
     }
 
     function scrubTagFromAllTasks(tagToScrub) {
-      tasks.forEach((task) => { if (task.hasTag(tagToScrub)) task.removeTag(tagToScrub); });
+      tasks.forEach((task) => {
+        if (task.hasTag(tagToScrub)) task.removeTag(tagToScrub);
+      });
     }
 
     return {

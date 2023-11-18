@@ -1,4 +1,4 @@
-import ChecklistItem from './ChecklistItem';
+import ChecklistItem from "./ChecklistItem";
 
 export default class Task {
   #checklist;
@@ -6,16 +6,18 @@ export default class Task {
   #tags;
 
   constructor() {
-    this.title = '';
+    this.title = "";
     this.dueDate = null;
-    this.shortDesc = '';
-    this.notes = '';
+    this.shortDesc = "";
+    this.notes = "";
     this.#checklist = [];
     this.#tags = [];
     this.isCompleted = false;
   }
 
-  get checklist() { return [...this.#checklist]; }
+  get checklist() {
+    return [...this.#checklist];
+  }
 
   createChecklistItem(newItemText) {
     const newChecklistItem = new ChecklistItem(newItemText);
@@ -28,16 +30,24 @@ export default class Task {
     if (deleteIndex > -1) this.#checklist.splice(deleteIndex, 1);
   }
 
-  get tags() { return [...this.#tags]; }
+  get tags() {
+    return [...this.#tags];
+  }
 
-  addTag(tagToAdd) { this.#tags.push(tagToAdd); }
+  addTag(tagToAdd) {
+    this.#tags.push(tagToAdd);
+  }
 
   removeTag(tagToRemove) {
     const removeIndex = this.#tags.indexOf(tagToRemove);
     if (removeIndex > -1) this.#tags.splice(removeIndex, 1);
   }
 
-  hasTag(tagToCheck) { return this.#tags.some((tag) => tag === tagToCheck); }
+  hasTag(tagToCheck) {
+    return this.#tags.some((tag) => tag === tagToCheck);
+  }
 
-  toggleCompleted() { this.isCompleted = !this.isCompleted; }
+  toggleCompleted() {
+    this.isCompleted = !this.isCompleted;
+  }
 }
